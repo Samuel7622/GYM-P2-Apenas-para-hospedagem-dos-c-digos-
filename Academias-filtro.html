@@ -1,0 +1,2356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academias - Gym P2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* ========== ANIMAÇÕES ========== */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes highlight {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0.3); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+/* Header Principal */
+.header-container {
+    background: linear-gradient(135deg, #000 0%, #111 50%, #0a0a0a 100%);
+    padding: 1.2rem 2.5rem;
+    box-shadow: 0 4px 20px rgba(21, 255, 0, 0.4);
+    position: relative;
+    top: 0;
+    z-index: 2000;
+    backdrop-filter: blur(20px);
+    width: 100%;
+}
+
+.nav-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.brand-container {
+    flex-shrink: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo-img {
+    height: 80px;
+    width: auto;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.right-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: nowrap;
+}
+
+/* BARRA DE PESQUISA */
+.search-widget {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.search-toggle-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00ff40 0%, #00cc33 100%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    z-index: 100;
+    flex-shrink: 0;
+}
+
+.search-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.search-icon {
+    width: 22px;
+    height: 22px;
+    fill: #000;
+    transition: all 0.3s ease;
+}
+
+.expandable-search-field {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid transparent;
+    border-radius: 30px;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    backdrop-filter: blur(15px);
+    z-index: 50;
+}
+
+.expandable-search-field.expanded {
+    width: 320px;
+    border-color: #00ff40;
+}
+
+.search-input-field {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0 60px 0 20px;
+    font-size: 1rem;
+    color: #000000;
+    font-family: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.2s;
+    cursor: text;
+}
+
+.expandable-search-field.expanded .search-input-field {
+    opacity: 1;
+}
+
+.expandable-search-field * {
+    pointer-events: auto;
+}
+
+/* Resultados da Pesquisa */
+.search-results {
+    position: fixed;
+    top: calc(1.2rem * 2 + 55px + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1999;
+    width: calc(100vw - 40px);
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-result-item:hover {
+    background: #f0f0f0;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.result-category {
+    font-size: 0.8rem;
+    color: #00ff40;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.result-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.result-description {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.gym-access-btn {
+    background: linear-gradient(135deg, #00ff40 0%, #26a653 50%, #00cc6a 100%);
+    color: #000;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.gym-access-btn a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+.gym-access-btn:hover {
+    background: #016916ea;
+}
+
+.gym-access-btn:active {
+    transform: translateY(0);
+}
+
+.menu-trigger {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    z-index: 2001;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.hamburger-line {
+    width: 28px;
+    height: 4px;
+    background: linear-gradient(45deg, #00ff40, #04ff00);
+    margin: 3px 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-radius: 3px;
+}
+
+.menu-trigger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(9px, 9px);
+}
+
+.menu-trigger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-trigger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(9px, -9px);
+}
+
+.slide-menu {
+    position: fixed;
+    top: -50px;
+    margin-top: 60px;
+    right: -450px;
+    width: 450px;
+    height: 100vh;
+    background: #000000;
+    transition: right 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 3000;
+    padding: 2rem 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #222;
+}
+
+.menu-close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.menu-close-btn:hover {
+    transform: rotate(90deg);
+}
+
+.menu-close-icon {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+}
+
+.menu-search-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #00ff40 0%, #00cc3a 100%);
+    color: #000;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    margin-bottom: 1.5rem;
+}
+
+.menu-search-btn:hover {
+    background: linear-gradient(135deg, #00ff40 0%, #00ff40 100%);
+}
+
+.slide-menu.open {
+    right: 0;
+}
+
+.navigation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.nav-item {
+    margin: 0;
+    width: 100%;
+}
+
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: block;
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 0.5px solid #333;
+}
+
+.nav-link:hover {
+    color: #00ff40;
+    padding-left: 15px;
+}
+
+.nav-item:last-child .nav-link {
+    border-bottom: none;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    z-index: 2500;
+    backdrop-filter: blur(8px);
+}
+
+.menu-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========== RESPONSIVIDADE DO HEADER ========== */
+
+/* Tablets Grandes (1024px e abaixo) */
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 1rem 1.5rem;
+    }
+
+    .logo-img {
+        height: 65px;
+    }
+
+    .right-controls {
+        gap: 1rem;
+    }
+
+    .gym-access-btn {
+        padding: 10px 16px;
+        font-size: 0.95rem;
+    }
+
+    .search-toggle-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .search-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .expandable-search-field {
+        width: 44px;
+        height: 44px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 280px;
+    }
+
+    .search-input-field {
+        padding: 0 50px 0 18px;
+        font-size: 0.95rem;
+    }
+
+    .slide-menu {
+        width: 350px;
+        right: -350px;
+        padding: 2rem 1.5rem;
+    }
+
+    .menu-search-btn {
+        padding: 12px 18px;
+        font-size: 0.95rem;
+    }
+
+    .search-results {
+        top: calc(1rem * 2 + 65px + 10px);
+        max-width: 500px;
+    }
+}
+
+/* Tablets Pequenos e Mobile Grande (768px e abaixo) */
+@media (max-width: 768px) {
+    /* Ocultar botão Home em mobile */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.8rem 1rem;
+    }
+
+    .nav-wrapper {
+        flex-wrap: nowrap;
+        gap: 10px;
+    }
+
+    .logo-img {
+        height: 50px;
+        min-height: 50px;
+    }
+
+    .right-controls {
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .search-toggle-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .search-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .expandable-search-field {
+        width: 42px;
+        height: 42px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 250px;
+        z-index: 2002;
+    }
+
+    .search-input-field {
+        padding: 0 45px 0 16px;
+        font-size: 0.9rem;
+    }
+
+    .gym-access-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        margin: 3px;
+    }
+
+    .slide-menu {
+        width: 300px;
+        right: -300px;
+        padding: 1.5rem 1.2rem;
+    }
+
+    .menu-search-btn {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+
+    .nav-link {
+        font-size: 1rem;
+        padding: 0.9rem 0;
+        white-space: normal;
+        line-height: 1.4;
+    }
+
+    .search-results {
+        top: calc(0.8rem * 2 + 50px + 10px);
+        max-width: 400px;
+    }
+}
+
+/* Mobile (640px e abaixo) */
+@media (max-width: 640px) {
+    /* Manter Home oculto em mobile */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.7rem 0.8rem;
+    }
+
+    .nav-wrapper {
+        gap: 8px;
+    }
+
+    .right-controls {
+        gap: 0.4rem;
+    }
+
+    .logo-img {
+        height: 45px;
+        min-height: 45px;
+    }
+
+    .search-toggle-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .search-icon {
+        width: 17px;
+        height: 17px;
+    }
+
+    .expandable-search-field {
+        width: 38px;
+        height: 38px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 220px;
+        position: fixed;
+        right: 15px;
+        top: 70px;
+        transform: none;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .search-input-field {
+        padding: 0 40px 0 15px;
+        font-size: 0.85rem;
+    }
+
+    .gym-access-btn {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+
+    .slide-menu {
+        width: 280px;
+        right: -280px;
+        padding: 1.5rem 1rem;
+    }
+
+    .menu-search-btn {
+        padding: 11px 14px;
+        font-size: 0.85rem;
+    }
+
+    .nav-link {
+        font-size: 0.95rem;
+        padding: 0.85rem 0;
+        white-space: normal;
+    }
+
+    .search-results {
+        top: calc(0.7rem * 2 + 45px + 10px);
+        max-width: 350px;
+    }
+}
+
+/* Pequenos Smartphones (480px e abaixo) */
+@media (max-width: 480px) {
+    /* Manter Home oculto */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.6rem 0.6rem;
+    }
+
+    .nav-wrapper {
+        gap: 6px;
+    }
+
+    .logo-img {
+        height: 40px;
+        min-height: 40px;
+    }
+
+    .right-controls {
+        gap: 0.3rem;
+    }
+
+    .search-toggle-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .search-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .expandable-search-field {
+        width: 36px;
+        height: 36px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 200px;
+        right: 10px;
+        top: 65px;
+    }
+
+    .search-input-field {
+        padding: 0 38px 0 12px;
+        font-size: 0.8rem;
+    }
+
+    .gym-access-btn {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+    }
+
+    .slide-menu {
+        width: 260px;
+        right: -260px;
+        padding: 1.2rem 0.8rem;
+    }
+
+    .menu-search-btn {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+
+    .nav-link {
+        font-size: 0.9rem;
+        padding: 0.8rem 0;
+    }
+
+    .search-results {
+        top: calc(0.6rem * 2 + 40px + 10px);
+        max-width: 300px;
+    }
+}
+
+/* Telas muito pequenas (360px e abaixo) */
+@media (max-width: 360px) {
+    /* Manter Home oculto */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.5rem 0.5rem;
+    }
+
+    .logo-img {
+        height: 35px;
+        min-height: 35px;
+    }
+
+    .right-controls {
+        gap: 0.25rem;
+    }
+
+    .search-toggle-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .search-icon {
+        width: 15px;
+        height: 15px;
+    }
+
+    .expandable-search-field {
+        width: 34px;
+        height: 34px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 180px;
+        right: 8px;
+        top: 60px;
+    }
+
+    .search-input-field {
+        padding: 0 35px 0 10px;
+        font-size: 0.75rem;
+    }
+
+    .gym-access-btn {
+        padding: 4px 6px;
+        font-size: 0.65rem;
+    }
+
+    .slide-menu {
+        width: 240px;
+        right: -240px;
+        padding: 1.2rem 0.8rem;
+    }
+
+    .menu-search-btn {
+        padding: 9px 10px;
+        font-size: 0.75rem;
+    }
+
+    .nav-link {
+        font-size: 0.85rem;
+        padding: 0.75rem 0;
+    }
+
+    .search-results {
+        top: calc(0.5rem * 2 + 35px + 10px);
+        max-width: 280px;
+    }
+}
+
+/* Telas muito muito pequenas (320px e abaixo) */
+@media (max-width: 320px) {
+    /* Manter Home oculto */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.4rem 0.4rem;
+    }
+
+    .logo-img {
+        height: 32px;
+        min-height: 32px;
+    }
+
+    .right-controls {
+        gap: 0.2rem;
+    }
+
+    .search-toggle-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .search-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .expandable-search-field {
+        width: 32px;
+        height: 32px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 170px;
+        right: 6px;
+        top: 55px;
+    }
+
+    .search-input-field {
+        padding: 0 32px 0 8px;
+        font-size: 0.7rem;
+    }
+
+    .gym-access-btn {
+        padding: 3px 5px;
+        font-size: 0.6rem;
+    }
+
+    .slide-menu {
+        width: 240px;
+        right: -240px;
+        padding: 60px 0.8rem 1.5rem;
+    }
+
+    .menu-search-btn {
+        padding: 8px 10px;
+        font-size: 0.7rem;
+    }
+
+    .nav-link {
+        font-size: 0.8rem;
+        padding: 0.7rem 0;
+    }
+
+    .search-results {
+        top: calc(0.4rem * 2 + 32px + 10px);
+        max-width: 260px;
+    }
+}
+
+
+/* ========== OVERLAY DO MENU ========== */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    z-index: 1998;
+    backdrop-filter: blur(8px);
+}
+
+.menu-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========== CONTEÚDO PRINCIPAL ========== */
+.section-title {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: #28a745;
+    text-align: center;
+}
+
+.content-wrapper {
+    display: flex;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ========== FILTROS ========== */
+.filters {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 280px;
+    height: fit-content;
+}
+
+.filter-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #1a5d1a;
+}
+
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-group h4 {
+    margin-bottom: 0.8rem;
+    color: #1a5d1a;
+    font-size: 1rem;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.filter-option input[type="radio"],
+.filter-option input[type="checkbox"] {
+    margin-right: 0.8rem;
+    cursor: pointer;
+    accent-color: #28a745;
+}
+
+.filter-option label {
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.price-range-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.price-input {
+    width: 80px;
+    padding: 0.4rem;
+    border: 2px solid #28a745;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background: #000;
+    color: #fff;
+}
+
+.price-separator {
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* ========== GRID DE ACADEMIAS ========== */
+.academies-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.academy-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(40, 167, 69, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+}
+
+.academy-card[data-type="artes-marciais"] {
+    border-color: #dc3545;
+    box-shadow: 0 2px 20px rgba(220, 53, 69, 0.3);
+}
+
+.academy-card[data-type="artes-marciais"] .academy-type {
+    background: #dc3545;
+}
+
+.academy-card[data-type="artes-marciais"] .price-badge {
+    background: #000;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.academy-card[data-type="artes-marciais"] .view-details-btn {
+    background: #dc3545;
+}
+
+.academy-card[data-type="artes-marciais"] .view-details-btn:hover {
+    background: #a71e2a;
+}
+
+.card-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: relative;
+}
+
+.card-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
+}
+
+.card-image-title {
+    position: relative;
+    z-index: 2;
+    padding: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.price-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #000;
+    color: #28a745;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    border: 1px solid #28a745;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.academy-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    color: #fff;
+}
+
+.academy-type {
+    background: #28a745;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-bottom: 0.8rem;
+}
+
+.academy-location {
+    color: #ccc;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.schedule-section {
+    border-top: 1px solid #333;
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.schedule {
+    font-size: 0.9rem;
+    color: #ccc;
+    line-height: 1.4;
+}
+
+.schedule-line {
+    margin-bottom: 0.3rem;
+}
+
+.view-details-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 1rem;
+    transition: background 0.3s;
+}
+
+.view-details-btn:hover {
+    background: #1a5d1a;
+}
+
+
+/* Footer */
+.academia-footer {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 60px;
+}
+
+.academia-background svg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 0;
+}
+
+.academia-footer-inner {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 2rem 8rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.academia-footer-inner .academia-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.academia-footer-inner .academia-top h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+}
+
+.academia-footer-inner .academia-top h3 {
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: 0.8;
+    color: white;
+}
+
+.academia-footer-inner .academia-bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.academia-logo-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.academia-socials {
+    display: flex;
+    gap: 1rem;
+}
+
+.academia-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    font-size: 1.25rem;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.academia-socials a:hover {
+    background: #00ff88;
+    color: #000;
+    transform: translateY(-3px);
+}
+
+.academia-nav {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.academia-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.academia-nav h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #ccc;
+}
+
+.academia-nav a {
+    font-size: 0.9rem;
+    color: white;
+    opacity: 0.8;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.academia-nav a:hover {
+    opacity: 1;
+    color: #00ff88;
+    transform: translateX(5px);
+}
+
+/* Responsividade do Footer */
+@media (max-width: 768px) {
+    .academia-footer-inner {
+        padding: 3rem 1.5rem 6rem;
+    }
+
+    .academia-footer-inner .academia-top h2 {
+        font-size: 1.6rem;
+    }
+
+    .academia-footer-inner .academia-top h3 {
+        font-size: 1.1rem;
+    }
+
+    .academia-nav {
+        gap: 2rem;
+        justify-content: space-between;
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .academia-footer-inner .academia-bottom {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .academia-logo-content {
+        align-items: center;
+    }
+
+    .academia-nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .academia-nav ul {
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .academia-footer-inner {
+        padding: 2rem 1rem 4rem;
+    }
+
+    .academia-footer-inner .academia-top h2 {
+        font-size: 1.3rem;
+    }
+
+    .academia-footer-inner .academia-top h3 {
+        font-size: 0.9rem;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+
+  <header class="header-container" id="menu">
+        <div class="nav-wrapper">
+            <div class="brand-container">
+                <a href="#"><img src="logo.png" alt="Logo" class="logo-img"></a>
+            </div>
+            
+            <div class="right-controls">
+                <div class="search-widget" id="searchWidget">
+                    <div class="expandable-search-field" id="searchField">
+                        <input type="text" class="search-input-field" placeholder="Digite sua pesquisa..." id="searchInput">
+                    </div>
+                    <button class="search-toggle-btn" id="searchToggle" aria-label="Abrir pesquisa">
+                        <svg class="search-icon" viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                    </button>
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+                
+                <button class="gym-access-btn"><a href="Menu-inicial-sem-logar.html">Home</a></button>
+                <button class="gym-access-btn"><a href="academias-filtro-sem-logar.html">Academias</a></button>
+                <button class="gym-access-btn"><a href="login-gym.html">Login</a></button>
+                
+                <button class="menu-trigger" id="menuTrigger" aria-label="Abrir menu">
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="slide-menu" id="slideMenu">
+        <div class="menu-header">
+            <button class="menu-close-btn" id="menuCloseBtn" aria-label="Fechar menu">
+                <svg class="menu-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        
+        <button class="menu-search-btn" id="menuSearchBtn">Academias</button>
+        
+        <ul class="navigation-list">
+            <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="#espaço-cliente" class="nav-link">Login</a></li>
+            <li class="nav-item"><a href="#franqueado" class="nav-link">Personais</a></li>
+            <li class="nav-item"><a href="#news" class="nav-link">Sorteios</a></li>
+            <li class="nav-item"><a href="#planos" class="nav-link">Configurações</a></li>
+            <li class="nav-item"><a href="#sustentabilidade" class="nav-link">Blogs e dicaas</a></li>
+            <li class="nav-item"><a href="#historia" class="nav-link">Sobre nós</a></li>
+        </ul>
+    </nav>
+
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <div class="main-content">
+        <h2 class="section-title">Academias e Artes Marciais em Pedro II</h2>
+       
+        <div class="content-wrapper">
+            <aside class="filters">
+                <h3 class="filter-title">Filtros</h3>
+               
+                <div class="filter-group">
+                    <h4>Apenas</h4>
+                    <div class="filter-option">
+                        <input type="radio" id="all" name="type" value="all" checked onchange="filterAcademies()">
+                        <label for="all">Todas as Academias</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="musculacao" name="type" value="musculacao" onchange="filterAcademies()">
+                        <label for="musculacao">Academias de Musculação</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="artes-marciais" name="type" value="artes-marciais" onchange="filterAcademies()">
+                        <label for="artes-marciais">Academias de Artes Marciais</label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Localização</h4>
+                    <div class="filter-option">
+                        <input type="checkbox" id="praca-matriz" value="praca-matriz" onchange="filterAcademies()">
+                        <label for="praca-matriz">Próximo à Praça da Matriz</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="centro" value="centro" onchange="filterAcademies()">
+                        <label for="centro">Centro</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="vila-kolping" value="vila-kolping" onchange="filterAcademies()">
+                        <label for="vila-kolping">Vila Kolping</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="chapada-serra" value="chapada-serra" onchange="filterAcademies()">
+                        <label for="chapada-serra">Chapada / Serra</label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Faixa de Preço</h4>
+                    <div class="price-range-container">
+                        <input type="number" id="minPrice" class="price-input" placeholder="Min" min="0" onchange="filterAcademies()">
+                        <span class="price-separator">-</span>
+                        <input type="number" id="maxPrice" class="price-input" placeholder="Max" min="0" onchange="filterAcademies()">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Facilidades</h4>
+                    <div class="filter-option">
+                        <input type="checkbox" id="estacionamento" value="estacionamento" onchange="filterAcademies()">
+                        <label for="estacionamento">Estacionamento</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="ar-condicionado" value="ar-condicionado" onchange="filterAcademies()">
+                        <label for="ar-condicionado">Ar Condicionado</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="vestiario" value="vestiario" onchange="filterAcademies()">
+                        <label for="vestiario">Vestiário</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="wifi" value="wifi" onchange="filterAcademies()">
+                        <label for="wifi">WiFi</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="personais" value="personais" onchange="filterAcademies()">
+                        <label for="personais">Personais</label>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="academies-grid" id="academiesGrid">
+                <!-- Card 1 -->
+                <div class="academy-card" data-type="musculacao" data-location="centro" data-price="60" data-facilities="estacionamento,ar-condicionado,vestiario,wifi">
+                    <div class="price-badge">R$ 80/mês</div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=250&fit=crop&q=80')">
+                        <div class="card-image-title">PERFORMANCE FITNESS 01</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="academy-name">PERFORMANCE FITNESS 01</h3>
+                        <span class="academy-type">Musculação</span>
+                        <div class="academy-location">rua Antônio Alexandrino, n° 90 - Vila kolp, Pedro II - PI, 64255-000</div>
+                        <div class="schedule-section">
+                            <div class="schedule">
+                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6h - 21:30h</div>
+                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 9h - 13h</div>
+                            </div>
+                        </div>
+                        <button class="view-details-btn" onclick="alert('Detalhes da Academia PERFORMANCE FITNESS 01')">Ver Detalhes</button>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="academy-card" data-type="artes-marciais" data-location="praca-matriz" data-price="80" data-facilities="vestiario,ar-condicionado,personais">
+                    <div class="price-badge">R$ 80/mês</div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=400&h=250&fit=crop&q=80')">
+                        <div class="card-image-title">centro de treinamento de Jiu-jitsu DGT</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="academy-name">centro de treinamento de Jiu-jitsu DGT</h3>
+                        <span class="academy-type">Artes Marciais</span>
+                        <div class="academy-location">Av. Cel. Cordeiro, 01 - Vila das flores, Pedro II - PI, 64255-000</div>
+                        <div class="schedule-section">
+                            <div class="schedule">
+                                <div class="schedule-line"><strong>Seg a Sex:</strong> 20h - 22:30h</div>
+                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 16h - 18h</div>
+                            </div>
+                        </div>
+                        <button class="view-details-btn" onclick="alert('Detalhes do Fight Club Pedro II')">Ver Detalhes</button>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="academy-card" data-type="musculacao" data-location="vila-kolping" data-price="45" data-facilities="estacionamento,vestiario,wifi">
+                    <div class="price-badge">R$ 45/mês</div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop&q=80')">
+                        <div class="card-image-title">Iron Body Fitness Pedro ii</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="academy-name">Iron Body Fitness Pedro ii</h3>
+                        <span class="academy-type">Musculação</span>
+                        <div class="academy-location">BR-407, Pedro II - PI, 64255-000</div>
+                        <div class="schedule-section">
+                            <div class="schedule">
+                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6:30h - 21h</div>
+                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 13h - 16h</div>
+                            </div>
+                        </div>
+                        <button class="view-details-btn" onclick="alert('Detalhes do Gym Evolution')">Ver Detalhes</button>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="academy-card" data-type="artes-marciais" data-location="chapada-serra" data-price="70" data-facilities="ar-condicionado,vestiario,personais">
+                    <div class="price-badge">R$ 70/mês</div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1555597673-b21d5c935865?w=400&h=250&fit=crop&q=80')">
+                        <div class="card-image-title">C.T gladiadores de P2</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="academy-name">C.T gladiadores de P2</h3>
+                        <span class="academy-type">Artes Marciais</span>
+                        <div class="academy-location">R. Vasco da Gama, 554, Pedro II - PI, 64255-000</div>
+                        <div class="schedule-section">
+                            <div class="schedule">
+                                <div class="schedule-line"><strong>Seg a Sex:</strong> 14h - 20h</div>
+                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> Fechado</div>
+                            </div>
+                        </div>
+                        <button class="view-details-btn" onclick="alert('Detalhes do Dojo Samurai')">Ver Detalhes</button>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="academy-card" data-type="musculacao" data-location="centro" data-price="85" data-facilities="estacionamento,ar-condicionado,vestiario,wifi,personais">
+                    <div class="price-badge">R$ 85/mês</div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1583500178690-80e3baf9d2b0?w=400&h=250&fit=crop&q=80')">
+                        <div class="card-image-title">SMART STRONG</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="academy-name">SMART STRONG</h3>
+                        <span class="academy-type">Musculação</span>
+                        <div class="academy-location">R. Ângelo Gonçalves, n°137, Pedro II - PI, 64255-000</div>
+                        <div class="schedule-section">
+                            <div class="schedule">
+                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6h - 22h</div>
+                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 9h - 14h</div>
+                            </div>
+                        </div>
+                        <button class="view-details-btn" onclick="alert('Detalhes do Power Gym')">Ver Detalhes</button>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="academy-card" data-type="artes-marciais" data-location="vila-kolping" data-price="55" data-facilities="vestiario,wifi">
+                    <div class="price-badge">R$ 55/mês</div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=400&h=250&fit=crop&q=80')">
+                        <div class="card-image-title">Studio de Treino Fucional</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="academy-name">Studio de Treino Fucional</h3>
+                        <span class="academy-type">Artes Marciais</span>
+                        <div class="academy-location">R. Raimundo José Leite, 541 - Boa Esperança, Pedro II - PI, 64255-000</div>
+                        <div class="schedule-section">
+                            <div class="schedule">
+                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6h - 20h</div>
+                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> Fechado</div>
+                            </div>
+                        </div>
+                        <button class="view-details-btn" onclick="alert('Detalhes da Academia Muay Thai')">Ver Detalhes</button>
+                    </div>
+                </div>
+
+                <!-- Card 7 -->
+                <div class="academy-card" data-type="musculacao" data-location="praca-matriz" data-price="50" data-facilities="estacionamento,vestiario">
+                    <div class="price-badge">R$ 50/mês</div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=400&h=250&fit=crop&q=80')">
+                        <div class="card-image-title">Academia do Gás</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="academy-name">Academia do Gás</h3>
+                        <span class="academy-type">Musculação</span>
+                        <div class="academy-location">34, R. João Benício da Silva, 2, Pedro II - PI, 64255-000</div>
+                        <div class="schedule-section">
+                            <div class="schedule">
+                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6:30h - 21h</div>
+                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 9h - 12h</div>
+                            </div>
+                        </div>
+                        <button class="view-details-btn" onclick="alert('Detalhes da Academia Strong')">Ver Detalhes</button>
+                    </div>
+                </div>
+
+                <!-- Card 8 -->
+                <div class="academy-card" data-type="musculacao" data-location="chapada-serra" data-price="65" data-facilities="ar-condicionado,wifi,personais">
+                    <div class="price-badge">R$ 65/mês</div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=250&fit=crop&q=80')">
+                        <div class="card-image-title">Academia P2</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="academy-name">Academia P2</h3>
+                        <span class="academy-type">Musculação</span>
+                        <div class="academy-location">R. Sotero Nogueira Lima, 94, Pedro II - PI, 64255-000</div>
+                        <div class="schedule-section">
+                            <div class="schedule">
+                                <div class="schedule-line"><strong>Seg a Sex:</strong> 9h - 17h</div>
+                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 9h - 17h</div>
+                            </div>
+                        </div>
+                        <button class="view-details-btn" onclick="alert('Detalhes do Karate-Do Pedro II')">Ver Detalhes</button>
+                    </div>
+                </div>
+
+                <!-- Card 9 -->
+                <div class="academy-card" data-type="musculacao" data-location="centro" data-price="75" data-facilities="estacionamento,ar-condicionado,vestiario,wifi,personais">
+                    <div class="price-badge">R$ 75/mês</div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?w=400&h=250&fit=crop&q=80')">
+                        <div class="card-image-title">olympic fit</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="academy-name">olympic fit</h3>
+                        <span class="academy-type">Musculação</span>
+                        <div class="academy-location">Av. Dr. José Lourenço Mourão, 865A, Pedro II - PI, 64255-000</div>
+                        <div class="schedule-section">
+                            <div class="schedule">
+                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6h - 22h</div>
+                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 7h - 15h</div>
+                            </div>
+                        </div>
+                        <button class="view-details-btn" onclick="alert('Detalhes do Iron Gym')">Ver Detalhes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<footer class="academia-footer">
+        <div class="academia-background">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="100%" height="100%" viewBox="0 0 1600 900">
+                <defs>
+                    <path id="wave" fill="rgba(0, 200, 100, 0.5)" d="M-363.852,502.589c0,0,236.988-41.997,505.475,0
+                    s371.981,38.998,575.971,0s293.985-39.278,505.474,5.859s493.475,48.368,716.963-4.995v560.106H-363.852V502.589z" />
+                </defs>
+                <g>
+                    <use xlink:href="#wave" opacity=".4">
+                        <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="8s" calcMode="spline"
+                            values="270 230; -334 180; 270 230" keyTimes="0; .5; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                            repeatCount="indefinite" />
+                    </use>
+                    <use xlink:href="#wave" opacity=".6">
+                        <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="6s" calcMode="spline"
+                            values="-270 230;243 220;-270 230" keyTimes="0; .6; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                            repeatCount="indefinite" />
+                    </use>
+                    <use xlink:href="#wave" opacty=".9">
+                        <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="4s" calcMode="spline"
+                            values="0 230;-140 200;0 230" keyTimes="0; .4; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                            repeatCount="indefinite" />
+                    </use>
+                </g>
+            </svg>
+        </div>
+        <div class="academia-footer-inner">
+            <div class="academia-top">
+                <div>
+                    <h2>VOCÊ ESTÁ PRONTO PARA TRANSFORMAR SEU CORPO E SUA VIDA?</h2>
+                    <h3>Encontre as melhores academias, dicas e uma comunidade que te impulsiona!</h3>
+                </div>
+            </div>
+            <div class="academia-bottom">
+                <div class="academia-logo-content">
+                    <div class="academia-socials">
+    <a href="#" class="instagram" title="Instagram" aria-label="Instagram">
+        <!-- Ícone SVG como fallback caso Font Awesome não carregue -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+    </a>
+</div>
+                </div>
+                <nav class="academia-nav">
+                    <ul>
+                        <li><h4>SOBRE O GYM P2</h4></li>
+                        <li><a href="#">Quem Somos</a></li>
+                        <li><a href="#">Nossa Missão</a></li>
+                        <li><a href="#">Contatos</a></li>
+                    </ul>
+                    <ul>
+                        <li><h4>EXPLORE</h4></li>
+                        <li><a href="#">Academias</a></li>
+                        <li><a href="#">Artes Marciais</a></li>
+                        <li><a href="#">Blog e Dicas</a></li>
+                    </ul>
+                    <ul>
+                        <li><h4>CONECTE-SE</h4></li>
+                        <li><a href="#">Siga-nos nas Redes Sociais</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+          // Funcionalidade do Menu Hamburguer
+        const menuTrigger = document.getElementById('menuTrigger');
+        const slideMenu = document.getElementById('slideMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const menuCloseBtn = document.getElementById('menuCloseBtn');
+        const menuSearchBtn = document.getElementById('menuSearchBtn');
+
+        // Abrir/fechar menu
+        menuTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuTrigger.classList.toggle('active');
+            slideMenu.classList.toggle('open');
+            menuOverlay.classList.toggle('visible');
+        });
+
+        // Fechar menu pelo botão X
+        menuCloseBtn.addEventListener('click', () => {
+            menuTrigger.classList.remove('active');
+            slideMenu.classList.remove('open');
+            menuOverlay.classList.remove('visible');
+        });
+
+        // Fechar menu ao clicar no overlay
+        menuOverlay.addEventListener('click', () => {
+            menuTrigger.classList.remove('active');
+            slideMenu.classList.remove('open');
+            menuOverlay.classList.remove('visible');
+        });
+
+        // Fechar menu ao clicar em um link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                menuTrigger.classList.remove('active');
+                slideMenu.classList.remove('open');
+                menuOverlay.classList.remove('visible');
+            });
+        });
+
+        // Abrir pesquisa pelo botão do menu
+        menuSearchBtn.addEventListener('click', () => {
+            // Fecha o menu
+            menuTrigger.classList.remove('active');
+            slideMenu.classList.remove('open');
+            menuOverlay.classList.remove('visible');
+            
+            // Abre a pesquisa
+            searchField.classList.add('expanded');
+            searchInput.focus();
+        });
+             // Funcionalidade da Barra de Pesquisa
+        const searchToggle = document.getElementById('searchToggle');
+        const searchField = document.getElementById('searchField');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        // Abrir/fechar pesquisa
+        searchToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            searchField.classList.toggle('expanded');
+            if (searchField.classList.contains('expanded')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+                searchResults.classList.remove('active');
+            }
+        });
+
+        // Fechar pesquisa ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!searchField.contains(e.target) && !searchToggle.contains(e.target)) {
+                searchField.classList.remove('expanded');
+                searchInput.value = '';
+                searchResults.classList.remove('active');
+            }
+        });
+
+        // Dados de exemplo para a pesquisa
+        const searchData = [
+            {
+                category: 'Academia',
+                title: 'Smart Strong',
+                description: 'Academia de musculação no centro',
+                link: 'smart-strong-sem-logar.html'
+            },
+            {
+                category: 'Academia',
+                title: 'Rede-Fit P2',
+                description: 'Musculação e fitness',
+                link: 'Redefit-sem-logar.html'
+            },
+            {
+                category: 'Academia',
+                title: 'Olympic Fit',
+                description: 'Treinos de alto desempenho',
+                link: 'olympic-sem-logar.html'
+            },
+            {
+                category: 'Página',
+                title: 'Blog & Dicas',
+                description: 'Artigos sobre saúde e fitness',
+                link: 'Blogs e dicas-sem-logar.html'
+            },
+            {
+                category: 'Página',
+                title: 'Cadastro de Academias',
+                description: 'Divulgue sua academia',
+                link: 'cadastro_academias-sem-logar.html'
+            },
+            {
+                category: 'Página',
+                title: 'Personal Trainer',
+                description: 'Cadastro de personal trainers',
+                link: 'cadastro_personal-sem-logar.html'
+            }
+        ];
+
+        // Função de pesquisa
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            if (searchTerm.length === 0) {
+                searchResults.classList.remove('active');
+                searchResults.innerHTML = '';
+                return;
+            }
+            
+            const filteredResults = searchData.filter(item => 
+                item.title.toLowerCase().includes(searchTerm) || 
+                item.description.toLowerCase().includes(searchTerm) ||
+                item.category.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filteredResults.length > 0) {
+                searchResults.innerHTML = filteredResults.map(item => `
+                    <div class="search-result-item" onclick="window.location.href='${item.link}'">
+                        <div class="result-category">${item.category}</div>
+                        <div class="result-title">${item.title}</div>
+                        <div class="result-description">${item.description}</div>
+                    </div>
+                `).join('');
+                searchResults.classList.add('active');
+            } else {
+                searchResults.innerHTML = `
+                    <div class="search-result-item">
+                        <div class="result-title">Nenhum resultado encontrado</div>
+                        <div class="result-description">Tente outra palavra-chave</div>
+                    </div>
+                `;
+                searchResults.classList.add('active');
+            }
+        });
+
+        // Prevenir que o Enter no input de pesquisa recarregue a página
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+       // ========== CONFIGURAÇÃO INICIAL ==========
+let searchExpanded = false;
+
+// Mapa de busca com páginas reais e academias
+const searchMap = {
+    'smart strong': {
+        url: 'smart-strong.html',
+        category: 'Academia',
+        description: 'Musculação - R. Ângelo Gonçalves, n°137'
+    },
+    'rede fit': {
+        url: 'Redefit.html',
+        category: 'Academia',
+        description: 'Musculação - R. Cel. Cordeiro, 739'
+    },
+    'força total': {
+        url: '#',
+        category: 'Academia',
+        description: 'Musculação - Centro - R$ 60/mês',
+        scrollTo: 'Academia Força Total'
+    },
+    'fight club': {
+        url: '#',
+        category: 'Academia',
+        description: 'Artes Marciais - Praça da Matriz - R$ 80/mês',
+        scrollTo: 'Fight Club Pedro II'
+    },
+    'gym evolution': {
+        url: '#',
+        category: 'Academia',
+        description: 'Musculação - Vila Kolping - R$ 45/mês',
+        scrollTo: 'Gym Evolution'
+    },
+    'personal trainer': {
+        url: 'personal-trainer.html',
+        category: 'Serviço',
+        description: 'Encontre profissionais qualificados'
+    },
+    'blog': {
+        url: 'blog.html',
+        category: 'Conteúdo',
+        description: 'Dicas e artigos sobre fitness'
+    },
+    'personais': {
+        url: '#treinadores',
+        category: 'Serviço',
+        description: 'Personal trainers disponíveis'
+    },
+    'sorteios': {
+        url: '#promocoes',
+        category: 'Promoção',
+        description: 'Participe dos sorteios'
+    },
+    'campeonatos': {
+        url: '#competicoes',
+        category: 'Eventos',
+        description: 'Competições e eventos fitness'
+    }
+};
+
+// ========== ELEMENTOS DO DOM ==========
+const elements = {
+    searchToggle: null,
+    searchField: null,
+    searchInput: null,
+    searchResults: null,
+    searchWidget: null,
+    menuTrigger: null,
+    slideMenu: null
+    // REMOVIDO: menuOverlay - não existe no HTML
+};
+
+// ========== FUNÇÕES DE BUSCA ==========
+function toggleSearch() {
+    searchExpanded = !searchExpanded;
+   
+    if (searchExpanded) {
+        elements.searchField?.classList.add('expanded');
+        elements.searchToggle?.classList.add('expanded');
+        elements.searchWidget?.classList.add('expanded-mode');
+       
+        setTimeout(() => {
+            if (elements.searchInput) {
+                elements.searchInput.focus();
+                elements.searchInput.style.pointerEvents = 'auto';
+            }
+        }, 300);
+    } else {
+        closeSearch();
+    }
+}
+
+function closeSearch() {
+    searchExpanded = false;
+    elements.searchField?.classList.remove('expanded');
+    elements.searchToggle?.classList.remove('expanded');
+    elements.searchWidget?.classList.remove('expanded-mode');
+   
+    if (elements.searchInput) {
+        elements.searchInput.blur();
+        elements.searchInput.value = '';
+    }
+   
+    hideResults();
+}
+
+function performSearch(query) {
+    const searchTerm = query.toLowerCase().trim();
+   
+    if (!searchTerm) {
+        hideResults();
+        return;
+    }
+   
+    // Buscar nas academias da página
+    const cards = document.querySelectorAll('.academy-card');
+    let academyMatches = [];
+   
+    cards.forEach(card => {
+        const academyName = card.querySelector('.academy-name').textContent.toLowerCase();
+        const academyLocation = card.querySelector('.academy-location').textContent.toLowerCase();
+        const academyType = card.getAttribute('data-type');
+        const academyPrice = card.getAttribute('data-price');
+       
+        if (academyName.includes(searchTerm) || academyLocation.includes(searchTerm)) {
+            academyMatches.push({
+                name: card.querySelector('.academy-name').textContent,
+                category: academyType === 'musculacao' ? 'Musculação' : 'Artes Marciais',
+                description: `${card.querySelector('.academy-location').textContent} - R$ ${academyPrice}/mês`,
+                scrollTo: card.querySelector('.academy-name').textContent
+            });
+        }
+    });
+   
+    // Buscar no mapa de navegação
+    const navMatches = Object.entries(searchMap)
+        .filter(([key, data]) =>
+            key.includes(searchTerm) ||
+            data.description.toLowerCase().includes(searchTerm) ||
+            data.category.toLowerCase().includes(searchTerm)
+        )
+        .map(([key, data]) => ({
+            name: formatTitle(key),
+            category: data.category,
+            description: data.description,
+            url: data.url,
+            scrollTo: data.scrollTo
+        }));
+   
+    const allMatches = [...academyMatches, ...navMatches].slice(0, 8);
+    displayResults(allMatches);
+}
+
+function displayResults(matches) {
+    if (!elements.searchResults) return;
+   
+    if (matches.length === 0) {
+        elements.searchResults.innerHTML = `
+            <div class="search-result-item">
+                <div class="result-title">Nenhum resultado encontrado</div>
+                <div class="result-description">Tente pesquisar por outro termo</div>
+            </div>
+        `;
+    } else {
+        elements.searchResults.innerHTML = matches.map((match, index) => `
+            <div class="search-result-item" onclick="navigateToSearchResult(${index})" data-match='${JSON.stringify(match).replace(/'/g, "&apos;")}'>
+                <div class="result-category">${match.category}</div>
+                <div class="result-title">${match.name}</div>
+                <div class="result-description">${match.description}</div>
+            </div>
+        `).join('');
+    }
+   
+    elements.searchResults.classList.add('active');
+}
+
+// FUNÇÃO CORRIGIDA - sem conflito de nomes
+function navigateToSearchResult(index) {
+    const resultItem = document.querySelectorAll('.search-result-item')[index];
+    const matchData = JSON.parse(resultItem.getAttribute('data-match').replace(/&apos;/g, "'"));
+   
+    closeSearch();
+   
+    if (matchData.scrollTo) {
+        scrollToCard(matchData.scrollTo);
+        showNotification(`📍 Encontrado: ${matchData.name}`);
+    } else if (matchData.url) {
+        showNotification(`Redirecionando para: ${matchData.name}`);
+       
+        setTimeout(() => {
+            if (matchData.url.startsWith('#')) {
+                const target = document.querySelector(matchData.url);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            } else {
+                window.location.href = matchData.url;
+            }
+        }, 500);
+    }
+}
+
+function hideResults() {
+    elements.searchResults?.classList.remove('active');
+}
+
+function formatTitle(text) {
+    return text.split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
+function scrollToCard(academyName) {
+    const cards = document.querySelectorAll('.academy-card');
+    cards.forEach(card => {
+        const name = card.querySelector('.academy-name').textContent;
+        if (name.toLowerCase() === academyName.toLowerCase()) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.style.animation = 'highlight 2s ease-in-out';
+            setTimeout(() => {
+                card.style.animation = '';
+            }, 2000);
+        }
+    });
+}
+
+// ========== FUNÇÕES DO MENU LATERAL ==========
+function toggleMenu() {
+    if (elements.menuTrigger && elements.slideMenu) {
+        elements.menuTrigger.classList.toggle('active');
+        elements.slideMenu.classList.toggle('open');
+       
+        // Criar overlay dinamicamente se não existir
+        let overlay = document.getElementById('menuOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'menuOverlay';
+            overlay.className = 'menu-overlay';
+            overlay.addEventListener('click', toggleMenu);
+            document.body.appendChild(overlay);
+        }
+        overlay.classList.toggle('visible');
+       
+        closeSearch();
+    }
+}
+
+        // ========== FUNÇÕES DE FILTRO ==========
+        function filterAcademies() {
+            const typeFilter = document.querySelector('input[name="type"]:checked').value;
+            const locationFilters = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(input => input.value);
+           
+            const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseInt(document.getElementById('maxPrice').value) || Infinity;
+           
+            const cards = document.querySelectorAll('.academy-card');
+           
+            cards.forEach(card => {
+                const cardType = card.getAttribute('data-type');
+                const cardLocation = card.getAttribute('data-location');
+                const cardPrice = parseInt(card.getAttribute('data-price'));
+                const cardFacilities = card.getAttribute('data-facilities').split(',');
+               
+                let showCard = true;
+               
+                // Filtro por tipo
+                if (typeFilter !== 'all' && cardType !== typeFilter) {
+                    showCard = false;
+                }
+               
+                // Filtro por localização
+                const locationChecks = locationFilters.filter(filter =>
+                    ['praca-matriz', 'centro', 'vila-kolping', 'chapada-serra'].includes(filter)
+                );
+                if (locationChecks.length > 0 && !locationChecks.includes(cardLocation)) {
+                    showCard = false;
+                }
+               
+                // Filtro por preço
+                if (cardPrice < minPrice || cardPrice > maxPrice) {
+                    showCard = false;
+                }
+               
+                // Filtro por facilidades
+                const facilityChecks = locationFilters.filter(filter =>
+                    ['estacionamento', 'ar-condicionado', 'vestiario', 'wifi', 'personais'].includes(filter)
+                );
+                if (facilityChecks.length > 0) {
+                    const hasAllFacilities = facilityChecks.every(facility =>
+                        cardFacilities.includes(facility)
+                    );
+                    if (!hasAllFacilities) {
+                        showCard = false;
+                    }
+                }
+               
+                card.style.display = showCard ? 'block' : 'none';
+            });
+        }
+
+        // ========== FUNÇÕES AUXILIARES ==========
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #00ff88;
+                color: #000;
+                padding: 12px 20px;
+                border-radius: 8px;
+                font-weight: 600;
+                z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+           
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 2700);
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        function initializeElements() {
+            elements.searchToggle = document.getElementById('searchToggle');
+            elements.searchField = document.getElementById('searchField');
+            elements.searchInput = document.getElementById('searchInput');
+            elements.searchResults = document.getElementById('searchResults');
+            elements.searchWidget = document.getElementById('searchWidget');
+            elements.menuTrigger = document.getElementById('menuTrigger');
+            elements.slideMenu = document.getElementById('slideMenu');
+            elements.menuOverlay = document.getElementById('menuOverlay');
+        }
+
+        function initializeSearchEvents() {
+            // Toggle da busca
+            if (elements.searchToggle) {
+                elements.searchToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleSearch();
+                });
+            }
+
+            // Input de busca
+            if (elements.searchInput) {
+                elements.searchInput.addEventListener('input', (e) => {
+                    performSearch(e.target.value);
+                });
+
+                elements.searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const query = elements.searchInput.value.trim();
+                        if (query) {
+                            performSearch(query);
+                        }
+                    } else if (e.key === 'Escape') {
+                        closeSearch();
+                    }
+                });
+            }
+
+            // Fechar ao clicar fora
+            document.addEventListener('click', (e) => {
+                if (searchExpanded &&
+                    !elements.searchField?.contains(e.target) &&
+                    !elements.searchToggle?.contains(e.target) &&
+                    !elements.searchInput?.contains(e.target) &&
+                    !elements.searchResults?.contains(e.target)) {
+                    closeSearch();
+                }
+            });
+
+            // Prevenir fechamento ao clicar nos resultados
+            if (elements.searchResults) {
+                elements.searchResults.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+
+            // Tecla ESC global
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && searchExpanded) {
+                    closeSearch();
+                }
+            });
+        }
+
+        function initializeMenuEvents() {
+            // Menu trigger
+            if (elements.menuTrigger) {
+                elements.menuTrigger.addEventListener('click', toggleMenu);
+            }
+
+            // Overlay do menu
+            if (elements.menuOverlay) {
+                elements.menuOverlay.addEventListener('click', toggleMenu);
+            }
+
+            // Links de navegação
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                   
+                    // Se for âncora interna, fazer scroll suave
+                    if (href.startsWith('#')) {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                            toggleMenu();
+                        }
+                    }
+                   
+                    showNotification(`📍 Navegando para: ${link.textContent}`);
+                });
+            });
+        }
+
+        function initializeSmoothScroll() {
+            // Scroll suave para todos os links âncora
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+        // ========== INICIALIZAÇÃO PRINCIPAL ==========
+        function initializeHeader() {
+            console.log('🚀 Inicializando sistema...');
+           
+            initializeElements();
+            initializeSearchEvents();
+            initializeMenuEvents();
+            initializeSmoothScroll();
+           
+            console.log('✅ Sistema inicializado com sucesso!');
+            console.log('🔍 Busca integrada ativada');
+            console.log('📱 Menu responsivo ativado');
+            console.log('🏋️ Total de academias:', document.querySelectorAll('.academy-card').length);
+        }
+
+        // Executar quando o DOM estiver pronto
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeHeader);
+        } else {
+            initializeHeader();
+        }
+
+        // Expor funções globalmente para uso inline
+        window.navigateToResult = navigateToResult;
+        window.toggleSearch = toggleSearch;
+        window.toggleMenu = toggleMenu;
+        window.showNotification = showNotification;
+        window.filterAcademies = filterAcademies;
+        window.scrollToCard = scrollToCard;
+    </script>
+  <script src="menu.js"></script>
+  <!-- 1. Sistema de Notificações Globais -->
+<script src="global-notifications.js"></script>
+<!-- 2. Gerenciador de Usuários -->
+<script src="user-manager.js"></script>
+<!-- 3. Header com Informações do Usuário -->
+<script src="user-header.js"></script>
+
+</body>
+</html>
