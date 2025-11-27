@@ -1,0 +1,327 @@
+<!-- ========== SISTEMA DE MANUTENÇÃO DE LOGIN ========== -->
+<script>
+// ========== VERIFICAÇÃO E MANUTENÇÃO DO LOGIN ==========
+(function() {
+    console.log('🔍 Verificando login na página:', window.location.pathname);
+    
+    // Verificar se há usuário logado
+    const userData = localStorage.getItem('gymp2_current_user') || 
+                     localStorage.getItem('currentUser');
+    
+    if (userData) {
+        try {
+            const user = JSON.parse(userData);
+            console.log('✅ Login mantido:', user.name);
+            
+            // Atualizar interface da página
+            updatePageForLoggedUser(user);
+            
+        } catch (error) {
+            console.error('❌ Erro ao processar login:', error);
+        }
+    } else {
+        console.log('ℹ️ Usuário não está logado');
+    }
+    
+    // ========== FUNÇÃO PARA ATUALIZAR A INTERFACE ==========
+    function updatePageForLoggedUser(user) {
+        console.log('🎨 Atualizando interface para:', user.name);
+        
+        // 1. Atualizar botão Login no header
+        updateLoginButton(user);
+        
+        // 2. Atualizar menu hamburguer
+        updateHamburgerMenu(user);
+        
+        // 3. Adicionar classe ao body
+        document.body.classList.add('logged-in');
+        
+        console.log('✅ Interface atualizada com sucesso!');
+    }
+    
+    // ========== ATUALIZAR BOTÃO LOGIN NO HEADER ==========
+    function updateLoginButton(user) {
+        // Encontrar todos os botões de Login
+        const loginButtons = document.querySelectorAll('.gym-access-btn');
+        
+        loginButtons.forEach(btn => {
+            const link = btn.querySelector('a');
+            
+            // Se for o botão de Login
+            if (btn.textContent.includes('Login') || 
+                (link && link.getAttribute('href') === 'login-gym.html')) {
+                
+                console.log('🔄 Substituindo botão Login...');
+                
+                const initials = user.name
+                    .split(' ')
+                    .map(n => n[0])
+                    .slice(0, 2)
+                    .join('')
+                    .toUpperCase();
+                
+                const firstName = user.name.split(' ')[0];
+                
+                // Substituir pelo componente do usuário
+                btn.outerHTML = `
+                    <div class="user-header-container" id="userHeaderContainer" style="
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        background: rgba(0, 255, 136, 0.15);
+                        border: 2px solid rgba(0, 255, 136, 0.4);
+                        border-radius: 25px;
+                        padding: 6px 14px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        position: relative;
+                    ">
+                        <div style="
+                            width: 35px;
+                            height: 35px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, #00ff88, #00cc6a);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 700;
+                            font-size: 14px;
+                            color: #000;
+                            border: 2px solid #fff;
+                        ">${initials}</div>
+                        
+                        <span style="
+                            font-weight: 600;
+                            color: #00ff88;
+                            font-size: 14px;
+                        ">${firstName}</span>
+                        
+                        <div class="user-dropdown" id="userDropdown" style="
+                            position: absolute;
+                            top: calc(100% + 8px);
+                            right: 0;
+                            background: #1a1a1a;
+                            border: 2px solid rgba(0, 255, 136, 0.3);
+                            border-radius: 12px;
+                            padding: 10px;
+                            min-width: 200px;
+                            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+                            opacity: 0;
+                            visibility: hidden;
+                            transform: translateY(-10px);
+                            transition: all 0.3s ease;
+                            z-index: 3000;
+                        ">
+                            <div style="padding: 10px; border-bottom: 1px solid rgba(0, 255, 136, 0.2); margin-bottom: 8px;">
+                                <div style="font-size: 14px; font-weight: 700; color: #fff;">${user.name}</div>
+                                <div style="font-size: 11px; color: rgba(255, 255, 255, 0.6);">${user.email || 'usuario@gymp2.com'}</div>
+                            </div>
+                            
+                            <a href="#perfil" style="
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                padding: 10px;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: all 0.2s ease;
+                                color: #fff;
+                                text-decoration: none;
+                                font-size: 13px;
+                            " onmouseover="this.style.background='rgba(0, 255, 136, 0.1)'" onmouseout="this.style.background='transparent'">
+                                👤 Meu Perfil
+                            </a>
+                            
+                            <div id="logoutBtnPage" style="
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                padding: 10px;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: all 0.2s ease;
+                                color: #ff4444;
+                                border-top: 1px solid rgba(255, 68, 68, 0.2);
+                                margin-top: 6px;
+                                font-size: 13px;
+                            " onmouseover="this.style.background='rgba(255, 68, 68, 0.1)'" onmouseout="this.style.background='transparent'">
+                                🚪 Sair
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                console.log('✅ Botão Login substituído');
+                
+                // Configurar eventos após inserir
+                setTimeout(setupDropdownEvents, 50);
+            }
+        });
+    }
+    
+    // ========== ATUALIZAR MENU HAMBURGUER ==========
+    function updateHamburgerMenu(user) {
+        const navigationList = document.querySelector('.navigation-list');
+        if (!navigationList) return;
+        
+        const navItems = navigationList.querySelectorAll('.nav-item');
+        let loginItem = null;
+        
+        // Encontrar item de Login
+        navItems.forEach(item => {
+            const link = item.querySelector('.nav-link');
+            if (link && (link.textContent.trim() === 'Login' || 
+                         link.getAttribute('href') === '#espaço-cliente' ||
+                         link.getAttribute('href') === 'login-gym.html')) {
+                loginItem = item;
+            }
+        });
+        
+        if (loginItem) {
+            const firstName = user.name.split(' ')[0];
+            
+            // Substituir por Perfil
+            loginItem.innerHTML = `
+                <a href="#perfil" class="nav-link" style="
+                    color: #00ff88; 
+                    font-weight: 700; 
+                    background: rgba(0, 255, 136, 0.1); 
+                    border-radius: 8px; 
+                    margin: 5px 0; 
+                    padding: 12px 15px !important;
+                ">
+                    <i class="fas fa-user" style="margin-right: 10px;"></i>
+                    Meu Perfil (${firstName})
+                </a>
+            `;
+            
+            // Remover logout anterior se existir
+            const existingLogout = navigationList.querySelector('#menuLogoutBtn');
+            if (existingLogout) {
+                existingLogout.closest('.nav-item').remove();
+            }
+            
+            // Adicionar botão Sair
+            const logoutItem = document.createElement('li');
+            logoutItem.className = 'nav-item';
+            logoutItem.innerHTML = `
+                <a href="#logout" class="nav-link" id="menuLogoutBtn" style="
+                    color: #ff4444; 
+                    background: rgba(255, 68, 68, 0.1); 
+                    border-radius: 8px; 
+                    margin: 5px 0; 
+                    padding: 12px 15px !important;
+                ">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i>
+                    Sair
+                </a>
+            `;
+            
+            navigationList.appendChild(logoutItem);
+            
+            // Configurar logout do menu
+            document.getElementById('menuLogoutBtn').addEventListener('click', handleLogout);
+            
+            console.log('✅ Menu hamburguer atualizado');
+        }
+    }
+    
+    // ========== CONFIGURAR EVENTOS DO DROPDOWN ==========
+    function setupDropdownEvents() {
+        const userContainer = document.getElementById('userHeaderContainer');
+        const dropdown = document.getElementById('userDropdown');
+        const logoutBtn = document.getElementById('logoutBtnPage');
+        
+        if (!userContainer || !dropdown || !logoutBtn) {
+            console.log('⚠️ Elementos do dropdown não encontrados');
+            return;
+        }
+        
+        // Toggle dropdown
+        userContainer.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isVisible = dropdown.style.opacity === '1';
+            
+            if (isVisible) {
+                dropdown.style.opacity = '0';
+                dropdown.style.visibility = 'hidden';
+                dropdown.style.transform = 'translateY(-10px)';
+            } else {
+                dropdown.style.opacity = '1';
+                dropdown.style.visibility = 'visible';
+                dropdown.style.transform = 'translateY(0)';
+            }
+        });
+        
+        // Fechar ao clicar fora
+        document.addEventListener('click', function() {
+            dropdown.style.opacity = '0';
+            dropdown.style.visibility = 'hidden';
+            dropdown.style.transform = 'translateY(-10px)';
+        });
+        
+        // Prevenir fechamento ao clicar no dropdown
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        
+        // Hover no container
+        userContainer.addEventListener('mouseenter', function() {
+            this.style.background = 'rgba(0, 255, 136, 0.25)';
+            this.style.borderColor = 'rgba(0, 255, 136, 0.6)';
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        userContainer.addEventListener('mouseleave', function() {
+            this.style.background = 'rgba(0, 255, 136, 0.15)';
+            this.style.borderColor = 'rgba(0, 255, 136, 0.4)';
+            this.style.transform = 'translateY(0)';
+        });
+        
+        // Logout
+        logoutBtn.addEventListener('click', handleLogout);
+        
+        console.log('✅ Eventos do dropdown configurados');
+    }
+    
+    // ========== FUNÇÃO DE LOGOUT ==========
+    function handleLogout(e) {
+        e.preventDefault();
+        
+        if (confirm('Deseja realmente sair da sua conta?')) {
+            console.log('🚪 Fazendo logout...');
+            
+            // Limpar dados
+            localStorage.removeItem('gymp2_current_user');
+            localStorage.removeItem('currentUser');
+            
+            // Redirecionar para página inicial
+            alert('Logout realizado com sucesso!');
+            window.location.href = 'Menu-inicial-sem-logar.html';
+        }
+    }
+    
+    // ========== EXPORTAR FUNÇÃO DE LOGOUT GLOBAL ==========
+    window.logout = handleLogout;
+    
+})();
+
+// ========== OBSERVAR MUDANÇAS NO LOCALSTORAGE ==========
+window.addEventListener('storage', function(e) {
+    if ((e.key === 'currentUser' || e.key === 'gymp2_current_user') && e.newValue) {
+        console.log('🔄 Login detectado em outra aba, recarregando...');
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+    
+    if ((e.key === 'currentUser' || e.key === 'gymp2_current_user') && !e.newValue) {
+        console.log('🚪 Logout detectado em outra aba, recarregando...');
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+});
+
+console.log('✅ Sistema de login carregado na página!');
+</script>
