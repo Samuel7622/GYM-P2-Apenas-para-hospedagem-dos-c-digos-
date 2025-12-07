@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Personal Trainers - Gym P2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: white;
+        }
+
+        /* ========== SEÇÃO PERSONAL - ESTILO SMART FIT COMPACTO ========== */
+        .quatro {
+            background: #2a2a2a;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .personal-wrapper {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* LADO ESQUERDO - TEXTO */
+        .personal-text {
+            padding-right: 20px;
+        }
+
+        .personal-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .personal-subtitle {
+            font-size: 1.1rem;
+            color: #cccccc;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* LISTA SIMPLES */
+        .info-list {
+            list-style: none;
+            margin-bottom: 35px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+
+        .bullet {
+            width: 6px;
+            height: 6px;
+            background: #00ff88;
+            border-radius: 50%;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        /* EXTRAS */
+        .extra-info {
+            font-size: 0.95rem;
+            color: #aaa;
+            margin-bottom: 35px;
+            font-style: italic;
+        }
+
+        /* BOTÕES */
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-download {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .btn-download:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #555;
+        }
+
+        .btn-secondary:hover {
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+
+        /* LADO DIREITO - MOCKUPS */
+        .phones-mockup {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .phone {
+            width: 240px;
+            height: 490px;
+            background: #1a1a1a;
+            border-radius: 30px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 6px solid #3a3a3a;
+            position: relative;
+        }
+
+        .phone.phone-1 {
+            transform: translateY(-20px);
+        }
+
+        .phone.phone-2 {
+            transform: translateY(20px);
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+            border-radius: 22px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* NOTCH */
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #000;
+            border-radius: 0 0 15px 15px;
+            z-index: 10;
+        }
+
+        /* CONTEÚDO SIMPLIFICADO - CORRIGIDO */
+        .screen-content {
+            padding: 40px 15px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+        }
+
+        .screen-header {
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 15px;
+            padding: 15px 10px;
+            text-align: center;
+        }
+
+        .screen-header h4 {
+            font-size: 0.9rem;
+            color: #00ff88;
+            margin-bottom: 5px;
+            white-space: nowrap; /* ✅ IMPEDE QUEBRA */
+        }
+
+        .screen-header p {
+            font-size: 0.75rem;
+            color: #888;
+            white-space: nowrap; /* ✅ IMPEDE QUEBRA */
+        }
+
+        .screen-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 45px; /* ✅ ALTURA MÍNIMA */
+        }
+
+        .card-info {
+            font-size: 0.75rem;
+            color: #ccc;
+            white-space: nowrap; /* ✅ IMPEDE QUEBRA */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #00ff88;
+            white-space: nowrap; /* ✅ IMPEDE QUEBRA */
+            margin-left: 10px;
+        }
+
+        /* ACENTO LARANJA */
+        .accent-bar {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: 500px;
+            background: linear-gradient(180deg, #ff9500 0%, #ff6b00 100%);
+            border-radius: 30px 0 0 30px;
+            z-index: 0;
+        }
+
+        /* ========== RESPONSIVIDADE CORRIGIDA ========== */
+        @media (max-width: 1024px) {
+            .personal-wrapper {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                text-align: center;
+            }
+
+            .personal-text {
+                padding-right: 0;
+            }
+
+            .personal-title {
+                font-size: 2.2rem;
+            }
+
+            .info-list {
+                max-width: 500px;
+                margin: 0 auto 35px;
+            }
+
+            .info-item {
+                justify-content: center;
+            }
+
+            .cta-buttons {
+                justify-content: center;
+            }
+
+            .accent-bar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quatro {
+                padding: 50px 15px;
+            }
+
+            .personal-title {
+                font-size: 2rem;
+            }
+
+            .personal-subtitle {
+                font-size: 1rem;
+            }
+
+            .phones-mockup {
+                gap: 15px;
+            }
+
+            .phone {
+                width: 180px;
+                height: 370px;
+                padding: 10px;
+            }
+
+            /* ✅ AJUSTES NO CONTEÚDO - 768px */
+            .screen-content {
+                padding: 35px 12px 12px;
+                gap: 10px;
+            }
+
+            .screen-header {
+                padding: 12px 8px;
+            }
+
+            .screen-header h4 {
+                font-size: 0.8rem;
+            }
+
+            .screen-header p {
+                font-size: 0.7rem;
+            }
+
+            .screen-card {
+                padding: 10px 8px;
+                min-height: 40px;
+            }
+
+            .card-info {
+                font-size: 0.7rem;
+            }
+
+            .card-value {
+                font-size: 0.85rem;
+            }
+
+            .notch {
+                width: 100px;
+                height: 22px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .quatro {
+                padding: 40px 10px;
+            }
+
+            .personal-title {
+                font-size: 1.8rem;
+            }
+
+            .phone {
+                width: 160px;
+                height: 330px;
+                padding: 8px;
+            }
+
+            /* ✅ AJUSTES NO CONTEÚDO - 640px */
+            .screen-content {
+                padding: 32px 10px 10px;
+                gap: 8px;
+            }
+
+            .screen-header {
+                padding: 10px 6px;
+            }
+
+            .screen-header h4 {
+                font-size: 0.75rem;
+            }
+
+            .screen-header p {
+                font-size: 0.65rem;
+            }
+
+            .screen-card {
+                padding: 8px 6px;
+                min-height: 35px;
+            }
+
+            .card-info {
+                font-size: 0.65rem;
+            }
+
+            .card-value {
+                font-size: 0.8rem;
+                margin-left: 5px;
+            }
+
+            .notch {
+                width: 90px;
+                height: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .personal-title {
+                font-size: 1.6rem;
+            }
+
+            .phones-mockup {
+                gap: 10px;
+            }
+
+            .phone {
+                width: 140px;
+                height: 290px;
+                padding: 7px;
+                border-width: 4px;
+            }
+
+            .phone.phone-1,
+            .phone.phone-2 {
+                transform: translateY(0);
+            }
+
+            /* ✅ AJUSTES NO CONTEÚDO - 480px */
+            .screen-content {
+                padding: 28px 8px 8px;
+                gap: 7px;
+            }
+
+            .screen-header {
+                padding: 8px 5px;
+                border-radius: 10px;
+            }
+
+            .screen-header h4 {
+                font-size: 0.7rem;
+            }
+
+            .screen-header p {
+                font-size: 0.6rem;
+            }
+
+            .screen-card {
+                padding: 7px 5px;
+                min-height: 30px;
+                border-radius: 8px;
+            }
+
+            .card-info {
+                font-size: 0.6rem;
+            }
+
+            .card-value {
+                font-size: 0.75rem;
+            }
+
+            .notch {
+                width: 80px;
+                height: 18px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .phone {
+                width: 120px;
+                height: 250px;
+                padding: 6px;
+            }
+
+            /* ✅ AJUSTES NO CONTEÚDO - 360px */
+            .screen-content {
+                padding: 25px 6px 6px;
+                gap: 6px;
+            }
+
+            .screen-header {
+                padding: 6px 4px;
+            }
+
+            .screen-header h4 {
+                font-size: 0.65rem;
+            }
+
+            .screen-header p {
+                font-size: 0.55rem;
+            }
+
+            .screen-card {
+                padding: 6px 4px;
+                min-height: 28px;
+            }
+
+            .card-info {
+                font-size: 0.55rem;
+            }
+
+            .card-value {
+                font-size: 0.7rem;
+            }
+
+            .notch {
+                width: 70px;
+                height: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="quatro">
+        <div class="accent-bar"></div>
+        
+        <div class="personal-wrapper">
+            <!-- LADO ESQUERDO -->
+            <div class="personal-text">
+                <h1 class="personal-title">
+                    Personal Trainers:<br>
+                    Seu parceiro nos treinos!
+                </h1>
+
+                <p class="personal-subtitle">
+                    Conecte-se com profissionais qualificados e alcance seus objetivos
+                </p>
+
+                <ul class="info-list">
+                    <li class="info-item">
+                        <span class="bullet"></span>
+                        <span>Encontre personal trainers próximos a você</span>
+                    </li>
+                    <li class="info-item">
+                        <span class="bullet"></span>
+                        <span>Veja avaliações e especialidades</span>
+                    </li>
+                    <li class="info-item">
+                        <span class="bullet"></span>
+                        <span>Agende sua primeira sessão gratuita</span>
+                    </li>
+                    <li class="info-item">
+                        <span class="bullet"></span>
+                        <span>Profissionais certificados e experientes</span>
+                    </li>
+                </ul>
+
+                <p class="extra-info">
+                    Tudo isso de graça!
+                </p>
+
+                <div class="cta-buttons">
+                    <a href="personais.html" class="btn btn-download">
+                        <i class="fas fa-search"></i>
+                        Encontrar Personal
+                    </a>
+                    <a href="cadastro.html" class="btn btn-secondary">
+                        <i class="fas fa-user-plus"></i>
+                        Cadastre-se
+                    </a>
+                </div>
+            </div>
+
+            <!-- LADO DIREITO - MOCKUPS -->
+            <div class="phones-mockup">
+                <div class="phone phone-1">
+                    <div class="phone-screen">
+                        <div class="notch"></div>
+                        <div class="screen-content">
+                            <div class="screen-header">
+                                <h4>Personal Trainers</h4>
+                                <p>Encontre o seu</p>
+                            </div>
+                            <div class="screen-card">
+                                <span class="card-info">Profissionais</span>
+                                <span class="card-value">150+</span>
+                            </div>
+                            <div class="screen-card">
+                                <span class="card-info">Avaliação</span>
+                                <span class="card-value">5.0 ★</span>
+                            </div>
+                            <div class="screen-card">
+                                <span class="card-info">Alunos</span>
+                                <span class="card-value">2.5K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phone phone-2">
+                    <div class="phone-screen">
+                        <div class="notch"></div>
+                        <div class="screen-content">
+                            <div class="screen-header">
+                                <h4>Seus Treinos</h4>
+                                <p>Acompanhamento</p>
+                            </div>
+                            <div class="screen-card">
+                                <span class="card-info">Treinos/Mês</span>
+                                <span class="card-value">16</span>
+                            </div>
+                            <div class="screen-card">
+                                <span class="card-info">Progresso</span>
+                                <span class="card-value">85%</span>
+                            </div>
+                            <div class="screen-card">
+                                <span class="card-info">Meta</span>
+                                <span class="card-value">4/4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
