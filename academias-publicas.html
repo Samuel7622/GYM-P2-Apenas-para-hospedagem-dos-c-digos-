@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academias - Gym P2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* ========== ANIMAÇÕES ========== */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes highlight {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0.3); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+
+        /* ========== CONTEÚDO PRINCIPAL ========== */
+        .public-page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .public-header {
+            background: linear-gradient(135deg, #000 0%, #111 100%);
+            padding: 30px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 5px solid #00ff88;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .public-header h1 {
+            color: #00ff88;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .public-header p {
+            color: #99ffcc;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .academies-count {
+            display: inline-block;
+            background: #00ff88;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        /* ========== FILTROS ========== */
+        .content-wrapper {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+        }
+
+        .filters {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 280px;
+            height: fit-content;
+            border: 1px solid #333;
+        }
+
+        @media (max-width: 1024px) {
+            .filters {
+                width: 100%;
+            }
+        }
+
+        .filter-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group h4 {
+            margin-bottom: 0.8rem;
+            color: #00ff88;
+            font-size: 1rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="radio"],
+        .filter-option input[type="checkbox"] {
+            margin-right: 0.8rem;
+            cursor: pointer;
+            accent-color: #00ff88;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .price-range-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .price-input {
+            width: 80px;
+            padding: 0.4rem;
+            border: 2px solid #00ff88;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background: #111;
+            color: #fff;
+        }
+
+        .price-input:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+
+        .price-separator {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .clear-filters-btn {
+            background: transparent;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .clear-filters-btn:hover {
+            background: #00ff88;
+            color: #000;
+        }
+
+        /* ========== GRID DE CARDS ========== */
+        .academies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .academies-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Card de Academia */
+        .academy-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(40, 167, 69, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .academy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.2);
+        }
+
+        /* Estilo específico para artes marciais */
+        .academy-card[data-type="artes-marciais"] {
+            border-color: #dc3545;
+            box-shadow: 0 2px 20px rgba(220, 53, 69, 0.3);
+        }
+
+        .academy-card[data-type="artes-marciais"]:hover {
+            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+        }
+
+        .academy-card[data-type="artes-marciais"] .academy-type {
+            background: #dc3545;
+        }
+
+        .academy-card[data-type="artes-marciais"] .price-badge {
+            background: #000;
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .academy-card[data-type="artes-marciais"] .view-details-btn {
+            background: #dc3545;
+        }
+
+        .academy-card[data-type="artes-marciais"] .view-details-btn:hover {
+            background: #a71e2a;
+        }
+
+        /* Imagem do card */
+        .card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .card-image {
+                height: 180px;
+            }
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
+        }
+
+        .card-image-title {
+            position: relative;
+            z-index: 2;
+            padding: 1rem;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            width: 100%;
+        }
+
+        /* Badge de preço */
+        .price-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #000;
+            color: #28a745;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            border: 1px solid #28a745;
+        }
+
+        /* Conteúdo do card */
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .card-content {
+                padding: 1.2rem;
+            }
+        }
+
+        .academy-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: #fff;
+        }
+
+        .academy-type {
+            background: #28a745;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+
+        .academy-location {
+            color: #ccc;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .academy-location::before {
+            content: '📍';
+        }
+
+        /* Seção de horário */
+        .schedule-section {
+            border-top: 1px solid #333;
+            padding-top: 1rem;
+            margin-top: auto;
+        }
+
+        .schedule {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.4;
+        }
+
+        .schedule-line {
+            margin-bottom: 0.3rem;
+        }
+
+        /* Botão de detalhes */
+        .view-details-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 1rem;
+            transition: background 0.3s;
+            font-size: 1rem;
+        }
+
+        .view-details-btn:hover {
+            background: #1a5d1a;
+        }
+
+        /* Status badge */
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #28a745;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+            border: 1px solid #28a745;
+        }
+
+        .status-badge.pending {
+            color: #ffa502;
+            border-color: #ffa502;
+        }
+
+        .status-badge.inactive {
+            color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        /* Mensagem quando não há academias */
+        .no-academies {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+            grid-column: 1 / -1;
+        }
+
+        .no-academies i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #3a3f48;
+        }
+
+        /* Campo de busca */
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+        }
+
+        /* ========== MODAL ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 50px auto;
+            padding: 0;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            border: 2px solid #00ff88;
+        }
+
+        .modal-header {
+            padding: 20px;
+            background-color: #111;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            color: #00ff88;
+        }
+
+        .close-btn {
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #00ff88;
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            background-color: #111;
+            border-top: 1px solid #333;
+            text-align: right;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b67;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== CONTEÚDO PRINCIPAL ========== -->
+    <div class="public-page-container">
+        <!-- Header da página pública -->
+        <div class="public-header">
+            <h1>Academias Cadastradas <span id="academiesCount" class="academies-count">0</span></h1>
+            <p>Encontre a academia perfeita para você! Filtre por tipo, localização e preço.</p>
+        </div>
+        
+        <!-- Campo de busca -->
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Pesquisar academias...">
+        
+        <!-- WRAPPER COM FILTROS E CARDS -->
+        <div class="content-wrapper">
+            <!-- ========== FILTROS ========== -->
+            <div class="filters">
+                <div class="filter-title">Filtrar Academias</div>
+                
+                <!-- Filtro por Tipo -->
+                <div class="filter-group">
+                    <h4>Tipo de Academia</h4>
+                    <div class="filter-option">
+                        <input type="radio" id="type-all" name="type" value="all" checked>
+                        <label for="type-all">Todos os tipos</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="type-musculacao" name="type" value="musculacao">
+                        <label for="type-musculacao">Musculação</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="type-artes-marciais" name="type" value="artes-marciais">
+                        <label for="type-artes-marciais">Artes Marciais</label>
+                    </div>
+                </div>
+                
+                <!-- Filtro por Localização -->
+                <div class="filter-group">
+                    <h4>Localização</h4>
+                    <div class="filter-option">
+                        <input type="checkbox" id="location-centro" value="centro">
+                        <label for="location-centro">Centro</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="location-praca-matriz" value="praca-matriz">
+                        <label for="location-praca-matriz">Praça da Matriz</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="location-vila-kolping" value="vila-kolping">
+                        <label for="location-vila-kolping">Vila Kolping</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="location-chapada-serra" value="chapada-serra">
+                        <label for="location-chapada-serra">Chapada/Serra</label>
+                    </div>
+                </div>
+                
+                <!-- Filtro por Facilidades -->
+                <div class="filter-group">
+                    <h4>Facilidades</h4>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-estacionamento" value="estacionamento">
+                        <label for="facility-estacionamento">Estacionamento</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-ar-condicionado" value="ar-condicionado">
+                        <label for="facility-ar-condicionado">Ar Condicionado</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-vestiario" value="vestiario">
+                        <label for="facility-vestiario">Vestiário</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-wifi" value="wifi">
+                        <label for="facility-wifi">Wi-Fi</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-personais" value="personais">
+                        <label for="facility-personais">Personais</label>
+                    </div>
+                </div>
+                
+                <!-- Filtro por Preço -->
+                <div class="filter-group">
+                    <h4>Faixa de Preço (R$/mês)</h4>
+                    <div class="price-range-container">
+                        <input type="number" id="minPrice" class="price-input" placeholder="Min" min="0">
+                        <span class="price-separator">-</span>
+                        <input type="number" id="maxPrice" class="price-input" placeholder="Max" min="0">
+                    </div>
+                </div>
+                
+                <button class="clear-filters-btn" id="clearFilters">
+                    <i class="fas fa-times"></i> Limpar Filtros
+                </button>
+            </div>
+            
+            <!-- ========== GRID DE CARDS ========== -->
+            <div class="academies-grid" id="academiesGrid">
+                <!-- Os cards das academias do localStorage serão carregados aqui -->
+            </div>
+        </div>
+        
+        <!-- Mensagem quando não há academias -->
+        <div id="noAcademiesMessage" class="no-academies" style="display: none;">
+            <i class="fas fa-dumbbell"></i>
+            <h3>Nenhuma academia cadastrada</h3>
+            <p>Volte ao painel administrativo para adicionar academias.</p>
+        </div>
+    </div>
+
+    <!-- ========== MODAL PARA DETALHES ========== -->
+    <div id="academyModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Detalhes da Academia</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===========================================
+        // SISTEMA DE ACADEMIAS (Página Pública)
+        // ===========================================
+
+        // Dados de exemplo para academias (caso localStorage esteja vazio)
+        const exampleAcademies = [
+            {
+                id: '1',
+                name: 'Smart Strong',
+                type: 'musculacao',
+                address: 'R. Ângelo Gonçalves, n°137 - Centro',
+                location: 'centro',
+                price: '80',
+                schedule: {
+                    weekdays: '5h - 23h',
+                    weekend: '8h - 17h'
+                },
+                facilities: ['estacionamento', 'ar-condicionado', 'vestiario', 'wifi', 'personais'],
+                image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: '2',
+                name: 'Fight Club Pedro II',
+                type: 'artes-marciais',
+                address: 'Praça da Matriz, s/n',
+                location: 'praca-matriz',
+                price: '120',
+                schedule: {
+                    weekdays: '8h - 22h',
+                    weekend: '9h - 18h'
+                },
+                facilities: ['vestiario', 'personais'],
+                image: 'https://images.unsplash.com/photo-1544593066-4f3c3a2d7a58?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: '3',
+                name: 'Gym Evolution',
+                type: 'musculacao',
+                address: 'Vila Kolping, R. das Flores, 123',
+                location: 'vila-kolping',
+                price: '45',
+                schedule: {
+                    weekdays: '6h - 22h',
+                    weekend: '8h - 16h'
+                },
+                facilities: ['estacionamento', 'vestiario'],
+                image: 'https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: '4',
+                name: 'Força Total',
+                type: 'musculacao',
+                address: 'R. Principal, 456 - Centro',
+                location: 'centro',
+                price: '60',
+                schedule: {
+                    weekdays: '5h - 23h',
+                    weekend: '8h - 17h'
+                },
+                facilities: ['ar-condicionado', 'vestiario', 'wifi'],
+                image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            }
+        ];
+
+        // Inicializar localStorage com dados de exemplo se estiver vazio
+        function initializeLocalStorage() {
+            const storedAcademies = localStorage.getItem('gymAcademies');
+            if (!storedAcademies || JSON.parse(storedAcademies).length === 0) {
+                localStorage.setItem('gymAcademies', JSON.stringify(exampleAcademies));
+                console.log('✅ Dados de exemplo carregados no localStorage');
+            }
+        }
+
+        // Função para criar card no estilo especificado
+        function createAcademyCard(academy) {
+            const card = document.createElement('div');
+            card.className = 'academy-card';
+            card.setAttribute('data-type', academy.type || 'musculacao');
+            card.setAttribute('data-location', academy.location || 'centro');
+            card.setAttribute('data-price', academy.price || '60');
+            card.setAttribute('data-facilities', academy.facilities?.join(',') || '');
+            card.setAttribute('data-id', academy.id);
+            
+            // Determinar status (só mostrar se não for ativo)
+            let statusBadge = '';
+            if (academy.status && academy.status !== 'active') {
+                const statusText = academy.status === 'pending' ? 'Pendente' : 'Inativa';
+                const statusClass = academy.status === 'pending' ? 'pending' : 'inactive';
+                statusBadge = `<div class="status-badge ${statusClass}">${statusText}</div>`;
+            }
+            
+            // Formatar horário
+            let scheduleHTML = '';
+            if (academy.schedule) {
+                scheduleHTML = `
+                    <div class="schedule-line"><strong>Seg a Sex:</strong> ${academy.schedule.weekdays || '5h - 23h'}</div>
+                    <div class="schedule-line"><strong>Sáb/Feriados:</strong> ${academy.schedule.weekend || '8h - 17h'}</div>
+                `;
+            } else {
+                scheduleHTML = `
+                    <div class="schedule-line"><strong>Seg a Sex:</strong> 5h - 23h</div>
+                    <div class="schedule-line"><strong>Sáb/Feriados:</strong> 8h - 17h</div>
+                `;
+            }
+            
+            // URL da imagem (usar placeholder se não houver)
+            const imageUrl = academy.image || 'https://via.placeholder.com/320x200/1a1a1a/28a745?text=Academia+Gym+P2';
+            
+            // Criar HTML do card
+            card.innerHTML = `
+                ${statusBadge}
+                <div class="price-badge">R$ ${academy.price}/mês</div>
+                <div class="card-image" style="background-image: url('${imageUrl}')">
+                    <div class="card-image-title">${academy.name}</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="academy-name">${academy.name}</h3>
+                    <span class="academy-type">${academy.type === 'artes-marciais' ? 'Artes Marciais' : 'Musculação'}</span>
+                    <div class="academy-location">${academy.address}</div>
+                    <div class="schedule-section">
+                        <div class="schedule">${scheduleHTML}</div>
+                    </div>
+                    <button class="view-details-btn" onclick="showAcademyDetails('${academy.id}')">
+                        Ver Detalhes Completos
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Função para carregar academias do localStorage
+        function loadAcademies() {
+            const academiesGrid = document.getElementById('academiesGrid');
+            const noAcademiesMessage = document.getElementById('noAcademiesMessage');
+            const academiesCount = document.getElementById('academiesCount');
+            
+            // Limpar grid
+            academiesGrid.innerHTML = '';
+            
+            // Buscar academias do localStorage
+            const academies = JSON.parse(localStorage.getItem('gymAcademies')) || [];
+            
+            // Atualizar contador
+            academiesCount.textContent = academies.length;
+            
+            // Verificar se há academias
+            if (academies.length === 0) {
+                academiesGrid.style.display = 'none';
+                noAcademiesMessage.style.display = 'block';
+                return;
+            }
+            
+            academiesGrid.style.display = 'grid';
+            noAcademiesMessage.style.display = 'none';
+            
+            // Ordenar por data de criação (mais recentes primeiro)
+            academies.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            // Criar cards para cada academia
+            academies.forEach(academy => {
+                const card = createAcademyCard(academy);
+                academiesGrid.appendChild(card);
+            });
+            
+            // Aplicar filtros após carregar
+            filterAcademies();
+        }
+        
+        // ========== SISTEMA DE FILTROS (MESMO DA PRIMEIRA PÁGINA) ==========
+        function filterAcademies() {
+            const typeFilter = document.querySelector('input[name="type"]:checked').value;
+            const locationFilters = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(input => input.value);
+           
+            const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseInt(document.getElementById('maxPrice').value) || Infinity;
+           
+            const cards = document.querySelectorAll('.academy-card');
+            let visibleCount = 0;
+           
+            cards.forEach(card => {
+                const cardType = card.getAttribute('data-type');
+                const cardLocation = card.getAttribute('data-location');
+                const cardPrice = parseInt(card.getAttribute('data-price'));
+                const cardFacilities = card.getAttribute('data-facilities').split(',');
+               
+                let showCard = true;
+               
+                // Filtro por tipo
+                if (typeFilter !== 'all' && cardType !== typeFilter) {
+                    showCard = false;
+                }
+               
+                // Filtro por localização
+                const locationChecks = locationFilters.filter(filter =>
+                    ['praca-matriz', 'centro', 'vila-kolping', 'chapada-serra'].includes(filter)
+                );
+                if (locationChecks.length > 0 && !locationChecks.includes(cardLocation)) {
+                    showCard = false;
+                }
+               
+                // Filtro por preço
+                if (cardPrice < minPrice || cardPrice > maxPrice) {
+                    showCard = false;
+                }
+               
+                // Filtro por facilidades
+                const facilityChecks = locationFilters.filter(filter =>
+                    ['estacionamento', 'ar-condicionado', 'vestiario', 'wifi', 'personais'].includes(filter)
+                );
+                if (facilityChecks.length > 0) {
+                    const hasAllFacilities = facilityChecks.every(facility =>
+                        cardFacilities.includes(facility)
+                    );
+                    if (!hasAllFacilities) {
+                        showCard = false;
+                    }
+                }
+                
+                // Filtro por busca (opcional)
+                const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+                if (searchTerm) {
+                    const academyName = card.querySelector('.academy-name').textContent.toLowerCase();
+                    const academyAddress = card.querySelector('.academy-location').textContent.toLowerCase();
+                    
+                    if (!academyName.includes(searchTerm) && !academyAddress.includes(searchTerm)) {
+                        showCard = false;
+                    }
+                }
+               
+                card.style.display = showCard ? 'block' : 'none';
+                if (showCard) visibleCount++;
+            });
+            
+            // Atualizar contador
+            document.getElementById('academiesCount').textContent = visibleCount;
+            
+            // Mostrar mensagem se não houver resultados
+            const noAcademiesMessage = document.getElementById('noAcademiesMessage');
+            const academiesGrid = document.getElementById('academiesGrid');
+            
+            if (visibleCount === 0 && cards.length > 0) {
+                noAcademiesMessage.innerHTML = `
+                    <i class="fas fa-filter"></i>
+                    <h3>Nenhuma academia encontrada</h3>
+                    <p>Tente ajustar os filtros ou a busca.</p>
+                `;
+                noAcademiesMessage.style.display = 'block';
+                academiesGrid.style.display = 'none';
+            } else if (visibleCount > 0) {
+                noAcademiesMessage.style.display = 'none';
+                academiesGrid.style.display = 'grid';
+            }
+        }
+
+        // Função para mostrar detalhes da academia
+        function showAcademyDetails(academyId) {
+            const academies = JSON.parse(localStorage.getItem('gymAcademies')) || [];
+            const academy = academies.find(a => a.id == academyId);
+            
+            if (!academy) return;
+            
+            const modal = document.getElementById('academyModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            // Preencher modal com informações
+            modalTitle.textContent = academy.name;
+            
+            modalBody.innerHTML = `
+                <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                    <img src="${academy.image || 'https://via.placeholder.com/150/1a1a1a/28a745?text=Academia'}" style="width: 150px; height: 150px; border-radius: 8px; object-fit: cover;">
+                    <div>
+                        <h4 style="color: #00ff88; margin-bottom: 10px;">Informações Gerais</h4>
+                        <p><strong>Tipo:</strong> ${academy.type === 'artes-marciais' ? 'Artes Marciais' : 'Musculação'}</p>
+                        <p><strong>Preço:</strong> R$ ${academy.price}/mês</p>
+                        <p><strong>Status:</strong> ${academy.status === 'active' ? 'Ativa' : academy.status === 'pending' ? 'Pendente' : 'Inativa'}</p>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Localização</h4>
+                    <p>${academy.address}</p>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Horário de Funcionamento</h4>
+                    <p><strong>Segunda a Sexta:</strong> ${academy.schedule?.weekdays || '5h - 23h'}</p>
+                    <p><strong>Sábado e Feriados:</strong> ${academy.schedule?.weekend || '8h - 17h'}</p>
+                </div>
+                
+                ${academy.description ? `
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Descrição</h4>
+                    <p>${academy.description}</p>
+                </div>
+                ` : ''}
+                
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Contato</h4>
+                    ${academy.email ? `<p><strong>E-mail:</strong> ${academy.email}</p>` : ''}
+                    ${academy.phone ? `<p><strong>Telefone:</strong> ${academy.phone}</p>` : ''}
+                </div>
+                
+                <div>
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Facilidades</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        ${(academy.facilities || []).map(facility => `
+                            <span style="background: rgba(0, 255, 136, 0.1); color: #00ff88; padding: 5px 10px; border-radius: 15px; font-size: 0.9rem;">
+                                ${facility}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Mostrar modal
+            modal.style.display = 'block';
+            
+            // Configurar botões para fechar
+            const closeBtn = modal.querySelector('.close-btn');
+            const closeModalBtn = modal.querySelector('.close-modal');
+            
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            closeModalBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        // ========== INICIALIZAÇÃO DA PÁGINA ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Inicializar localStorage
+            initializeLocalStorage();
+            
+            // 2. Carregar academias
+            loadAcademies();
+            
+            // 3. Adicionar eventos aos filtros
+            const filterInputs = document.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+            filterInputs.forEach(input => {
+                input.addEventListener('change', filterAcademies);
+            });
+            
+            // 4. Adicionar eventos aos inputs de preço
+            document.getElementById('minPrice').addEventListener('input', filterAcademies);
+            document.getElementById('maxPrice').addEventListener('input', filterAcademies);
+            
+            // 5. Busca em tempo real
+            document.getElementById('searchBox').addEventListener('input', filterAcademies);
+            
+            // 6. Botão para limpar filtros
+            document.getElementById('clearFilters').addEventListener('click', function() {
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    if (radio.value === 'all') radio.checked = true;
+                });
+                
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                document.getElementById('minPrice').value = '';
+                document.getElementById('maxPrice').value = '';
+                document.getElementById('searchBox').value = '';
+                
+                filterAcademies();
+            });
+            
+            // 7. Configurar atualização automática
+            window.addEventListener('focus', loadAcademies);
+            
+            // 8. Atualizar contador inicial
+            filterAcademies();
+            
+            console.log('✅ Sistema de academias carregado!');
+        });
+    </script>
+</body>
+</html>
