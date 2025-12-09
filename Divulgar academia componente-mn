@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divulga Academia - Gym P2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .divulga-academia {
+            background: #111;
+            
+            border-radius: 10px;
+            padding: 25px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        
+        .topo {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .titulo {
+            color: #00ff88;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .subtitulo {
+            color: #ccc;
+            font-size: 16px;
+        }
+        
+        .conteudo {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .vantagens {
+            flex: 2;
+        }
+        
+        .vantagem {
+            background: #1a1a1a;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #00ff88;
+            border-radius: 4px;
+        }
+        
+        .vantagem-titulo {
+            color: #00ff88;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .vantagem-texto {
+            color: #999;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+        
+        .cadastro {
+            flex: 1;
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        
+        .btn-cadastrar {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .btn-cadastrar:hover {
+            background: #00cc6a;
+        }
+        
+        .numeros {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .numero {
+            text-align: center;
+        }
+        
+        .numero-valor {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 16px;
+            display: block;
+        }
+        
+        .numero-texto {
+            color: #888;
+            font-size: 11px;
+        }
+        
+        .rodape {
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 600px) {
+            .conteudo {
+                flex-direction: column;
+            }
+            
+            .divulga-academia {
+                padding: 15px;
+            }
+            
+            .titulo {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="divulga-academia">
+        <div class="topo">
+            <div class="titulo">DIVULGUE SUA ACADEMIA</div>
+            <div class="subtitulo">Apareça para milhares de alunos na sua região</div>
+        </div>
+        
+        <div class="conteudo">
+            <div class="vantagens">
+                <div class="vantagem">
+                    <div class="vantagem-titulo">MAIS VISIBILIDADE</div>
+                    <div class="vantagem-texto">Sua academia aparece no topo das buscas</div>
+                </div>
+                
+                <div class="vantagem">
+                    <div class="vantagem-titulo">ALUNOS INTERESSADOS</div>
+                    <div class="vantagem-texto">Pessoas procurando academias perto de você</div>
+                </div>
+                
+                <div class="vantagem">
+                    <div class="vantagem-titulo">AUMENTE MATRÍCULAS</div>
+                    <div class="vantagem-texto">Mais alunos = mais faturamento</div>
+                </div>
+                
+                <div class="vantagem">
+                    <div class="vantagem-titulo">RÁPIDO E FÁCIL</div>
+                    <div class="vantagem-texto">Cadastro simples, aprovação em 24h</div>
+                </div>
+            </div>
+            
+            <div class="cadastro">
+                <button class="btn-cadastrar" onclick="cadastrar()">
+                    CADASTRAR AGORA
+                </button>
+                
+                <div class="numeros">
+                    <div class="numero">
+                        <span class="numero-valor">85+</span>
+                        <span class="numero-texto">ACADEMIAS</span>
+                    </div>
+                    <div class="numero">
+                        <span class="numero-valor">2.5K</span>
+                        <span class="numero-texto">ALUNOS</span>
+                    </div>
+                    <div class="numero">
+                        <span class="numero-valor">24h</span>
+                        <span class="numero-texto">APROVAÇÃO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="rodape">
+            Sem fidelidade • Cancele quando quiser • Suporte por WhatsApp
+        </div>
+    </div>
+
+    <script>
+        function cadastrar() {
+            alert('Vamos te levar para o cadastro da academia...');
+            // Aqui iria o código para o cadastro
+        }
+    </script>
+</body>
+</html>
