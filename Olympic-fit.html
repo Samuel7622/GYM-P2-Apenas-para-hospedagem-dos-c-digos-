@@ -1,0 +1,3256 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <title>Academia - Rede Fit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --active-color: #00ff88;
+            --bg-color: #e1e3e5;
+            --icon-default: hsl(0, 0%, 0%);
+            --icon-accent: hsl(203 15 98);
+            --navigation-color: hsl(203 5 25 / 0.3);
+        }
+
+        body {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow-x: hidden;
+        }
+
+       /* Header Principal */
+.header-container {
+    background: linear-gradient(135deg, #000 0%, #111 50%, #0a0a0a 100%);
+    padding: 1.2rem 2.5rem;
+    box-shadow: 0 4px 20px rgba(21, 255, 0, 0.4);
+    position: relative;
+    top: 0;
+    z-index: 2000;
+    backdrop-filter: blur(20px);
+    width: 100%;
+}
+
+.nav-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.brand-container {
+    flex-shrink: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo-img {
+    height: 80px;
+    width: auto;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.right-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: nowrap;
+}
+
+/* BARRA DE PESQUISA */
+.search-widget {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.search-toggle-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00ff40 0%, #00cc33 100%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    z-index: 100;
+    flex-shrink: 0;
+}
+
+.search-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.search-icon {
+    width: 22px;
+    height: 22px;
+    fill: #000;
+    transition: all 0.3s ease;
+}
+
+.expandable-search-field {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid transparent;
+    border-radius: 30px;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    backdrop-filter: blur(15px);
+    z-index: 50;
+}
+
+.expandable-search-field.expanded {
+    width: 320px;
+    border-color: #00ff40;
+}
+
+.search-input-field {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0 60px 0 20px;
+    font-size: 1rem;
+    color: #000000;
+    font-family: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.2s;
+    cursor: text;
+}
+
+.expandable-search-field.expanded .search-input-field {
+    opacity: 1;
+}
+
+.expandable-search-field * {
+    pointer-events: auto;
+}
+
+/* Resultados da Pesquisa */
+.search-results {
+    position: fixed;
+    top: calc(1.2rem * 2 + 55px + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1999;
+    width: calc(100vw - 40px);
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-result-item:hover {
+    background: #f0f0f0;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.result-category {
+    font-size: 0.8rem;
+    color: #00ff40;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.result-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.result-description {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.gym-access-btn {
+    background: linear-gradient(135deg, #00ff40 0%, #26a653 50%, #00cc6a 100%);
+    color: #000;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.gym-access-btn a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+.gym-access-btn:hover {
+    background: #016916ea;
+}
+
+.gym-access-btn:active {
+    transform: translateY(0);
+}
+
+.menu-trigger {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    z-index: 2001;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.hamburger-line {
+    width: 28px;
+    height: 4px;
+    background: linear-gradient(45deg, #00ff40, #04ff00);
+    margin: 3px 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-radius: 3px;
+}
+
+.menu-trigger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(9px, 9px);
+}
+
+.menu-trigger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-trigger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(9px, -9px);
+}
+
+.slide-menu {
+    position: fixed;
+    top: -50px;
+    margin-top: 60px;
+    right: -450px;
+    width: 450px;
+    height: 100vh;
+    background: #000000;
+    transition: right 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 3000;
+    padding: 2rem 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #222;
+}
+
+.menu-close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.menu-close-btn:hover {
+    transform: rotate(90deg);
+}
+
+.menu-close-icon {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+}
+
+.menu-search-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #00ff40 0%, #00cc3a 100%);
+    color: #000;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    margin-bottom: 1.5rem;
+}
+
+.menu-search-btn:hover {
+    background: linear-gradient(135deg, #00ff40 0%, #00ff40 100%);
+}
+
+.slide-menu.open {
+    right: 0;
+}
+
+.navigation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.nav-item {
+    margin: 0;
+    width: 100%;
+}
+
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: block;
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 0.5px solid #333;
+}
+
+.nav-link:hover {
+    color: #00ff40;
+    padding-left: 15px;
+}
+
+.nav-item:last-child .nav-link {
+    border-bottom: none;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    z-index: 2500;
+    backdrop-filter: blur(8px);
+}
+
+.menu-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========== RESPONSIVIDADE DO HEADER ========== */
+
+/* Tablets Grandes (1024px e abaixo) */
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 1rem 1.5rem;
+    }
+
+    .logo-img {
+        height: 65px;
+    }
+
+    .right-controls {
+        gap: 1rem;
+    }
+
+    .gym-access-btn {
+        padding: 10px 16px;
+        font-size: 0.95rem;
+    }
+
+    .search-toggle-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .search-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .expandable-search-field {
+        width: 44px;
+        height: 44px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 280px;
+    }
+
+    .search-input-field {
+        padding: 0 50px 0 18px;
+        font-size: 0.95rem;
+    }
+
+    .slide-menu {
+        width: 350px;
+        right: -350px;
+        padding: 2rem 1.5rem;
+    }
+
+    .menu-search-btn {
+        padding: 12px 18px;
+        font-size: 0.95rem;
+    }
+
+    .search-results {
+        top: calc(1rem * 2 + 65px + 10px);
+        max-width: 500px;
+    }
+}
+
+/* Tablets Pequenos e Mobile Grande (768px e abaixo) */
+@media (max-width: 768px) {
+    /* Ocultar botão Home em mobile */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.8rem 1rem;
+    }
+
+    .nav-wrapper {
+        flex-wrap: nowrap;
+        gap: 10px;
+    }
+
+    .logo-img {
+        height: 50px;
+        min-height: 50px;
+    }
+
+    .right-controls {
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .search-toggle-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .search-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .expandable-search-field {
+        width: 42px;
+        height: 42px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 250px;
+        z-index: 2002;
+    }
+
+    .search-input-field {
+        padding: 0 45px 0 16px;
+        font-size: 0.9rem;
+    }
+
+    .gym-access-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        margin: 3px;
+    }
+
+    .slide-menu {
+        width: 300px;
+        right: -300px;
+        padding: 1.5rem 1.2rem;
+    }
+
+    .menu-search-btn {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+
+    .nav-link {
+        font-size: 1rem;
+        padding: 0.9rem 0;
+        white-space: normal;
+        line-height: 1.4;
+    }
+
+    .search-results {
+        top: calc(0.8rem * 2 + 50px + 10px);
+        max-width: 400px;
+    }
+}
+
+/* Mobile (640px e abaixo) */
+@media (max-width: 640px) {
+    /* Manter Home oculto em mobile */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.7rem 0.8rem;
+    }
+
+    .nav-wrapper {
+        gap: 8px;
+    }
+
+    .right-controls {
+        gap: 0.4rem;
+    }
+
+    .logo-img {
+        height: 45px;
+        min-height: 45px;
+    }
+
+    .search-toggle-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .search-icon {
+        width: 17px;
+        height: 17px;
+    }
+
+    .expandable-search-field {
+        width: 38px;
+        height: 38px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 220px;
+        position: fixed;
+        right: 15px;
+        top: 70px;
+        transform: none;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .search-input-field {
+        padding: 0 40px 0 15px;
+        font-size: 0.85rem;
+    }
+
+    .gym-access-btn {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+
+    .slide-menu {
+        width: 280px;
+        right: -280px;
+        padding: 1.5rem 1rem;
+    }
+
+    .menu-search-btn {
+        padding: 11px 14px;
+        font-size: 0.85rem;
+    }
+
+    .nav-link {
+        font-size: 0.95rem;
+        padding: 0.85rem 0;
+        white-space: normal;
+    }
+
+    .search-results {
+        top: calc(0.7rem * 2 + 45px + 10px);
+        max-width: 350px;
+    }
+}
+
+/* Pequenos Smartphones (480px e abaixo) */
+@media (max-width: 480px) {
+    /* Manter Home oculto */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.6rem 0.6rem;
+    }
+
+    .nav-wrapper {
+        gap: 6px;
+    }
+
+    .logo-img {
+        height: 40px;
+        min-height: 40px;
+    }
+
+    .right-controls {
+        gap: 0.3rem;
+    }
+
+    .search-toggle-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .search-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .expandable-search-field {
+        width: 36px;
+        height: 36px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 200px;
+        right: 10px;
+        top: 65px;
+    }
+
+    .search-input-field {
+        padding: 0 38px 0 12px;
+        font-size: 0.8rem;
+    }
+
+    .gym-access-btn {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+    }
+
+    .slide-menu {
+        width: 260px;
+        right: -260px;
+        padding: 1.2rem 0.8rem;
+    }
+
+    .menu-search-btn {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+
+    .nav-link {
+        font-size: 0.9rem;
+        padding: 0.8rem 0;
+    }
+
+    .search-results {
+        top: calc(0.6rem * 2 + 40px + 10px);
+        max-width: 300px;
+    }
+}
+
+/* Telas muito pequenas (360px e abaixo) */
+@media (max-width: 360px) {
+    /* Manter Home oculto */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.5rem 0.5rem;
+    }
+
+    .logo-img {
+        height: 35px;
+        min-height: 35px;
+    }
+
+    .right-controls {
+        gap: 0.25rem;
+    }
+
+    .search-toggle-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .search-icon {
+        width: 15px;
+        height: 15px;
+    }
+
+    .expandable-search-field {
+        width: 34px;
+        height: 34px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 180px;
+        right: 8px;
+        top: 60px;
+    }
+
+    .search-input-field {
+        padding: 0 35px 0 10px;
+        font-size: 0.75rem;
+    }
+
+    .gym-access-btn {
+        padding: 4px 6px;
+        font-size: 0.65rem;
+    }
+
+    .slide-menu {
+        width: 240px;
+        right: -240px;
+        padding: 1.2rem 0.8rem;
+    }
+
+    .menu-search-btn {
+        padding: 9px 10px;
+        font-size: 0.75rem;
+    }
+
+    .nav-link {
+        font-size: 0.85rem;
+        padding: 0.75rem 0;
+    }
+
+    .search-results {
+        top: calc(0.5rem * 2 + 35px + 10px);
+        max-width: 280px;
+    }
+}
+
+/* Telas muito muito pequenas (320px e abaixo) */
+@media (max-width: 320px) {
+    /* Manter Home oculto */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.4rem 0.4rem;
+    }
+
+    .logo-img {
+        height: 32px;
+        min-height: 32px;
+    }
+
+    .right-controls {
+        gap: 0.2rem;
+    }
+
+    .search-toggle-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .search-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .expandable-search-field {
+        width: 32px;
+        height: 32px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 170px;
+        right: 6px;
+        top: 55px;
+    }
+
+    .search-input-field {
+        padding: 0 32px 0 8px;
+        font-size: 0.7rem;
+    }
+
+    .gym-access-btn {
+        padding: 3px 5px;
+        font-size: 0.6rem;
+    }
+
+    .slide-menu {
+        width: 240px;
+        right: -240px;
+        padding: 60px 0.8rem 1.5rem;
+    }
+
+    .menu-search-btn {
+        padding: 8px 10px;
+        font-size: 0.7rem;
+    }
+
+    .nav-link {
+        font-size: 0.8rem;
+        padding: 0.7rem 0;
+    }
+
+    .search-results {
+        top: calc(0.4rem * 2 + 32px + 10px);
+        max-width: 260px;
+    }
+}
+        /* ========== CONTEÚDO PRINCIPAL ========== */
+        .page-title {
+            color: #00ff88;
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 40px 20px;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        .main-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        /* SLIDER DE IMAGENS */
+        .image-slider {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .slider__content {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .image-display {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.3s ease;
+        }
+
+        /* Se você já tem Font Awesome incluído (que parece ter no seu código) */
+.slider-control--button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 255, 136, 0.9);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    font-size: 20px;
+    color: #000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.slider-control--button:hover {
+    background: rgba(0, 255, 136, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* SETAS DO SLIDER COM FONT AWESOME */
+.slider-control--button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 255, 136, 0.9);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    font-size: 20px;
+    color: #000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.slider-control--button:hover {
+    background: rgba(0, 255, 136, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.prev-button {
+    left: 15px;
+}
+
+.next-button {
+    right: 15px;
+}
+
+/* Remove as setas CSS antigas */
+.arrow-wrapper, .arrow {
+    display: none;
+}
+
+/* ========== RESPONSIVIDADE DAS SETAS ========== */
+
+/* Tablets (1024px) */
+@media (max-width: 1024px) {
+    .slider-control--button {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
+/* Tablets Pequenos (768px) */
+@media (max-width: 768px) {
+    .slider-control--button {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+}
+
+/* Mobile Grande (640px) */
+@media (max-width: 640px) {
+    .slider-control--button {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+}
+
+/* Mobile Pequeno (480px) */
+@media (max-width: 480px) {
+    .slider-control--button {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+}
+
+/* Telas muito pequenas (360px) */
+@media (max-width: 360px) {
+    .slider-control--button {
+        width: 28px;
+        height: 28px;
+        font-size: 10px;
+    }
+}
+
+        .slider-navigation {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            width: 80px;
+            height: 60px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: none;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .nav-button[aria-selected="true"] {
+            border-color: #00ff88;
+            transform: scale(1.1);
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* CARDS DE INFORMAÇÃO */
+        .info-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 400px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid #00ff88;
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .info-label {
+            color: #555;
+        }
+
+        .info-value {
+            color: #1a1a1a;
+            font-weight: 200;
+        }
+
+        .address {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .contato {
+            min-height: 80px;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            border-radius: 12px;
+            border: #00ff88 2px solid;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .contato:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .contato-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .whatsapp-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .contato p {
+            color: #555;
+            font-weight: 600;
+            margin: 0;
+            text-align: left;
+        }
+
+        .contato-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            width: 100%;
+        }
+
+        /* SEÇÃO DE HORÁRIOS */
+        .titulo {
+            color: #00ff88;
+            text-align: center;
+            font-size: 2rem;
+            margin: 40px 20px 20px;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        .separar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .peak-hours-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .peak-hours-card {
+            background: #2d2d2d;
+            border-radius: 12px;
+            padding: 32px;
+            border: 2px solid #00ff88;
+            width: 100%;
+        }
+
+        .peak-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .peak-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+        }
+
+        .info-icon {
+            width: 20px;
+            height: 20px;
+            background: #555;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #aaa;
+            cursor: help;
+        }
+
+        .days {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #444;
+            flex-wrap: wrap;
+        }
+
+        .day {
+            padding: 12px 16px;
+            cursor: pointer;
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .day.active {
+            color: #00ff88;
+            border-bottom-color: #00ff88;
+        }
+
+        .peak-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #ccc;
+            flex-wrap: wrap;
+        }
+
+        .peak-info svg {
+            width: 20px;
+            height: 20px;
+            fill: #00ff88;
+        }
+
+        .chart {
+            position: relative;
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            padding: 0 4px;
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        .bar-container {
+            flex: 1;
+            min-width: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .bar {
+            width: 100%;
+            background: #555;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s;
+            min-height: 8px;
+        }
+
+        .bar.peak {
+            background: #00ff88;
+        }
+
+        .bar-container:hover .bar {
+            opacity: 0.8;
+        }
+
+        .hour-label {
+            font-size: 11px;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            margin-bottom: 8px;
+        }
+
+        .bar-container:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* CONTADOR */
+        .container2 {
+            width: 100%;
+            max-width: 280px;
+            background-color: rgba(50, 50, 50, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            border: 2px solid #00ff88;
+            flex-shrink: 0;
+        }
+
+        .container2 h1 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .counter-display {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .counter-value {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .counter-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .info-panel {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .info-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .info-card h3 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: #fdbb2d;
+        }
+
+        .info-card p {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .last-update {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+    /* CSS do Footer */
+.academia-footer {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 60px;
+}
+
+.academia-background svg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 0;
+}
+
+.academia-footer-inner {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 2rem 8rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.academia-footer-inner .academia-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.academia-footer-inner .academia-top h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+    line-height: 1.3;
+}
+
+.academia-footer-inner .academia-top h3 {
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: 0.8;
+    color: white;
+    margin-top: 0.5rem;
+}
+
+.academia-footer-inner .academia-bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.academia-logo-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.academia-socials {
+    display: flex;
+    gap: 1rem;
+}
+
+.academia-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    font-size: 1.25rem;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+
+
+.academia-nav {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.academia-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.academia-nav h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #ccc;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.academia-nav a {
+    font-size: 0.9rem;
+    color: white;
+    opacity: 0.8;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    padding-left: 0;
+}
+
+.academia-nav a:hover {
+    opacity: 1;
+    color: #00ff88;
+    transform: translateX(5px);
+}
+
+/* ========== RESPONSIVIDADE DO FOOTER ========== */
+
+/* Tablets (1024px) */
+@media (max-width: 1024px) {
+    .academia-footer-inner {
+        padding: 3rem 1.5rem 6rem;
+    }
+
+    .academia-footer-inner .academia-top h2 {
+        font-size: 1.8rem;
+    }
+
+    .academia-footer-inner .academia-top h3 {
+        font-size: 1.1rem;
+    }
+
+    .academia-nav {
+        gap: 2rem;
+    }
+}
+
+/* Tablets Pequenos (768px) */
+@media (max-width: 768px) {
+    .academia-footer-inner {
+        padding: 2.5rem 1.5rem 5rem;
+        gap: 3rem;
+    }
+
+    .academia-footer-inner .academia-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .academia-footer-inner .academia-top h2 {
+        font-size: 1.6rem;
+    }
+
+    .academia-footer-inner .academia-top h3 {
+        font-size: 1rem;
+    }
+
+    .academia-footer-inner .academia-bottom {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .academia-nav {
+        flex-direction: column;
+        gap: 2rem;
+        width: 100%;
+    }
+
+    .academia-nav ul {
+        width: 100%;
+    }
+}
+
+/* Mobile Grande (640px) */
+@media (max-width: 640px) {
+    .academia-footer-inner {
+        padding: 2rem 1rem 4rem;
+        gap: 2.5rem;
+    }
+
+    .academia-footer-inner .academia-top h2 {
+        font-size: 1.4rem;
+        line-height: 1.4;
+    }
+
+    .academia-footer-inner .academia-top h3 {
+        font-size: 0.95rem;
+    }
+
+    .academia-logo-content {
+        width: 100%;
+    }
+
+    .academia-socials {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .academia-socials a {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+    }
+
+    .academia-footer-inner .academia-bottom {
+        align-items: center;
+        text-align: center;
+    }
+
+    .academia-logo-content {
+        align-items: center;
+    }
+
+    .academia-nav {
+        align-items: center;
+    }
+
+    .academia-nav ul {
+        align-items: center;
+    }
+}
+
+/* Mobile Pequeno (480px) */
+@media (max-width: 480px) {
+    .academia-footer-inner {
+        padding: 1.5rem 1rem 3.5rem;
+        gap: 2rem;
+    }
+
+    .academia-footer-inner .academia-top h2 {
+        font-size: 1.2rem;
+        line-height: 1.5;
+    }
+
+    .academia-footer-inner .academia-top h3 {
+        font-size: 0.85rem;
+    }
+
+    .academia-socials a {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+    }
+
+    .academia-nav h4 {
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .academia-nav a {
+        font-size: 0.85rem;
+    }
+
+    .academia-nav ul {
+        gap: 0.75rem;
+    }
+
+    .academia-background svg {
+        height: 150px;
+        min-height: 150px;
+    }
+}
+
+/* Telas muito pequenas (360px) */
+@media (max-width: 360px) {
+    .academia-footer-inner {
+        padding: 1rem 0.75rem 3rem;
+        gap: 1.5rem;
+    }
+
+    .academia-footer-inner .academia-top h2 {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .academia-footer-inner .academia-top h3 {
+        font-size: 0.75rem;
+    }
+
+    .academia-socials a {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .academia-nav h4 {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .academia-nav a {
+        font-size: 0.75rem;
+    }
+
+    .academia-nav ul {
+        gap: 0.5rem;
+    }
+
+    .academia-background svg {
+        height: 120px;
+        min-height: 120px;
+    }
+}
+        /* ========== RESPONSIVIDADE DO CONTEÚDO ========== */
+
+        /* Tablets (1024px) */
+        @media (max-width: 1024px) {
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .slider__content {
+                height: 350px;
+            }
+
+            .peak-hours-card {
+                padding: 25px;
+            }
+
+        
+        }
+
+        /* Tablets Pequenos (768px) */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+                margin: 25px 15px;
+            }
+
+            .main-wrapper {
+                padding: 15px;
+                gap: 20px;
+            }
+
+            .slider__content {
+                height: 300px;
+            }
+
+            .slider-control--button {
+                width: 45px;
+                height: 45px;
+            }
+
+            .nav-button {
+                width: 70px;
+                height: 50px;
+            }
+
+            .titulo {
+                font-size: 1.8rem;
+                margin: 30px 15px 15px;
+            }
+
+            .separar {
+                gap: 20px;
+                padding: 15px;
+            }
+
+            .peak-hours-card {
+                padding: 20px;
+            }
+
+            .days {
+                gap: 12px;
+            }
+
+            .day {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+
+            .chart {
+                height: 180px;
+            }
+
+            .bar-container {
+                min-width: 25px;
+            }
+        }
+
+        /* Mobile Grande (640px) */
+        @media (max-width: 640px) {
+            .page-title {
+                font-size: 1.8rem;
+                margin: 20px 10px;
+            }
+
+            .main-wrapper {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                gap: 15px;
+            }
+
+            .image-slider {
+                max-width: 100%;
+            }
+
+            .slider__content {
+                height: 250px;
+            }
+
+            .slider-control--button {
+                width: 40px;
+                height: 40px;
+            }
+
+            .nav-button {
+                width: 60px;
+                height: 45px;
+            }
+
+            .info-cards-container {
+                max-width: 100%;
+            }
+
+            .titulo {
+                font-size: 1.6rem;
+                margin: 25px 10px 10px;
+            }
+
+            .separar {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                padding: 10px;
+            }
+
+            .peak-hours-container {
+                padding: 0 10px;
+                max-width: 100%;
+            }
+
+            .peak-hours-card {
+                padding: 15px;
+            }
+
+            .days {
+                gap: 8px;
+                justify-content: center;
+            }
+
+            .day {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .peak-info {
+                font-size: 13px;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .chart {
+                height: 150px;
+                gap: 6px;
+            }
+
+            .bar-container {
+                min-width: 20px;
+            }
+
+            .hour-label {
+                font-size: 9px;
+            }
+
+            .container2 {
+                max-width: 100%;
+            }
+
+            .counter-value {
+                font-size: 3rem;
+            }
+        }
+
+        /* Mobile Pequeno (480px) */
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+                margin: 15px 8px;
+            }
+
+            .slider__content {
+                height: 200px;
+            }
+
+            .slider-control--button {
+                width: 35px;
+                height: 35px;
+            }
+
+            .nav-button {
+                width: 50px;
+                height: 40px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .title {
+                font-size: 16px;
+            }
+
+            .info-row {
+                font-size: 13px;
+            }
+
+            .contato-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .titulo {
+                font-size: 1.4rem;
+                margin: 20px 8px 8px;
+            }
+
+            .peak-hours-card {
+                padding: 12px;
+            }
+
+            .peak-header h2 {
+                font-size: 20px;
+            }
+
+            .days {
+                gap: 4px;
+            }
+
+            .day {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .peak-info {
+                font-size: 12px;
+            }
+
+            .chart {
+                height: 120px;
+            }
+
+            .bar-container {
+                min-width: 18px;
+            }
+
+            .hour-label {
+                font-size: 8px;
+            }
+
+            .counter-value {
+                font-size: 2.5rem;
+            }
+
+            .info-panel {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Telas muito pequenas (360px) */
+        @media (max-width: 360px) {
+            .page-title {
+                font-size: 1.3rem;
+            }
+
+            .slider__content {
+                height: 180px;
+            }
+
+            .slider-control--button {
+                width: 30px;
+                height: 30px;
+            }
+
+            .nav-button {
+                width: 45px;
+                height: 35px;
+            }
+
+            .titulo {
+                font-size: 1.2rem;
+            }
+
+            .days {
+                gap: 2px;
+            }
+
+            .day {
+                padding: 5px 8px;
+                font-size: 10px;
+            }
+
+            .chart {
+                height: 100px;
+            }
+
+            .bar-container {
+                min-width: 16px;
+            }
+
+            .counter-value {
+                font-size: 2rem;
+            }
+        }
+
+        /* Ajustes específicos para o conteúdo */
+        @media (max-width: 640px) {
+            .contato p {
+                font-size: 14px;
+                text-align: center;
+            }
+            
+            .contato-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .info-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .info-label, .info-value {
+                text-align: center;
+            }
+        }
+
+        /* Garante que o input seja clicável */
+        .search-input-field {
+            cursor: text;
+        }
+
+        /* Remove qualquer sobreposição que impeça o clique */
+        .expandable-search-field * {
+            pointer-events: auto;
+        }
+
+/* ========== SEÇÃO DO MAPA ========== */
+.map-section {
+    padding: 40px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.map-title {
+    color: #00ff88;
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.map-container {
+    width: 100%;
+    height: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 2px solid #00ff88;
+    position: relative;
+}
+
+.map-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.map-controls {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.map-btn {
+    background: rgba(0, 255, 136, 0.9);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+}
+
+.map-btn:hover {
+    background: rgba(0, 255, 136, 1);
+    transform: translateY(-2px);
+}
+
+.map-info {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 300px;
+    z-index: 1000;
+    border-left: 4px solid #00ff88;
+}
+
+.map-info h3 {
+    margin-bottom: 8px;
+    color: #00ff88;
+}
+
+.map-info p {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+/* ========== COMPONENTE DESCRIÇÃO DA ACADEMIA ========== */
+
+.descricao-container {
+    background: #1a1a1a;
+    border-radius: 10px;
+    border: 2px solid #00ff88;
+    padding: 25px;
+    margin: 25px auto;
+    width: 95%;
+    max-width: 1400px;
+}
+
+.descricao-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.descricao-title {
+    color: #00ff88;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.descricao-title i {
+    font-size: 1.6rem;
+}
+
+.descricao-content {
+    color: #fff;
+    line-height: 1.6;
+}
+
+.descricao-text {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    color: #e0e0e0;
+    text-align: center;
+    padding: 0 15px;
+}
+
+.descricao-text strong {
+    color: #00ff88;
+    font-weight: 600;
+}
+
+.descricao-highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background: #222;
+    border-radius: 8px;
+}
+
+.highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    background: #2a2a2a;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.highlight-item:hover {
+    background: #333;
+    transform: translateY(-2px);
+}
+
+.highlight-item i {
+    color: #00ff88;
+    font-size: 1.2rem;
+    width: 25px;
+    text-align: center;
+}
+
+.highlight-item span {
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* ========== RESPONSIVIDADE ========== */
+
+@media (max-width: 1024px) {
+    .descricao-container {
+        width: 90%;
+        padding: 20px;
+    }
+    
+    .descricao-title {
+        font-size: 1.6rem;
+    }
+    
+    .descricao-text {
+        font-size: 1rem;
+    }
+    
+    .descricao-highlights {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .descricao-container {
+        width: 95%;
+        padding: 18px;
+        margin: 20px auto;
+    }
+    
+    .descricao-title {
+        font-size: 1.5rem;
+    }
+    
+    .descricao-title i {
+        font-size: 1.4rem;
+    }
+    
+    .descricao-text {
+        padding: 0;
+        margin-bottom: 20px;
+    }
+    
+    .descricao-highlights {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 15px;
+    }
+    
+    .highlight-item {
+        padding: 10px 12px;
+    }
+    
+    .highlight-item i {
+        font-size: 1.1rem;
+    }
+    
+    .highlight-item span {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .descricao-container {
+        width: 100%;
+        margin: 15px 0;
+        border-radius: 8px;
+    }
+    
+    .descricao-title {
+        font-size: 1.4rem;
+    }
+    
+    .descricao-text {
+        font-size: 0.95rem;
+    }
+    
+    .descricao-highlights {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .descricao-container {
+        padding: 15px;
+    }
+    
+    .descricao-title {
+        font-size: 1.3rem;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .descricao-title i {
+        font-size: 1.3rem;
+    }
+    
+    .descricao-text {
+        font-size: 0.9rem;
+    }
+    
+    .descricao-highlights {
+        padding: 12px;
+    }
+    
+    .highlight-item {
+        padding: 10px;
+    }
+}
+    </style>
+</head>
+<body>
+    <header class="header-container" id="menu">
+        <div class="nav-wrapper">
+            <div class="brand-container">
+                <a href="#"><img src="logo.png" alt="Logo" class="logo-img"></a>
+            </div>
+            
+            <div class="right-controls">
+                <div class="search-widget" id="searchWidget">
+                    <div class="expandable-search-field" id="searchField">
+                        <input type="text" class="search-input-field" placeholder="Digite sua pesquisa..." id="searchInput">
+                    </div>
+                    <button class="search-toggle-btn" id="searchToggle" aria-label="Abrir pesquisa">
+                        <svg class="search-icon" viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                    </button>
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+                
+                <button class="gym-access-btn"><a href="Menu-inicial-sem-logar.html">Home</a></button>
+                <button class="gym-access-btn"><a href="academias-filtro-sem-logar.html">Academias</a></button>
+                <button class="gym-access-btn"><a href="login-gym.html">Login</a></button>
+                
+                <button class="menu-trigger" id="menuTrigger" aria-label="Abrir menu">
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="slide-menu" id="slideMenu">
+        <div class="menu-header">
+            <button class="menu-close-btn" id="menuCloseBtn" aria-label="Fechar menu">
+                <svg class="menu-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        
+        <button class="menu-search-btn" id="menuSearchBtn">Academias</button>
+        
+        <ul class="navigation-list">
+            <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="#espaço-cliente" class="nav-link">Login</a></li>
+            <li class="nav-item"><a href="#franqueado" class="nav-link">Personais</a></li>
+            <li class="nav-item"><a href="#news" class="nav-link">Sorteios</a></li>
+            <li class="nav-item"><a href="#planos" class="nav-link">Configurações</a></li>
+            <li class="nav-item"><a href="#sustentabilidade" class="nav-link">Blogs e dicaas</a></li>
+            <li class="nav-item"><a href="#historia" class="nav-link">Sobre nós</a></li>
+        </ul>
+    </nav>
+
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Conteúdo Principal -->
+    <h1 class="page-title">Rede Fit</h1>
+
+    <div class="main-wrapper">
+        <div class="image-slider">
+    <section class="slider__content">
+        <button type="button" class="slider-control--button prev-button">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <main class="image-display"></main>
+        
+        <button type="button" class="slider-control--button next-button">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </section>
+    
+    <nav class="slider-navigation">
+        <button class="nav-button" aria-selected="true">
+            <img class="thumbnail" src="Smart-Strong.jpeg" alt="Academia 1" />
+        </button>
+        <button class="nav-button" aria-selected="false">
+            <img class="thumbnail" src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop" alt="Academia 2" />
+        </button>
+        <button class="nav-button" aria-selected="false">
+            <img class="thumbnail" src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop" alt="Academia 3" />
+        </button>
+        <button class="nav-button" aria-selected="false">
+            <img class="thumbnail" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop" alt="Academia 4" />
+        </button>
+        <button class="nav-button" aria-selected="false">
+            <img class="thumbnail" src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop" alt="Academia 5" />
+        </button>
+        <button class="nav-button" aria-selected="false">
+            <img class="thumbnail" src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop" alt="Academia 6" />
+        </button>
+    </nav>
+</div>
+
+        <div class="info-cards-container">
+            <div class="card">
+                <div class="content">
+                    <div class="title">Horário de funcionamento</div>
+                    <div class="info-row">
+                        <span class="info-label">Seg a Sex</span>
+                        <span class="info-value">5h - 23h</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Sáb/Feriados</span>
+                        <span class="info-value">8h - 17h</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Dom</span>
+                        <span class="info-value">(Fechado)</span>
+                    </div>
+                    <span class="info-value"><a href="#peak">Ver quantas pessoas tem no momento</a></span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="content">
+                    <div class="title">Endereço</div>
+                    <div class="address">
+                       R. Cel. Cordeiro, 739, Pedro II - PI, 64255-000
+                    </div>
+                </div>
+            </div>
+
+            <div class="contato">
+                <div class="contato-content">
+                    <a href="https://wa.me/5511999999999" class="contato-link" target="_blank">
+                        <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 16C2.814 9.813 3.11 5.134 5.94 3.012l.627-.467a1.483 1.483 0 0 1 2.1.353l1.579 2.272a1.5 1.5 0 0 1-.25 1.99L8.476 8.474c-.38.329-.566.828-.395 1.301.316.88 1.083 2.433 2.897 4.246 1.814 1.814 3.366 2.581 4.246 2.898.474.17.973-.015 1.302-.396l1.314-1.518a1.5 1.5 0 0 1 1.99-.25l2.276 1.58a1.48 1.48 0 0 1 .354 2.096l-.47.633C19.869 21.892 15.188 22.187 9 16z" fill="#25D366"></path>
+                        </svg>
+                        <p>Para mais informações, acesse o WhatsApp</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- COMPONENTE DESCRIÇÃO DA ACADEMIA -->
+<div class="descricao-container">
+    <div class="descricao-header">
+        <h2 class="descricao-title">
+            <i class="fas fa-info-circle"></i>
+            Descrição
+        </h2>
+    </div>
+    
+    <div class="descricao-content">
+        <p class="descricao-text">
+            A <strong>Olympic Fit</strong> é uma academia premium localizada no coração de Pedro II, 
+            oferecendo infraestrutura completa para quem busca saúde, bem-estar e resultados 
+            reais. Com equipamentos de última geração, instrutores qualificados e um ambiente 
+            motivador, somos referência em excelência no fitness.
+        </p>
+        
+        <div class="descricao-highlights">
+            <div class="highlight-item">
+                <i class="fas fa-dumbbell"></i>
+                <span>Equipamentos Modernos</span>
+            </div>
+            <div class="highlight-item">
+                <i class="fas fa-user-graduate"></i>
+                <span>Instrutores Certificados</span>
+            </div>
+            <div class="highlight-item">
+                <i class="fas fa-clock"></i>
+                <span>Horário Estendido</span>
+            </div>
+            <div class="highlight-item">
+                <i class="fas fa-users"></i>
+                <span>Comunidade Ativa</span>
+            </div>
+            <div class="highlight-item">
+                <i class="fas fa-heartbeat"></i>
+                <span>Avaliação Física</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SEÇÃO DO MAPA -->
+<section class="map-section">
+    <h2 class="map-title">Localização da Academia</h2>
+    <div class="map-container">
+        <!-- IFRAME DO GOOGLE MAPS (SEM API KEY) -->
+        <!-- IFRAME DO GOOGLE MAPS (SEM API KEY) -->
+<!-- IFRAME DO GOOGLE MAPS (SEM API KEY) -->
+<iframe 
+    class="map-iframe"
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3977.8884461020107!2d-41.45625402520996!3d-4.431872695542325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x793900f2a942b4f%3A0x619d4473eb6a749!2sAcademia%20SMART%20STRONG!5e0!3m2!1spt-BR!2sbr!4v1765404817132!5m2!1spt-BR!2sbr" 
+    width="100%" 
+    height="100%" 
+    style="border:0;" 
+    allowfullscreen="" 
+    loading="lazy" 
+    referrerpolicy="no-referrer-when-downgrade"
+    title="Mapa da Academia Smart Strong">
+</iframe>
+        
+        <div class="map-controls">
+            <button class="map-btn" onclick="abrirMapaCompleto()">🗺️ Abrir Mapa</button>
+            <button class="map-btn" onclick="abrirRota()">📍 Traçar Rota</button>
+            <button class="map-btn" onclick="obterMinhaLocalizacao()">👤 Minha Localização</button>
+        </div>
+        
+        <div class="map-info">
+            <h3>Rede Fit</h3>
+            <p>R. Cel. Cordeiro, 739</p>
+            <p>Pedro II - PI, 64255-000</p>
+            <p>Horário: Seg-Sex 5h-23h</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    // ============================================
+// FUNÇÕES PARA O MAPA (SEM API)
+// ============================================
+
+function abrirMapaCompleto() {
+    // Abre o Google Maps em uma nova aba
+    window.open('https://www.google.com/maps/place/Redefit/@-4.427322,-41.463747,16z', '_blank');
+}
+
+function abrirRota() {
+    // Abre rotas no Google Maps
+    const endereco = encodeURIComponent("R. Cel. Cordeiro, 739, Pedro II - PI");
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${endereco}`, '_blank');
+}
+
+function obterMinhaLocalizacao() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                
+                // Abre rota do usuário até a academia
+                window.open(`https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=-4.4259,-41.4592`, '_blank');
+            },
+            function(error) {
+                alert("Não foi possível obter sua localização.");
+            }
+        );
+    } else {
+        alert("Seu navegador não suporta geolocalização.");
+    }
+}
+</script>
+
+    
+    <div class="titulo"><h2>Horários por ocupação</h2></div>
+
+    <div class="separar">
+        <div class="peak-hours-container">
+            <div class="peak-hours-card">
+                <div class="peak-header">
+                    <h2>Horários de pico</h2>
+                    <div class="info-icon">?</div>
+                </div>
+
+                <div class="days">
+                    <div class="day active">SEG.</div>
+                    <div class="day">TER.</div>
+                    <div class="day">QUA.</div>
+                    <div class="day">QUI.</div>
+                    <div class="day">SEX.</div>
+                    <div class="day">SÁB.</div>
+                    <div class="day">DOM.</div>
+                </div>
+
+                <div class="peak-info">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span><strong>17:00:</strong> Geralmente é o horário mais movimentado</span>
+                </div>
+
+                <div class="chart" id="chart"></div>
+            </div>
+        </div>
+        
+        <div class="container2" id="peak">
+            <header>
+                <h1>Academia Fitness</h1>
+                <p class="counter-label">Pessoas na academia</p>
+            </header>
+            
+            <div class="counter-display">
+                <div class="counter-value" id="peopleCount">42</div>
+            </div>
+            
+            <div class="info-panel">
+                <div class="info-card">
+                    <h3>Capacidade</h3>
+                    <p>80</p>
+                </div>
+                <div class="info-card">
+                    <h3>Ocupação</h3>
+                    <p id="occupancyRate">52.5%</p>
+                </div>
+            </div>
+            
+            <div class="status">
+                <div class="status-dot"></div>
+                <span>Sistema ativo</span>
+            </div>
+            
+            <div class="last-update">
+                <p>Atualiza a cada 15 min</p>
+                <p>Última: <span id="lastUpdate">15:30</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="academia-footer">
+        <div class="academia-background">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="100%" height="100%" viewBox="0 0 1600 900">
+                <defs>
+                    <path id="wave" fill="rgba(0, 200, 100, 0.5)" d="M-363.852,502.589c0,0,236.988-41.997,505.475,0
+                    s371.981,38.998,575.971,0s293.985-39.278,505.474,5.859s493.475,48.368,716.963-4.995v560.106H-363.852V502.589z" />
+                </defs>
+                <g>
+                    <use xlink:href="#wave" opacity=".4">
+                        <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="8s" calcMode="spline"
+                            values="270 230; -334 180; 270 230" keyTimes="0; .5; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                            repeatCount="indefinite" />
+                    </use>
+                    <use xlink:href="#wave" opacity=".6">
+                        <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="6s" calcMode="spline"
+                            values="-270 230;243 220;-270 230" keyTimes="0; .6; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                            repeatCount="indefinite" />
+                    </use>
+                    <use xlink:href="#wave" opacty=".9">
+                        <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="4s" calcMode="spline"
+                            values="0 230;-140 200;0 230" keyTimes="0; .4; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                            repeatCount="indefinite" />
+                    </use>
+                </g>
+            </svg>
+        </div>
+        <div class="academia-footer-inner">
+            <div class="academia-top">
+                <div>
+                    <h2>VOCÊ ESTÁ PRONTO PARA TRANSFORMAR SEU CORPO E SUA VIDA?</h2>
+                    <h3>Encontre as melhores academias, dicas e uma comunidade que te impulsiona!</h3>
+                </div>
+            </div>
+            <div class="academia-bottom">
+                <div class="academia-logo-content">
+                    <div class="academia-socials">
+                        <a href="#" class="instagram" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <nav class="academia-nav">
+                    <ul>
+                        <li><h4>SOBRE O GYM P2</h4></li>
+                        <li><a href="#">Quem Somos</a></li>
+                        <li><a href="#">Nossa Missão</a></li>
+                        <li><a href="#">Contatos</a></li>
+                    </ul>
+                    <ul>
+                        <li><h4>EXPLORE</h4></li>
+                        <li><a href="#">Academias</a></li>
+                        <li><a href="#">Artes Marciais</a></li>
+                        <li><a href="#">Blog e Dicas</a></li>
+                    </ul>
+                    <ul>
+                        <li><h4>CONECTE-SE</h4></li>
+                        <li><a href="#">Siga-nos nas Redes Sociais</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </footer>
+      <script src="menu.js"></script>
+  <!-- 1. Sistema de Notificações Globais -->
+<script src="global-notifications.js"></script>
+<!-- 2. Gerenciador de Usuários -->
+<script src="user-manager.js"></script>
+<!-- 3. Header com Informações do Usuário -->
+<script src="user-header.js"></script>
+
+    <script>
+          // Funcionalidade do Menu Hamburguer
+        const menuTrigger = document.getElementById('menuTrigger');
+        const slideMenu = document.getElementById('slideMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const menuCloseBtn = document.getElementById('menuCloseBtn');
+        const menuSearchBtn = document.getElementById('menuSearchBtn');
+
+        // Abrir/fechar menu
+        menuTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuTrigger.classList.toggle('active');
+            slideMenu.classList.toggle('open');
+            menuOverlay.classList.toggle('visible');
+        });
+
+        // Fechar menu pelo botão X
+        menuCloseBtn.addEventListener('click', () => {
+            menuTrigger.classList.remove('active');
+            slideMenu.classList.remove('open');
+            menuOverlay.classList.remove('visible');
+        });
+
+        // Fechar menu ao clicar no overlay
+        menuOverlay.addEventListener('click', () => {
+            menuTrigger.classList.remove('active');
+            slideMenu.classList.remove('open');
+            menuOverlay.classList.remove('visible');
+        });
+
+        // Fechar menu ao clicar em um link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                menuTrigger.classList.remove('active');
+                slideMenu.classList.remove('open');
+                menuOverlay.classList.remove('visible');
+            });
+        });
+
+        // Abrir pesquisa pelo botão do menu
+        menuSearchBtn.addEventListener('click', () => {
+            // Fecha o menu
+            menuTrigger.classList.remove('active');
+            slideMenu.classList.remove('open');
+            menuOverlay.classList.remove('visible');
+            
+            // Abre a pesquisa
+            searchField.classList.add('expanded');
+            searchInput.focus();
+        });
+             // Funcionalidade da Barra de Pesquisa
+        const searchToggle = document.getElementById('searchToggle');
+        const searchField = document.getElementById('searchField');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        // Abrir/fechar pesquisa
+        searchToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            searchField.classList.toggle('expanded');
+            if (searchField.classList.contains('expanded')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+                searchResults.classList.remove('active');
+            }
+        });
+
+        // Fechar pesquisa ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!searchField.contains(e.target) && !searchToggle.contains(e.target)) {
+                searchField.classList.remove('expanded');
+                searchInput.value = '';
+                searchResults.classList.remove('active');
+            }
+        });
+
+        // Dados de exemplo para a pesquisa
+        const searchData = [
+            {
+                category: 'Academia',
+                title: 'Smart Strong',
+                description: 'Academia de musculação no centro',
+                link: 'smart-strong-sem-logar.html'
+            },
+            {
+                category: 'Academia',
+                title: 'Rede-Fit P2',
+                description: 'Musculação e fitness',
+                link: 'Redefit-sem-logar.html'
+            },
+            {
+                category: 'Academia',
+                title: 'Olympic Fit',
+                description: 'Treinos de alto desempenho',
+                link: 'olympic-sem-logar.html'
+            },
+            {
+                category: 'Página',
+                title: 'Blog & Dicas',
+                description: 'Artigos sobre saúde e fitness',
+                link: 'Blogs e dicas-sem-logar.html'
+            },
+            {
+                category: 'Página',
+                title: 'Cadastro de Academias',
+                description: 'Divulgue sua academia',
+                link: 'cadastro_academias-sem-logar.html'
+            },
+            {
+                category: 'Página',
+                title: 'Personal Trainer',
+                description: 'Cadastro de personal trainers',
+                link: 'cadastro_personal-sem-logar.html'
+            }
+        ];
+
+        // Função de pesquisa
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            if (searchTerm.length === 0) {
+                searchResults.classList.remove('active');
+                searchResults.innerHTML = '';
+                return;
+            }
+            
+            const filteredResults = searchData.filter(item => 
+                item.title.toLowerCase().includes(searchTerm) || 
+                item.description.toLowerCase().includes(searchTerm) ||
+                item.category.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filteredResults.length > 0) {
+                searchResults.innerHTML = filteredResults.map(item => `
+                    <div class="search-result-item" onclick="window.location.href='${item.link}'">
+                        <div class="result-category">${item.category}</div>
+                        <div class="result-title">${item.title}</div>
+                        <div class="result-description">${item.description}</div>
+                    </div>
+                `).join('');
+                searchResults.classList.add('active');
+            } else {
+                searchResults.innerHTML = `
+                    <div class="search-result-item">
+                        <div class="result-title">Nenhum resultado encontrado</div>
+                        <div class="result-description">Tente outra palavra-chave</div>
+                    </div>
+                `;
+                searchResults.classList.add('active');
+            }
+        });
+
+        // Prevenir que o Enter no input de pesquisa recarregue a página
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+
+        // Slider
+        const imageDisplay = document.querySelector('.image-display');
+        const navButtons = document.querySelectorAll('.nav-button');
+        const prevButton = document.querySelector('.prev-button');
+        const nextButton = document.querySelector('.next-button');
+
+        let currentIndex = 0;
+        const images = [];
+
+        navButtons.forEach(button => {
+            const img = button.querySelector('.thumbnail');
+            if (img && img.src) {
+                images.push(img.src);
+            }
+        });
+
+        if (imageDisplay && images.length > 0) {
+            imageDisplay.style.backgroundImage = `url(${images[currentIndex]})`;
+        }
+
+        function updateSlider(index) {
+            if (index >= 0 && index < images.length) {
+                currentIndex = index;
+                imageDisplay.style.backgroundImage = `url(${images[currentIndex]})`;
+                
+                navButtons.forEach((button, i) => {
+                    button.setAttribute('aria-selected', i === currentIndex ? 'true' : 'false');
+                });
+            }
+        }
+
+        navButtons.forEach((button, index) => {
+            button.addEventListener('click', () => updateSlider(index));
+        });
+
+        prevButton.addEventListener('click', () => {
+            const newIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
+            updateSlider(newIndex);
+        });
+
+        nextButton.addEventListener('click', () => {
+            const newIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
+            updateSlider(newIndex);
+        });
+
+        // Horários de pico
+        const hours = [
+            { time: '06', value: 15 },
+            { time: '07', value: 20 },
+            { time: '08', value: 25 },
+            { time: '09', value: 30 },
+            { time: '10', value: 40 },
+            { time: '11', value: 45 },
+            { time: '12', value: 55 },
+            { time: '13', value: 60 },
+            { time: '14', value: 70 },
+            { time: '15', value: 80 },
+            { time: '16', value: 90 },
+            { time: '17', value: 100 },
+            { time: '18', value: 85 },
+            { time: '19', value: 75 },
+            { time: '20', value: 65 },
+            { time: '21', value: 50 }
+        ];
+
+        const chart = document.getElementById('chart');
+        const maxValue = Math.max(...hours.map(h => h.value));
+        const peakHour = hours.reduce((max, h) => h.value > max.value ? h : max, hours[0]);
+
+        hours.forEach(hour => {
+            const container = document.createElement('div');
+            container.className = 'bar-container';
+
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            if (hour.time === peakHour.time) {
+                bar.classList.add('peak');
+            }
+            
+            const height = (hour.value / maxValue) * 140;
+            bar.style.height = height + 'px';
+
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = `${hour.time}:00 - ${hour.value}% ocupação`;
+
+            const label = document.createElement('div');
+            label.className = 'hour-label';
+            label.textContent = hour.time;
+
+            container.appendChild(tooltip);
+            container.appendChild(bar);
+            container.appendChild(label);
+            chart.appendChild(container);
+        });
+
+        // Dias da semana
+        const days = document.querySelectorAll('.day');
+        days.forEach(day => {
+            day.addEventListener('click', function() {
+                days.forEach(d => d.classList.remove('active'));
+                this.classList.add('active');
+                
+                const bars = document.querySelectorAll('.bar');
+                bars.forEach((bar, i) => {
+                    bar.style.animation = 'none';
+                    setTimeout(() => {
+                        const randomVariation = 0.8 + Math.random() * 0.4;
+                        const newHeight = (hours[i].value / maxValue) * 140 * randomVariation;
+                        bar.style.height = newHeight + 'px';
+                    }, i * 30);
+                });
+            });
+        });
+
+        // Contador de pessoas
+        const peopleCountElement = document.getElementById('peopleCount');
+        const occupancyRateElement = document.getElementById('occupancyRate');
+        const lastUpdateElement = document.getElementById('lastUpdate');
+        
+        let peopleCount = 42;
+        const maxCapacity = 80;
+        
+        function updateDisplay() {
+            peopleCountElement.textContent = peopleCount;
+            
+            const occupancyRate = (peopleCount / maxCapacity * 100).toFixed(1);
+            occupancyRateElement.textContent = `${occupancyRate}%`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            lastUpdateElement.textContent = timeString;
+        }
+        
+        function simulateVariation() {
+            const variation = Math.floor(Math.random() * 11) - 5;
+            const newCount = peopleCount + variation;
+            
+            if (newCount >= 0 && newCount <= maxCapacity) {
+                peopleCount = newCount;
+            } else if (newCount < 0) {
+                peopleCount = 0;
+            } else {
+                peopleCount = maxCapacity;
+            }
+            
+            updateDisplay();
+        }
+        
+        updateDisplay();
+        setInterval(simulateVariation, 900000);
+    </script>
+
+    <!-- ========== SISTEMA DE MANUTENÇÃO DE LOGIN ========== -->
+<script>
+// ========== VERIFICAÇÃO E MANUTENÇÃO DO LOGIN ==========
+(function() {
+    console.log('🔍 Verificando login na página:', window.location.pathname);
+    
+    // Verificar se há usuário logado
+    const userData = localStorage.getItem('gymp2_current_user') || 
+                     localStorage.getItem('currentUser');
+    
+    if (userData) {
+        try {
+            const user = JSON.parse(userData);
+            console.log('✅ Login mantido:', user.name);
+            
+            // Atualizar interface da página
+            updatePageForLoggedUser(user);
+            
+        } catch (error) {
+            console.error('❌ Erro ao processar login:', error);
+        }
+    } else {
+        console.log('ℹ️ Usuário não está logado');
+    }
+    
+    // ========== FUNÇÃO PARA ATUALIZAR A INTERFACE ==========
+    function updatePageForLoggedUser(user) {
+        console.log('🎨 Atualizando interface para:', user.name);
+        
+        // 1. Atualizar botão Login no header
+        updateLoginButton(user);
+        
+        // 2. Atualizar menu hamburguer
+        updateHamburgerMenu(user);
+        
+        // 3. Adicionar classe ao body
+        document.body.classList.add('logged-in');
+        
+        console.log('✅ Interface atualizada com sucesso!');
+    }
+    
+   
+    
+    // ========== ATUALIZAR MENU HAMBURGUER ==========
+    function updateHamburgerMenu(user) {
+        const navigationList = document.querySelector('.navigation-list');
+        if (!navigationList) return;
+        
+        const navItems = navigationList.querySelectorAll('.nav-item');
+        let loginItem = null;
+        
+        // Encontrar item de Login
+        navItems.forEach(item => {
+            const link = item.querySelector('.nav-link');
+            if (link && (link.textContent.trim() === 'Login' || 
+                         link.getAttribute('href') === '#espaço-cliente' ||
+                         link.getAttribute('href') === 'login-gym.html')) {
+                loginItem = item;
+            }
+        });
+        
+        if (loginItem) {
+            const firstName = user.name.split(' ')[0];
+            
+            // Substituir por Perfil
+            loginItem.innerHTML = `
+                <a href="#perfil" class="nav-link" style="
+                    color: #00ff88; 
+                    font-weight: 700; 
+                    background: rgba(0, 255, 136, 0.1); 
+                    border-radius: 8px; 
+                    margin: 5px 0; 
+                    padding: 12px 15px !important;
+                ">
+                    <i class="fas fa-user" style="margin-right: 10px;"></i>
+                    Meu Perfil (${firstName})
+                </a>
+            `;
+            
+            // Remover logout anterior se existir
+            const existingLogout = navigationList.querySelector('#menuLogoutBtn');
+            if (existingLogout) {
+                existingLogout.closest('.nav-item').remove();
+            }
+            
+            // Adicionar botão Sair
+            const logoutItem = document.createElement('li');
+            logoutItem.className = 'nav-item';
+            logoutItem.innerHTML = `
+                <a href="#logout" class="nav-link" id="menuLogoutBtn" style="
+                    color: #ff4444; 
+                    background: rgba(255, 68, 68, 0.1); 
+                    border-radius: 8px; 
+                    margin: 5px 0; 
+                    padding: 12px 15px !important;
+                ">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i>
+                    Sair
+                </a>
+            `;
+            
+            navigationList.appendChild(logoutItem);
+            
+            // Configurar logout do menu
+            document.getElementById('menuLogoutBtn').addEventListener('click', handleLogout);
+            
+            console.log('✅ Menu hamburguer atualizado');
+        }
+    }
+    
+    // ========== CONFIGURAR EVENTOS DO DROPDOWN ==========
+    function setupDropdownEvents() {
+        const userContainer = document.getElementById('userHeaderContainer');
+        const dropdown = document.getElementById('userDropdown');
+        const logoutBtn = document.getElementById('logoutBtnPage');
+        
+        if (!userContainer || !dropdown || !logoutBtn) {
+            console.log('⚠️ Elementos do dropdown não encontrados');
+            return;
+        }
+        
+        // Toggle dropdown
+        userContainer.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isVisible = dropdown.style.opacity === '1';
+            
+            if (isVisible) {
+                dropdown.style.opacity = '0';
+                dropdown.style.visibility = 'hidden';
+                dropdown.style.transform = 'translateY(-10px)';
+            } else {
+                dropdown.style.opacity = '1';
+                dropdown.style.visibility = 'visible';
+                dropdown.style.transform = 'translateY(0)';
+            }
+        });
+        
+        // Fechar ao clicar fora
+        document.addEventListener('click', function() {
+            dropdown.style.opacity = '0';
+            dropdown.style.visibility = 'hidden';
+            dropdown.style.transform = 'translateY(-10px)';
+        });
+        
+        // Prevenir fechamento ao clicar no dropdown
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        
+        // Hover no container
+        userContainer.addEventListener('mouseenter', function() {
+            this.style.background = 'rgba(0, 255, 136, 0.25)';
+            this.style.borderColor = 'rgba(0, 255, 136, 0.6)';
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        userContainer.addEventListener('mouseleave', function() {
+            this.style.background = 'rgba(0, 255, 136, 0.15)';
+            this.style.borderColor = 'rgba(0, 255, 136, 0.4)';
+            this.style.transform = 'translateY(0)';
+        });
+        
+        // Logout
+        logoutBtn.addEventListener('click', handleLogout);
+        
+        console.log('✅ Eventos do dropdown configurados');
+    }
+    
+    // ========== FUNÇÃO DE LOGOUT ==========
+    function handleLogout(e) {
+        e.preventDefault();
+        
+        if (confirm('Deseja realmente sair da sua conta?')) {
+            console.log('🚪 Fazendo logout...');
+            
+            // Limpar dados
+            localStorage.removeItem('gymp2_current_user');
+            localStorage.removeItem('currentUser');
+            
+            // Redirecionar para página inicial
+            alert('Logout realizado com sucesso!');
+            window.location.href = 'Menu-inicial-sem-logar.html';
+        }
+    }
+    
+    // ========== EXPORTAR FUNÇÃO DE LOGOUT GLOBAL ==========
+    window.logout = handleLogout;
+    
+})();
+
+// ========== OBSERVAR MUDANÇAS NO LOCALSTORAGE ==========
+window.addEventListener('storage', function(e) {
+    if ((e.key === 'currentUser' || e.key === 'gymp2_current_user') && e.newValue) {
+        console.log('🔄 Login detectado em outra aba, recarregando...');
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+    
+    if ((e.key === 'currentUser' || e.key === 'gymp2_current_user') && !e.newValue) {
+        console.log('🚪 Logout detectado em outra aba, recarregando...');
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+});
+
+console.log('✅ Sistema de login carregado na página!');
+</script>
+</body>
+</html>
