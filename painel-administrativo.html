@@ -1035,43 +1035,109 @@
                     </table>
                 </div>
                 
-                <!-- Personals Section -->
-                <div class="section" id="personais-section" style="display: none;">
-                    <div class="section-header">
-                        <h3 class="section-title">Gerenciamento de Personais</h3>
-                        <button class="btn btn-primary">Acessar Página de Personais</button>
+             
+<!-- Substitua a seção completa de personais por esta versão corrigida: -->
+<div class="section" id="personais-section" style="display: none;">
+    <div class="section-header">
+        <h3 class="section-title">Gerenciamento de Personais</h3>
+        <button class="btn btn-primary" id="btnNovoPersonal">Novo Personal</button>
+         <a href="area-admin.html"><button class="btn btn-primary" id="btnNovoPersonal">Vizualizar Pedidos</button></a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Especialidade</th>
+                <th>Experiência</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Academia</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="personaisTbody">
+            <!-- Personais serão carregados dinamicamente aqui -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Adicione este modal SIMPLIFICADO após o modal de academia: -->
+<div id="modalPersonal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-dumbbell"></i> <span id="modalPersonalTitle">Cadastrar Novo Personal</span></h3>
+            <span class="close-btn">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="formPersonal">
+                <input type="hidden" id="personalId">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="personalNome">Nome Completo *</label>
+                        <input type="text" id="personalNome" placeholder="Ex: Carlos Silva" required>
                     </div>
-                    
-                    <div class="personals-hero">
-                        <div class="personals-hero-content">
-                            <div>
-                                <h3 style="margin-bottom: 10px;">Personal Trainers Cadastrados</h3>
-                                <p style="margin-bottom: 15px; color: var(--primary-green-light);">Gerencie todos os profissionais cadastrados na plataforma</p>
-                                <div style="font-size: 2.5rem; font-weight: bold; color: var(--primary-green);">24</div>
-                                <p style="color: var(--primary-green-light);">personais ativos</p>
-                            </div>
-                            <div>
-                                <i class="fas fa-dumbbell" style="font-size: 5rem; color: var(--primary-green); opacity: 0.3;"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="personals-stats">
-                        <div class="stat-card">
-                            <div class="stat-value" style="color: var(--primary-green);">18</div>
-                            <div class="stat-label">Personais Ativos</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" style="color: #ffc107;">4</div>
-                            <div class="stat-label">Aguardando Aprovação</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" style="color: var(--primary-gray-light);">2</div>
-                            <div class="stat-label">Inativos</div>
-                        </div>
+                    <div class="form-group">
+                        <label for="personalEmail">E-mail *</label>
+                        <input type="email" id="personalEmail" placeholder="exemplo@email.com" required>
                     </div>
                 </div>
-                
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="personalTelefone">Telefone *</label>
+                        <input type="tel" id="personalTelefone" placeholder="(11) 99999-9999" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personalEspecialidade">Especialidade *</label>
+                        <select id="personalEspecialidade" required>
+                            <option value="">Selecione</option>
+                            <option value="Musculação">Musculação</option>
+                            <option value="Emagrecimento">Emagrecimento</option>
+                            <option value="Condicionamento Físico">Condicionamento Físico</option>
+                            <option value="Crossfit">Crossfit</option>
+                            <option value="Treino Funcional">Treino Funcional</option>
+                            <option value="Reabilitação">Reabilitação</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="personalAnos">Anos de Experiência *</label>
+                        <input type="number" id="personalAnos" min="0" max="50" value="3" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personalStatus">Status *</label>
+                        <select id="personalStatus" required>
+                            <option value="ativo">Ativo</option>
+                            <option value="pendente">Pendente</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="personalAcademia">Academia Associada</label>
+                    <select id="personalAcademia">
+                        <option value="">Nenhuma (Independente)</option>
+                        <!-- As academias serão carregadas dinamicamente -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="personalDescricao">Sobre o Personal</label>
+                    <textarea id="personalDescricao" placeholder="Descreva a experiência, formação e especialidades do personal..." rows="4"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btnCancelarPersonal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="btnSalvarPersonal">Salvar Personal</button>
+        </div>
+    </div>
+</div>
                 <!-- Administrators Section -->
                 <div class="section" id="administradores-section" style="display: none;">
                     <div class="section-header">
@@ -2154,6 +2220,1661 @@
             }
         }, 100);
     });
+    // ============================================
+// GESTÃO DE PERSONAIS
+// ============================================
+
+// Função para carregar personais do localStorage
+function getPersonaisFromStorage() {
+    return JSON.parse(localStorage.getItem('gymPersonais')) || [];
+}
+
+// Função para salvar personais no localStorage
+function savePersonaisToStorage(personais) {
+    localStorage.setItem('gymPersonais', JSON.stringify(personais));
+}
+
+// Função para atualizar estatísticas
+function updatePersonaisStats() {
+    const personais = getPersonaisFromStorage();
+    
+    const totalPersonais = personais.length;
+    const personaisAtivos = personais.filter(p => p.status === 'aprovado').length;
+    const personaisPendentes = personais.filter(p => p.status === 'pendente').length;
+    const personaisInativos = personais.filter(p => p.status === 'inativo').length;
+    
+    // Atualizar contadores
+    document.getElementById('totalPersonais').textContent = totalPersonais;
+    document.getElementById('personaisAtivos').textContent = personaisAtivos;
+    document.getElementById('personaisPendentes').textContent = personaisPendentes;
+    document.getElementById('personaisInativos').textContent = personaisInativos;
+    
+    // Atualizar badges nos filtros
+    document.getElementById('countTodos').textContent = totalPersonais;
+    document.getElementById('countAtivos').textContent = personaisAtivos;
+    document.getElementById('countPendentes').textContent = personaisPendentes;
+    document.getElementById('countInativos').textContent = personaisInativos;
+    
+    // Atualizar badge de pedidos pendentes
+    const badgePendentes = document.getElementById('badgePendentes');
+    if (personaisPendentes > 0) {
+        badgePendentes.textContent = personaisPendentes;
+        badgePendentes.style.display = 'inline-block';
+    } else {
+        badgePendentes.style.display = 'none';
+    }
+    
+    // Atualizar contador no card do dashboard
+    const personaisCard = document.querySelector('.card[data-tab="personais"] .card-value');
+    if (personaisCard) {
+        personaisCard.textContent = totalPersonais;
+    }
+}
+
+// Função para carregar academias no select
+function loadAcademiasForPersonal() {
+    const academias = JSON.parse(localStorage.getItem('gymAcademies')) || [];
+    const select = document.getElementById('personalAcademia');
+    
+    // Manter a opção atual
+    const currentValue = select.value;
+    select.innerHTML = '<option value="">Nenhuma (Independente)</option>';
+    
+    academias.forEach(academia => {
+        const option = document.createElement('option');
+        option.value = academia.name;
+        option.textContent = academia.name;
+        select.appendChild(option);
+    });
+    
+    // Restaurar valor anterior
+    select.value = currentValue;
+}
+
+// Função para renderizar personais na tabela
+function renderPersonaisTable(filter = 'todos') {
+    const personais = getPersonaisFromStorage();
+    const tbody = document.getElementById('personaisTbody');
+    
+    // Filtrar personais
+    let filteredPersonais = personais;
+    if (filter === 'ativos') {
+        filteredPersonais = personais.filter(p => p.status === 'aprovado');
+    } else if (filter === 'pendentes') {
+        filteredPersonais = personais.filter(p => p.status === 'pendente');
+    } else if (filter === 'inativos') {
+        filteredPersonais = personais.filter(p => p.status === 'inativo');
+    }
+    
+    if (filteredPersonais.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" style="text-align: center; padding: 40px;">
+                    <i class="fas fa-user-slash" style="font-size: 2rem; color: var(--primary-gray-light); margin-bottom: 10px; display: block;"></i>
+                    <p style="color: var(--primary-gray-light);">Nenhum personal encontrado</p>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = filteredPersonais.map(personal => {
+        const statusMap = {
+            'aprovado': { text: 'Ativo', class: 'active' },
+            'pendente': { text: 'Pendente', class: 'pending' },
+            'inativo': { text: 'Inativo', class: 'inactive' }
+        };
+        
+        const status = statusMap[personal.status] || statusMap.pendente;
+        
+        return `
+            <tr data-id="${personal.id}">
+                <td>
+                    <strong>${personal.nome}</strong>
+                    ${personal.academia ? `<br><small style="color: var(--primary-green-light);">${personal.academia}</small>` : ''}
+                </td>
+                <td>${personal.especialidade}</td>
+                <td>${personal.anos} anos</td>
+                <td>${personal.email}</td>
+                <td>${personal.telefone}</td>
+                <td><span class="status ${status.class}">${status.text}</span></td>
+                <td>${new Date(personal.dataCadastro).toLocaleDateString('pt-BR')}</td>
+                <td>
+                    <button class="action-btn btn-ver-personal" title="Ver detalhes" data-id="${personal.id}">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn btn-editar-personal" title="Editar" data-id="${personal.id}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-excluir-personal" title="Excluir" data-id="${personal.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    ${personal.status === 'pendente' ? `
+                    <button class="action-btn btn-aprovar-personal" title="Aprovar" data-id="${personal.id}" style="color: var(--primary-green);">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    ` : ''}
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    // Adicionar eventos aos botões
+    addPersonalTableEvents();
+}
+
+// Função para adicionar eventos aos botões da tabela
+function addPersonalTableEvents() {
+    // Botão ver detalhes
+    document.querySelectorAll('.btn-ver-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = parseInt(this.getAttribute('data-id'));
+            openPersonalDetailsModal(personalId);
+        });
+    });
+    
+    // Botão editar
+    document.querySelectorAll('.btn-editar-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = parseInt(this.getAttribute('data-id'));
+            openEditPersonalModal(personalId);
+        });
+    });
+    
+    // Botão excluir
+    document.querySelectorAll('.btn-excluir-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = parseInt(this.getAttribute('data-id'));
+            deletePersonal(personalId);
+        });
+    });
+    
+    // Botão aprovar
+    document.querySelectorAll('.btn-aprovar-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = parseInt(this.getAttribute('data-id'));
+            approvePersonal(personalId);
+        });
+    });
+}
+
+// Função para abrir modal de detalhes do personal
+function openPersonalDetailsModal(personalId) {
+    const personais = getPersonaisFromStorage();
+    const personal = personais.find(p => p.id === personalId);
+    
+    if (!personal) {
+        showAlert('Personal não encontrado!', 'error');
+        return;
+    }
+    
+    const statusMap = {
+        'aprovado': { text: 'Ativo', class: 'active', color: 'var(--primary-green)' },
+        'pendente': { text: 'Pendente', class: 'pending', color: '#ffc107' },
+        'inativo': { text: 'Inativo', class: 'inactive', color: 'var(--primary-gray-light)' }
+    };
+    
+    const status = statusMap[personal.status] || statusMap.pendente;
+    
+    const detailsContent = document.getElementById('detailsPersonalContent');
+    detailsContent.innerHTML = `
+        <div class="details-grid">
+            <div class="details-item">
+                <div class="details-label">Nome Completo</div>
+                <div class="details-value">${personal.nome}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Status</div>
+                <div class="details-value">
+                    <span class="status ${status.class}" style="background-color: ${status.color}20; color: ${status.color};">
+                        ${status.text}
+                    </span>
+                </div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">E-mail</div>
+                <div class="details-value">${personal.email}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Telefone</div>
+                <div class="details-value">${personal.telefone}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Especialidade</div>
+                <div class="details-value">${personal.especialidade}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Experiência</div>
+                <div class="details-value">${personal.anos} anos</div>
+            </div>
+            ${personal.academia ? `
+            <div class="details-item">
+                <div class="details-label">Academia Associada</div>
+                <div class="details-value">${personal.academia}</div>
+            </div>
+            ` : ''}
+            <div class="details-item">
+                <div class="details-label">Data de Cadastro</div>
+                <div class="details-value">${new Date(personal.dataCadastro).toLocaleDateString('pt-BR')}</div>
+            </div>
+        </div>
+        
+        ${personal.descricao ? `
+        <div class="details-item" style="grid-column: 1 / -1;">
+            <div class="details-label">Sobre o Personal</div>
+            <div class="details-value" style="background-color: var(--primary-black-light); padding: 15px; border-radius: 6px; border: 1px solid var(--primary-gray-dark);">
+                ${personal.descricao}
+            </div>
+        </div>
+        ` : ''}
+        
+        <div class="modal-footer" style="padding: 0; margin-top: 20px; background: none; border: none;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('modalDetalhesPersonal').style.display='none'">
+                Fechar
+            </button>
+            <button type="button" class="btn btn-primary" onclick="openEditPersonalModal(${personal.id})">
+                <i class="fas fa-edit"></i> Editar Personal
+            </button>
+        </div>
+    `;
+    
+    // Armazenar ID do personal para edição
+    document.getElementById('modalDetalhesPersonal').setAttribute('data-personal-id', personalId);
+    
+    const modal = document.getElementById('modalDetalhesPersonal');
+    modal.style.display = 'block';
+}
+
+// Função para abrir modal de edição
+function openEditPersonalModal(personalId = null) {
+    const modal = document.getElementById('modalPersonal');
+    const modalTitle = document.getElementById('modalPersonalTitle');
+    
+    if (personalId) {
+        // Modo edição
+        const personais = getPersonaisFromStorage();
+        const personal = personais.find(p => p.id === personalId);
+        
+        if (!personal) {
+            showAlert('Personal não encontrado!', 'error');
+            return;
+        }
+        
+        modalTitle.textContent = 'Editar Personal';
+        document.getElementById('personalId').value = personalId;
+        document.getElementById('personalNome').value = personal.nome;
+        document.getElementById('personalEmail').value = personal.email;
+        document.getElementById('personalTelefone').value = personal.telefone;
+        document.getElementById('personalEspecialidade').value = personal.especialidade;
+        document.getElementById('personalAnos').value = personal.anos;
+        document.getElementById('personalAcademia').value = personal.academia || '';
+        document.getElementById('personalDescricao').value = personal.descricao || '';
+        document.getElementById('personalStatus').value = personal.status;
+        
+        modal.setAttribute('data-editing', 'true');
+    } else {
+        // Modo novo
+        modalTitle.textContent = 'Cadastrar Novo Personal';
+        document.getElementById('formPersonal').reset();
+        document.getElementById('personalId').value = '';
+        document.getElementById('personalStatus').value = 'aprovado';
+        document.getElementById('personalAnos').value = '3';
+        
+        modal.removeAttribute('data-editing');
+    }
+    
+    // Carregar academias
+    loadAcademiasForPersonal();
+    
+    modal.style.display = 'block';
+}
+
+// Função para salvar/atualizar personal
+function savePersonal() {
+    const form = document.getElementById('formPersonal');
+    
+    // Validar campos obrigatórios
+    const nome = document.getElementById('personalNome').value;
+    const email = document.getElementById('personalEmail').value;
+    const telefone = document.getElementById('personalTelefone').value;
+    const especialidade = document.getElementById('personalEspecialidade').value;
+    const anos = document.getElementById('personalAnos').value;
+    const status = document.getElementById('personalStatus').value;
+    
+    if (!nome || !email || !telefone || !especialidade || !anos || !status) {
+        showAlert('Por favor, preencha todos os campos obrigatórios!', 'error');
+        return;
+    }
+    
+    const personalId = document.getElementById('personalId').value;
+    const isEditing = personalId !== '';
+    
+    const personalData = {
+        id: isEditing ? parseInt(personalId) : Date.now(),
+        nome: nome,
+        email: email,
+        telefone: telefone,
+        especialidade: especialidade,
+        anos: anos,
+        academia: document.getElementById('personalAcademia').value || '',
+        descricao: document.getElementById('personalDescricao').value || '',
+        status: status,
+        dataCadastro: isEditing ? 
+            (getPersonaisFromStorage().find(p => p.id === parseInt(personalId))?.dataCadastro || new Date().toISOString()) : 
+            new Date().toISOString(),
+        atualizadoEm: new Date().toISOString()
+    };
+    
+    let personais = getPersonaisFromStorage();
+    
+    if (isEditing) {
+        // Atualizar
+        const index = personais.findIndex(p => p.id === parseInt(personalId));
+        if (index !== -1) {
+            personais[index] = personalData;
+        }
+    } else {
+        // Adicionar novo
+        personais.push(personalData);
+    }
+    
+    savePersonaisToStorage(personais);
+    
+    // Fechar modal
+    document.getElementById('modalPersonal').style.display = 'none';
+    form.reset();
+    
+    // Atualizar interface
+    updatePersonaisStats();
+    renderPersonaisTable(document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'todos');
+    
+    showAlert(`Personal ${isEditing ? 'atualizado' : 'cadastrado'} com sucesso!`, 'success');
+}
+
+// Função para excluir personal
+function deletePersonal(personalId) {
+    const personais = getPersonaisFromStorage();
+    const personal = personais.find(p => p.id === personalId);
+    
+    if (!personal) return;
+    
+    if (confirm(`Tem certeza que deseja excluir o personal "${personal.nome}"?`)) {
+        const updatedPersonais = personais.filter(p => p.id !== personalId);
+        savePersonaisToStorage(updatedPersonais);
+        
+        // Atualizar interface
+        updatePersonaisStats();
+        renderPersonaisTable(document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'todos');
+        
+        showAlert('Personal excluído com sucesso!', 'success');
+    }
+}
+
+// Função para aprovar personal
+function approvePersonal(personalId) {
+    const personais = getPersonaisFromStorage();
+    const personal = personais.find(p => p.id === personalId);
+    
+    if (!personal) return;
+    
+    if (confirm(`Deseja aprovar o personal "${personal.nome}"?`)) {
+        personal.status = 'aprovado';
+        personal.atualizadoEm = new Date().toISOString();
+        
+        savePersonaisToStorage(personais);
+        
+        // Atualizar interface
+        updatePersonaisStats();
+        renderPersonaisTable(document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'todos');
+        
+        // Se estiver conectado à página de aprovação, atualizar lá também
+        syncWithApprovalPage();
+        
+        showAlert('Personal aprovado com sucesso!', 'success');
+    }
+}
+
+// Função para sincronizar com a página de aprovação
+function syncWithApprovalPage() {
+    try {
+        // Atualizar os anúncios na página de aprovação
+        const personais = getPersonaisFromStorage();
+        const anuncios = personais.map(personal => ({
+            id: personal.id,
+            nome: personal.nome,
+            telefone: personal.telefone,
+            email: personal.email,
+            especialidade: personal.especialidade,
+            anos: personal.anos,
+            mensagem: personal.descricao,
+            data: new Date(personal.dataCadastro).toLocaleDateString('pt-BR'),
+            status: personal.status,
+            dataAprovacao: personal.status === 'aprovado' ? new Date().toLocaleDateString('pt-BR') : undefined
+        }));
+        
+        localStorage.setItem('anuncios', JSON.stringify(anuncios));
+        console.log('Personais sincronizados com a página de aprovação');
+    } catch (error) {
+        console.error('Erro ao sincronizar com página de aprovação:', error);
+    }
+}
+
+// Inicializar a seção de personais
+function initPersonaisSection() {
+    // Carregar dados iniciais se não existirem
+    if (getPersonaisFromStorage().length === 0) {
+        const examplePersonais = [
+            {
+                id: 1,
+                nome: "Carlos Silva",
+                email: "carlos@email.com",
+                telefone: "(11) 99999-9999",
+                especialidade: "Condicionamento Físico",
+                anos: "5",
+                academia: "Academia Fitness Plus",
+                descricao: "Especialista em treinamento funcional e condicionamento físico",
+                status: "aprovado",
+                dataCadastro: "2024-01-15T10:00:00.000Z",
+                atualizadoEm: "2024-03-15T14:30:00.000Z"
+            },
+            {
+                id: 2,
+                nome: "Ana Santos",
+                email: "ana@email.com",
+                telefone: "(11) 98888-8888",
+                especialidade: "Emagrecimento",
+                anos: "3",
+                academia: "",
+                descricao: "Foco em emagrecimento saudável e reeducação alimentar",
+                status: "pendente",
+                dataCadastro: "2024-03-14T09:15:00.000Z",
+                atualizadoEm: "2024-03-14T09:15:00.000Z"
+            },
+            {
+                id: 3,
+                nome: "Roberto Lima",
+                email: "roberto@email.com",
+                telefone: "(11) 97777-7777",
+                especialidade: "Musculação",
+                anos: "8",
+                academia: "Power Gym",
+                descricao: "Especializado em hipertrofia e força",
+                status: "aprovado",
+                dataCadastro: "2024-02-20T16:45:00.000Z",
+                atualizadoEm: "2024-02-20T16:45:00.000Z"
+            }
+        ];
+        
+        savePersonaisToStorage(examplePersonais);
+    }
+    
+    // Atualizar estatísticas
+    updatePersonaisStats();
+    
+    // Renderizar tabela
+    renderPersonaisTable();
+}
+
+// Adicione este código dentro do seu DOMContentLoaded, após as outras inicializações:
+document.addEventListener('DOMContentLoaded', function() {
+    // ... código existente ...
+    
+    // Inicializar personais
+    initPersonaisSection();
+    
+    // Event Listeners para personais
+    const btnNovoPersonal = document.getElementById('btnNovoPersonal');
+    if (btnNovoPersonal) {
+        btnNovoPersonal.addEventListener('click', () => openEditPersonalModal());
+    }
+    
+    const btnSalvarPersonal = document.getElementById('btnSalvarPersonal');
+    if (btnSalvarPersonal) {
+        btnSalvarPersonal.addEventListener('click', savePersonal);
+    }
+    
+    const btnCancelarPersonal = document.getElementById('btnCancelarPersonal');
+    if (btnCancelarPersonal) {
+        btnCancelarPersonal.addEventListener('click', () => {
+            document.getElementById('modalPersonal').style.display = 'none';
+        });
+    }
+    
+    // Filtros
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const filter = this.getAttribute('data-filter');
+            renderPersonaisTable(filter);
+        });
+    });
+    
+    // Busca
+    const searchPersonal = document.getElementById('searchPersonal');
+    if (searchPersonal) {
+        searchPersonal.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#personaisTbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+    }
+    
+    // Formatação de telefone
+    document.getElementById('personalTelefone')?.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        
+        if (value.length <= 11) {
+            if (value.length <= 10) {
+                value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                value = value.replace(/(\d{4})(\d)/, '$1-$2');
+            } else {
+                value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                value = value.replace(/(\d{5})(\d)/, '$1-$2');
+            }
+            e.target.value = value;
+        }
+    });
+    
+    // Fechar modais de personais
+    document.querySelectorAll('#modalPersonal .close-btn, #modalDetalhesPersonal .close-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            modal.style.display = 'none';
+        });
+    });
+    
+    window.addEventListener('click', function(event) {
+        if (event.target.id === 'modalPersonal') {
+            document.getElementById('modalPersonal').style.display = 'none';
+        }
+        if (event.target.id === 'modalDetalhesPersonal') {
+            document.getElementById('modalDetalhesPersonal').style.display = 'none';
+        }
+    });
+});
+// ============================================
+// SISTEMA COMPLETO DE SINCRONIZAÇÃO
+// ============================================
+
+// Variável global para controle de filtro atual
+let currentFilter = 'todos';
+
+// ============================================
+// FUNÇÕES BÁSICAS DE PERSONAIS
+// ============================================
+
+// Função para carregar personais do localStorage
+function getPersonaisFromStorage() {
+    try {
+        const personais = JSON.parse(localStorage.getItem('gymPersonais')) || [];
+        // Garantir que todos os personais têm os campos necessários
+        return personais.map(p => ({
+            id: p.id || Date.now() + Math.random(),
+            nome: p.nome || 'Sem nome',
+            email: p.email || '',
+            telefone: p.telefone || '',
+            especialidade: p.especialidade || 'Não informada',
+            anos: p.anos || '0',
+            academia: p.academia || '',
+            descricao: p.descricao || p.mensagem || '',
+            status: p.status || 'pendente',
+            dataCadastro: p.dataCadastro || p.data || new Date().toISOString(),
+            atualizadoEm: p.atualizadoEm || new Date().toISOString()
+        }));
+    } catch (error) {
+        console.error('Erro ao carregar personais:', error);
+        return [];
+    }
+}
+
+// Função para salvar personais no localStorage
+function savePersonaisToStorage(personais) {
+    localStorage.setItem('gymPersonais', JSON.stringify(personais));
+}
+
+// ============================================
+// FUNÇÕES DE ATUALIZAÇÃO DA INTERFACE
+// ============================================
+
+// Função para atualizar estatísticas
+function updatePersonaisStats() {
+    try {
+        const personais = getPersonaisFromStorage();
+        
+        const totalPersonais = personais.length;
+        const personaisAtivos = personais.filter(p => p.status === 'aprovado').length;
+        const personaisPendentes = personais.filter(p => p.status === 'pendente').length;
+        const personaisInativos = personais.filter(p => p.status === 'inativo').length;
+        
+        // Atualizar contadores
+        if (document.getElementById('totalPersonais')) {
+            document.getElementById('totalPersonais').textContent = totalPersonais;
+        }
+        if (document.getElementById('personaisAtivos')) {
+            document.getElementById('personaisAtivos').textContent = personaisAtivos;
+        }
+        if (document.getElementById('personaisPendentes')) {
+            document.getElementById('personaisPendentes').textContent = personaisPendentes;
+        }
+        if (document.getElementById('personaisInativos')) {
+            document.getElementById('personaisInativos').textContent = personaisInativos;
+        }
+        
+        // Atualizar badges nos filtros
+        if (document.getElementById('countTodos')) {
+            document.getElementById('countTodos').textContent = totalPersonais;
+        }
+        if (document.getElementById('countAtivos')) {
+            document.getElementById('countAtivos').textContent = personaisAtivos;
+        }
+        if (document.getElementById('countPendentes')) {
+            document.getElementById('countPendentes').textContent = personaisPendentes;
+        }
+        if (document.getElementById('countInativos')) {
+            document.getElementById('countInativos').textContent = personaisInativos;
+        }
+        
+        // Atualizar badge de pedidos pendentes
+        const badgePendentes = document.getElementById('badgePendentes');
+        if (badgePendentes) {
+            if (personaisPendentes > 0) {
+                badgePendentes.textContent = personaisPendentes;
+                badgePendentes.style.display = 'inline-block';
+            } else {
+                badgePendentes.style.display = 'none';
+            }
+        }
+        
+        // Atualizar contador no card do dashboard
+        const personaisCard = document.querySelector('.card[data-tab="personais"] .card-value');
+        if (personaisCard) {
+            personaisCard.textContent = totalPersonais;
+        }
+        
+        return { totalPersonais, personaisAtivos, personaisPendentes, personaisInativos };
+    } catch (error) {
+        console.error('Erro ao atualizar estatísticas:', error);
+        return { totalPersonais: 0, personaisAtivos: 0, personaisPendentes: 0, personaisInativos: 0 };
+    }
+}
+
+// Função para renderizar personais na tabela
+function renderPersonaisTable(filter = 'todos') {
+    try {
+        const personais = getPersonaisFromStorage();
+        const tbody = document.getElementById('personaisTbody');
+        
+        if (!tbody) return;
+        
+        // Filtrar personais
+        let filteredPersonais = personais;
+        if (filter === 'ativos') {
+            filteredPersonais = personais.filter(p => p.status === 'aprovado');
+        } else if (filter === 'pendentes') {
+            filteredPersonais = personais.filter(p => p.status === 'pendente');
+        } else if (filter === 'inativos') {
+            filteredPersonais = personais.filter(p => p.status === 'inativo');
+        }
+        
+        // Aplicar filtro de busca
+        const searchInput = document.getElementById('searchPersonal');
+        if (searchInput && searchInput.value) {
+            const searchTerm = searchInput.value.toLowerCase();
+            filteredPersonais = filteredPersonais.filter(p => 
+                p.nome.toLowerCase().includes(searchTerm) ||
+                p.especialidade.toLowerCase().includes(searchTerm) ||
+                p.email.toLowerCase().includes(searchTerm) ||
+                p.telefone.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        if (filteredPersonais.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-user-slash" style="font-size: 2rem; color: var(--primary-gray-light); margin-bottom: 10px; display: block;"></i>
+                        <p style="color: var(--primary-gray-light);">Nenhum personal encontrado</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = filteredPersonais.map(personal => {
+            const statusMap = {
+                'aprovado': { text: 'Ativo', class: 'active' },
+                'pendente': { text: 'Pendente', class: 'pending' },
+                'inativo': { text: 'Inativo', class: 'inactive' }
+            };
+            
+            const status = statusMap[personal.status] || statusMap.pendente;
+            const dataFormatada = personal.dataCadastro ? 
+                new Date(personal.dataCadastro).toLocaleDateString('pt-BR') : 
+                'Data não informada';
+            
+            return `
+                <tr data-id="${personal.id}">
+                    <td>
+                        <strong>${personal.nome}</strong>
+                        ${personal.academia ? `<br><small style="color: var(--primary-green-light);">${personal.academia}</small>` : ''}
+                    </td>
+                    <td>${personal.especialidade}</td>
+                    <td>${personal.anos} anos</td>
+                    <td>${personal.email}</td>
+                    <td>${personal.telefone}</td>
+                    <td><span class="status ${status.class}">${status.text}</span></td>
+                    <td>${dataFormatada}</td>
+                    <td>
+                        <button class="action-btn btn-ver-personal" title="Ver detalhes" data-id="${personal.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn btn-editar-personal" title="Editar" data-id="${personal.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-excluir-personal" title="Excluir" data-id="${personal.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        ${personal.status === 'pendente' ? `
+                        <button class="action-btn btn-aprovar-personal" title="Aprovar" data-id="${personal.id}" style="color: var(--primary-green);">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `;
+        }).join('');
+        
+        // Adicionar eventos aos botões
+        addPersonalTableEvents();
+    } catch (error) {
+        console.error('Erro ao renderizar tabela:', error);
+    }
+}
+
+// ============================================
+// FUNÇÕES DE FILTRO E BUSCA
+// ============================================
+
+function filterPersonais(filter) {
+    currentFilter = filter;
+    
+    // Atualizar botões ativos
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-filter') === filter) {
+            btn.classList.add('active');
+        }
+    });
+    
+    renderPersonaisTable(filter);
+}
+
+// ============================================
+// FUNÇÕES DE SINCRONIZAÇÃO EM TEMPO REAL
+// ============================================
+
+// Função para carregar dados da página de aprovação
+function loadDataFromApprovalPage() {
+    console.log('🔄 Carregando dados da página de aprovação...');
+    
+    try {
+        showSyncStatus('Carregando dados da página de aprovação...');
+        
+        // Carregar anúncios da página de aprovação
+        const anuncios = JSON.parse(localStorage.getItem('anuncios')) || [];
+        let personaisAtuais = getPersonaisFromStorage();
+        
+        let novosPersonais = 0;
+        let atualizados = 0;
+        
+        // Processar cada anúncio
+        anuncios.forEach(anuncio => {
+            // Verificar se o personal já existe
+            const personalExistente = personaisAtuais.find(p => p.id === anuncio.id);
+            
+            if (personalExistente) {
+                // Atualizar dados se necessário
+                if (personalExistente.status !== anuncio.status) {
+                    personalExistente.status = anuncio.status;
+                    personalExistente.atualizadoEm = new Date().toISOString();
+                    atualizados++;
+                }
+                
+                // Atualizar outros dados se estiverem vazios
+                if (!personalExistente.email && anuncio.email) {
+                    personalExistente.email = anuncio.email;
+                }
+                if (!personalExistente.telefone && anuncio.telefone) {
+                    personalExistente.telefone = anuncio.telefone;
+                }
+                if (!personalExistente.especialidade && anuncio.especialidade) {
+                    personalExistente.especialidade = anuncio.especialidade;
+                }
+                if (!personalExistente.anos && anuncio.anos) {
+                    personalExistente.anos = anuncio.anos;
+                }
+                if (!personalExistente.descricao && anuncio.mensagem) {
+                    personalExistente.descricao = anuncio.mensagem;
+                }
+            } else {
+                // Criar novo personal a partir do anúncio
+                const novoPersonal = {
+                    id: anuncio.id,
+                    nome: anuncio.nome,
+                    email: anuncio.email || '',
+                    telefone: anuncio.telefone || '',
+                    especialidade: anuncio.especialidade || 'Não informada',
+                    anos: anuncio.anos || '0',
+                    academia: anuncio.academia || '',
+                    descricao: anuncio.mensagem || '',
+                    status: anuncio.status || 'pendente',
+                    dataCadastro: new Date(anuncio.data).toISOString() || new Date().toISOString(),
+                    atualizadoEm: new Date().toISOString()
+                };
+                
+                personaisAtuais.push(novoPersonal);
+                novosPersonais++;
+            }
+        });
+        
+        // Salvar se houver mudanças
+        if (novosPersonais > 0 || atualizados > 0) {
+            savePersonaisToStorage(personaisAtuais);
+            
+            // Atualizar interface
+            updatePersonaisStats();
+            renderPersonaisTable(currentFilter);
+            
+            showSyncStatus(`✅ ${novosPersonais} novos, ${atualizados} atualizados`, 'success');
+            
+            // Mostrar alerta se houver novos personais
+            if (novosPersonais > 0) {
+                showAlert(`${novosPersonais} novos personais carregados da página de aprovação!`, 'success');
+            }
+        } else {
+            showSyncStatus('✅ Dados já estão sincronizados', 'success');
+        }
+        
+    } catch (error) {
+        console.error('❌ Erro ao carregar dados:', error);
+        showSyncStatus('❌ Erro ao carregar dados', 'error');
+    }
+}
+
+// Forçar sincronização completa
+function forceSyncPersonais() {
+    console.log('🔄 Forçando sincronização completa...');
+    showSyncStatus('Sincronizando com página de aprovação...');
+    
+    // Primeiro, enviar nossos dados para a página de aprovação
+    syncToApprovalPage();
+    
+    // Depois, carregar dados da página de aprovação
+    setTimeout(() => {
+        loadDataFromApprovalPage();
+    }, 500);
+}
+
+// Sincronizar nossos personais para a página de aprovação
+function syncToApprovalPage() {
+    try {
+        const personais = getPersonaisFromStorage();
+        
+        // Converter para o formato da página de aprovação
+        const anuncios = personais.map(personal => ({
+            id: personal.id,
+            nome: personal.nome,
+            telefone: personal.telefone,
+            email: personal.email,
+            especialidade: personal.especialidade,
+            anos: personal.anos,
+            mensagem: personal.descricao,
+            data: new Date(personal.dataCadastro).toLocaleDateString('pt-BR'),
+            status: personal.status,
+            dataAprovacao: personal.status === 'aprovado' ? 
+                new Date(personal.atualizadoEm).toLocaleDateString('pt-BR') : undefined
+        }));
+        
+        localStorage.setItem('anuncios', JSON.stringify(anuncios));
+        console.log('✅ Dados enviados para página de aprovação');
+        return true;
+    } catch (error) {
+        console.error('❌ Erro ao sincronizar:', error);
+        return false;
+    }
+}
+
+// Mostrar status de sincronização
+function showSyncStatus(message, type = 'info') {
+    const syncStatus = document.getElementById('syncStatus');
+    const syncStatusText = document.getElementById('syncStatusText');
+    
+    if (!syncStatus || !syncStatusText) return;
+    
+    const icon = type === 'success' ? 'fa-check' : 
+                 type === 'error' ? 'fa-times' : 
+                 'fa-sync fa-spin';
+    
+    syncStatusText.textContent = message;
+    syncStatus.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+    syncStatus.style.display = 'block';
+    
+    if (type !== 'info') {
+        setTimeout(() => {
+            syncStatus.style.display = 'none';
+        }, 3000);
+    }
+}
+
+// ============================================
+// MONITORAMENTO DE MUDANÇAS EM TEMPO REAL
+// ============================================
+
+// Configurar monitoramento de mudanças
+function setupSyncMonitoring() {
+    // Ouvir eventos de storage (para quando outra aba modifica)
+    window.addEventListener('storage', function(event) {
+        if (event.key === 'anuncios' || event.key === 'gymPersonais') {
+            console.log('📡 Mudança detectada no localStorage:', event.key);
+            
+            // Se a seção de personais estiver visível, atualizar
+            const personaisSection = document.getElementById('personais-section');
+            if (personaisSection && personaisSection.style.display !== 'none') {
+                setTimeout(() => {
+                    loadDataFromApprovalPage();
+                }, 300);
+            }
+        }
+    });
+    
+    // Verificar periodicamente por mudanças (a cada 3 segundos)
+    setInterval(() => {
+        const personaisSection = document.getElementById('personais-section');
+        if (personaisSection && personaisSection.style.display !== 'none') {
+            // Verificar timestamp da última atualização
+            const lastUpdate = localStorage.getItem('last_personais_update');
+            if (lastUpdate) {
+                const now = new Date().getTime();
+                const lastUpdateTime = new Date(lastUpdate).getTime();
+                
+                // Se foi atualizado nos últimos 5 segundos, sincronizar
+                if (now - lastUpdateTime < 5000) {
+                    loadDataFromApprovalPage();
+                }
+            }
+        }
+    }, 3000);
+}
+
+// ============================================
+// FUNÇÕES DE CRUD PARA PERSONAIS
+// ============================================
+
+// Função para adicionar eventos aos botões da tabela
+function addPersonalTableEvents() {
+    // Botão ver detalhes
+    document.querySelectorAll('.btn-ver-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = this.getAttribute('data-id');
+            openPersonalDetailsModal(personalId);
+        });
+    });
+    
+    // Botão editar
+    document.querySelectorAll('.btn-editar-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = this.getAttribute('data-id');
+            openEditPersonalModal(personalId);
+        });
+    });
+    
+    // Botão excluir
+    document.querySelectorAll('.btn-excluir-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = this.getAttribute('data-id');
+            deletePersonal(personalId);
+        });
+    });
+    
+    // Botão aprovar
+    document.querySelectorAll('.btn-aprovar-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = this.getAttribute('data-id');
+            approvePersonal(personalId);
+        });
+    });
+}
+
+// Abrir modal de detalhes
+function openPersonalDetailsModal(personalId) {
+    const personais = getPersonaisFromStorage();
+    const personal = personais.find(p => p.id == personalId);
+    
+    if (!personal) {
+        showAlert('Personal não encontrado!', 'error');
+        return;
+    }
+    
+    const statusMap = {
+        'aprovado': { text: 'Ativo', class: 'active', color: 'var(--primary-green)' },
+        'pendente': { text: 'Pendente', class: 'pending', color: '#ffc107' },
+        'inativo': { text: 'Inativo', class: 'inactive', color: 'var(--primary-gray-light)' }
+    };
+    
+    const status = statusMap[personal.status] || statusMap.pendente;
+    const dataFormatada = personal.dataCadastro ? 
+        new Date(personal.dataCadastro).toLocaleDateString('pt-BR') : 
+        'Data não informada';
+    
+    const detailsContent = document.getElementById('detailsPersonalContent');
+    if (!detailsContent) {
+        showAlert('Modal de detalhes não encontrado!', 'error');
+        return;
+    }
+    
+    detailsContent.innerHTML = `
+        <div class="details-grid">
+            <div class="details-item">
+                <div class="details-label">Nome Completo</div>
+                <div class="details-value">${personal.nome}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Status</div>
+                <div class="details-value">
+                    <span class="status ${status.class}" style="background-color: ${status.color}20; color: ${status.color};">
+                        ${status.text}
+                    </span>
+                </div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">E-mail</div>
+                <div class="details-value">${personal.email || 'Não informado'}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Telefone</div>
+                <div class="details-value">${personal.telefone || 'Não informado'}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Especialidade</div>
+                <div class="details-value">${personal.especialidade}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Experiência</div>
+                <div class="details-value">${personal.anos} anos</div>
+            </div>
+            ${personal.academia ? `
+            <div class="details-item">
+                <div class="details-label">Academia Associada</div>
+                <div class="details-value">${personal.academia}</div>
+            </div>
+            ` : ''}
+            <div class="details-item">
+                <div class="details-label">Data de Cadastro</div>
+                <div class="details-value">${dataFormatada}</div>
+            </div>
+        </div>
+        
+        ${personal.descricao ? `
+        <div class="details-item" style="grid-column: 1 / -1; margin-top: 15px;">
+            <div class="details-label">Sobre o Personal</div>
+            <div class="details-value" style="background-color: var(--primary-black-light); padding: 15px; border-radius: 6px; border: 1px solid var(--primary-gray-dark);">
+                ${personal.descricao}
+            </div>
+        </div>
+        ` : ''}
+        
+        <div style="padding: 0; margin-top: 20px; background: none; border: none; display: flex; gap: 10px; justify-content: flex-end;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('modalDetalhesPersonal').style.display='none'">
+                Fechar
+            </button>
+            <button type="button" class="btn btn-primary" onclick="openEditPersonalModal('${personal.id}')">
+                <i class="fas fa-edit"></i> Editar Personal
+            </button>
+        </div>
+    `;
+    
+    const modal = document.getElementById('modalDetalhesPersonal');
+    modal.style.display = 'block';
+}
+
+// Função para aprovar personal
+function approvePersonal(personalId) {
+    const personais = getPersonaisFromStorage();
+    const personal = personais.find(p => p.id == personalId);
+    
+    if (!personal) return;
+    
+    if (confirm(`Deseja aprovar o personal "${personal.nome}"?`)) {
+        personal.status = 'aprovado';
+        personal.atualizadoEm = new Date().toISOString();
+        
+        savePersonaisToStorage(personais);
+        
+        // Sincronizar com a página de aprovação
+        syncToApprovalPage();
+        
+        // Atualizar interface
+        updatePersonaisStats();
+        renderPersonaisTable(currentFilter);
+        
+        showAlert('Personal aprovado com sucesso!', 'success');
+    }
+}
+
+// Função para excluir personal
+function deletePersonal(personalId) {
+    const personais = getPersonaisFromStorage();
+    const personal = personais.find(p => p.id == personalId);
+    
+    if (!personal) return;
+    
+    if (confirm(`Tem certeza que deseja excluir o personal "${personal.nome}"?`)) {
+        const updatedPersonais = personais.filter(p => p.id != personalId);
+        savePersonaisToStorage(updatedPersonais);
+        
+        // Sincronizar com a página de aprovação
+        syncToApprovalPage();
+        
+        // Atualizar interface
+        updatePersonaisStats();
+        renderPersonaisTable(currentFilter);
+        
+        showAlert('Personal excluído com sucesso!', 'success');
+    }
+}
+
+// ============================================
+// INICIALIZAÇÃO
+// ============================================
+
+// Inicializar a seção de personais
+function initPersonaisSection() {
+    console.log('🚀 Inicializando seção de personais...');
+    
+    // Verificar se há dados na página de aprovação
+    const anuncios = JSON.parse(localStorage.getItem('anuncios')) || [];
+    const personaisAtuais = getPersonaisFromStorage();
+    
+    // Se houver anúncios mas não houver personais, importar
+    if (anuncios.length > 0 && personaisAtuais.length === 0) {
+        console.log('📥 Importando dados da página de aprovação...');
+        loadDataFromApprovalPage();
+    } else {
+        // Atualizar estatísticas e renderizar
+        updatePersonaisStats();
+        renderPersonaisTable(currentFilter);
+    }
+    
+    // Configurar monitoramento
+    setupSyncMonitoring();
+}
+
+// Adicione este código no final do DOMContentLoaded existente:
+document.addEventListener('DOMContentLoaded', function() {
+    // ... código existente ...
+    
+    // ============================================
+    // INICIALIZAÇÃO DOS PERSONAIS
+    // ============================================
+    
+    // Aguardar um pouco para garantir que o DOM está completamente carregado
+    setTimeout(() => {
+        // Inicializar personais
+        initPersonaisSection();
+        
+        // Event Listeners para personais
+        const btnNovoPersonal = document.getElementById('btnNovoPersonal');
+        if (btnNovoPersonal) {
+            btnNovoPersonal.addEventListener('click', () => openEditPersonalModal());
+        }
+        
+        const btnSalvarPersonal = document.getElementById('btnSalvarPersonal');
+        if (btnSalvarPersonal) {
+            btnSalvarPersonal.addEventListener('click', savePersonal);
+        }
+        
+        const btnCancelarPersonal = document.getElementById('btnCancelarPersonal');
+        if (btnCancelarPersonal) {
+            btnCancelarPersonal.addEventListener('click', () => {
+                document.getElementById('modalPersonal').style.display = 'none';
+            });
+        }
+        
+        // Busca em tempo real
+        const searchPersonal = document.getElementById('searchPersonal');
+        if (searchPersonal) {
+            searchPersonal.addEventListener('input', function() {
+                renderPersonaisTable(currentFilter);
+            });
+        }
+        
+        // Fechar modais de personais
+        document.querySelectorAll('#modalPersonal .close-btn, #modalDetalhesPersonal .close-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modal = this.closest('.modal');
+                modal.style.display = 'none';
+            });
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target.id === 'modalPersonal') {
+                document.getElementById('modalPersonal').style.display = 'none';
+            }
+            if (event.target.id === 'modalDetalhesPersonal') {
+                document.getElementById('modalDetalhesPersonal').style.display = 'none';
+            }
+        });
+        
+        // Formatação de telefone no modal (se existir)
+        const personalTelefone = document.getElementById('personalTelefone');
+        if (personalTelefone) {
+            personalTelefone.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.length <= 11) {
+                    if (value.length <= 10) {
+                        value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                        value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                    } else {
+                        value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                        value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                    }
+                    e.target.value = value;
+                }
+            });
+        }
+        
+        // Quando abrir a seção de personais, verificar atualizações
+        document.querySelectorAll('.nav-links li, .dashboard-cards .card').forEach(element => {
+            element.addEventListener('click', function() {
+                const tab = this.getAttribute('data-tab');
+                if (tab === 'personais') {
+                    // Pequeno delay para garantir que a seção está visível
+                    setTimeout(() => {
+                        // Atualizar dados da página de aprovação
+                        loadDataFromApprovalPage();
+                    }, 500);
+                }
+            });
+        });
+        
+        // Botão de editar no modal de detalhes
+        const btnEditarPersonal = document.getElementById('btnEditarPersonal');
+        if (btnEditarPersonal) {
+            btnEditarPersonal.addEventListener('click', function() {
+                const modal = document.getElementById('modalDetalhesPersonal');
+                const personalId = modal.getAttribute('data-personal-id');
+                if (personalId) {
+                    modal.style.display = 'none';
+                    setTimeout(() => {
+                        openEditPersonalModal(personalId);
+                    }, 300);
+                }
+            });
+        }
+        
+        // Botão de fechar no modal de detalhes
+        const btnFecharDetalhesPersonal = document.getElementById('btnFecharDetalhesPersonal');
+        if (btnFecharDetalhesPersonal) {
+            btnFecharDetalhesPersonal.addEventListener('click', function() {
+                document.getElementById('modalDetalhesPersonal').style.display = 'none';
+            });
+        }
+        
+        console.log('✅ Seção de personais inicializada com sucesso!');
+    }, 1000);
+});
+// ============================================
+// SISTEMA SIMPLIFICADO DE PERSONAIS
+// ============================================
+
+// Função para carregar personais do localStorage
+function getPersonaisFromStorage() {
+    return JSON.parse(localStorage.getItem('gymPersonais')) || [];
+}
+
+// Função para salvar personais no localStorage
+function savePersonaisToStorage(personais) {
+    localStorage.setItem('gymPersonais', JSON.stringify(personais));
+}
+
+// Função para carregar academias no select
+function loadAcademiasForPersonal() {
+    const academias = JSON.parse(localStorage.getItem('gymAcademies')) || [];
+    const select = document.getElementById('personalAcademia');
+    
+    // Manter a opção atual
+    const currentValue = select.value;
+    select.innerHTML = '<option value="">Nenhuma (Independente)</option>';
+    
+    academias.forEach(academia => {
+        const option = document.createElement('option');
+        option.value = academia.name;
+        option.textContent = academia.name;
+        select.appendChild(option);
+    });
+    
+    // Restaurar valor anterior
+    select.value = currentValue;
+}
+
+// Função para renderizar personais na tabela
+function renderPersonaisTable() {
+    const personais = getPersonaisFromStorage();
+    const tbody = document.getElementById('personaisTbody');
+    
+    if (personais.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" style="text-align: center; padding: 20px; color: var(--primary-gray-light);">
+                    Nenhum personal cadastrado
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = personais.map(personal => {
+        return `
+            <tr data-id="${personal.id}">
+                <td>${personal.nome}</td>
+                <td>${personal.especialidade}</td>
+                <td>${personal.anos} anos</td>
+                <td>${personal.email}</td>
+                <td>${personal.telefone}</td>
+                <td>${personal.academia || 'Independente'}</td>
+                <td><span class="status ${personal.status}">${personal.status.charAt(0).toUpperCase() + personal.status.slice(1)}</span></td>
+                <td>
+                    <button class="action-btn btn-editar-personal" title="Editar" data-id="${personal.id}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-excluir-personal" title="Excluir" data-id="${personal.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    // Adicionar eventos aos botões
+    addPersonalTableEvents();
+}
+
+// Função para adicionar eventos aos botões da tabela
+function addPersonalTableEvents() {
+    // Botões de editar
+    document.querySelectorAll('.btn-editar-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = this.getAttribute('data-id');
+            openEditPersonalModal(personalId);
+        });
+    });
+    
+    // Botões de excluir
+    document.querySelectorAll('.btn-excluir-personal').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const personalId = this.getAttribute('data-id');
+            deletePersonal(personalId);
+        });
+    });
+}
+
+// Função para abrir modal de edição
+function openEditPersonalModal(personalId = null) {
+    const modal = document.getElementById('modalPersonal');
+    const modalTitle = document.getElementById('modalPersonalTitle');
+    
+    if (personalId) {
+        // Modo edição
+        const personais = getPersonaisFromStorage();
+        const personal = personais.find(p => p.id == personalId);
+        
+        if (!personal) {
+            showAlert('Personal não encontrado!', 'error');
+            return;
+        }
+        
+        modalTitle.textContent = 'Editar Personal';
+        document.getElementById('personalId').value = personalId;
+        document.getElementById('personalNome').value = personal.nome;
+        document.getElementById('personalEmail').value = personal.email;
+        document.getElementById('personalTelefone').value = personal.telefone;
+        document.getElementById('personalEspecialidade').value = personal.especialidade;
+        document.getElementById('personalAnos').value = personal.anos;
+        document.getElementById('personalAcademia').value = personal.academia || '';
+        document.getElementById('personalDescricao').value = personal.descricao || '';
+        document.getElementById('personalStatus').value = personal.status;
+    } else {
+        // Modo novo
+        modalTitle.textContent = 'Cadastrar Novo Personal';
+        document.getElementById('formPersonal').reset();
+        document.getElementById('personalId').value = '';
+        document.getElementById('personalStatus').value = 'ativo';
+        document.getElementById('personalAnos').value = '3';
+    }
+    
+    // Carregar academias
+    loadAcademiasForPersonal();
+    
+    modal.style.display = 'block';
+}
+
+// Função para salvar/atualizar personal
+function savePersonal() {
+    const form = document.getElementById('formPersonal');
+    
+    // Validar campos obrigatórios
+    const nome = document.getElementById('personalNome').value;
+    const email = document.getElementById('personalEmail').value;
+    const telefone = document.getElementById('personalTelefone').value;
+    const especialidade = document.getElementById('personalEspecialidade').value;
+    const anos = document.getElementById('personalAnos').value;
+    const status = document.getElementById('personalStatus').value;
+    
+    if (!nome || !email || !telefone || !especialidade || !anos || !status) {
+        showAlert('Por favor, preencha todos os campos obrigatórios!', 'error');
+        return;
+    }
+    
+    const personalId = document.getElementById('personalId').value;
+    const isEditing = personalId !== '';
+    
+    const personalData = {
+        id: isEditing ? parseInt(personalId) : Date.now(),
+        nome: nome,
+        email: email,
+        telefone: telefone,
+        especialidade: especialidade,
+        anos: anos,
+        academia: document.getElementById('personalAcademia').value || '',
+        descricao: document.getElementById('personalDescricao').value || '',
+        status: status,
+        dataCadastro: new Date().toISOString()
+    };
+    
+    let personais = getPersonaisFromStorage();
+    
+    if (isEditing) {
+        // Atualizar
+        const index = personais.findIndex(p => p.id == personalId);
+        if (index !== -1) {
+            personais[index] = personalData;
+        }
+    } else {
+        // Adicionar novo
+        personais.push(personalData);
+    }
+    
+    savePersonaisToStorage(personais);
+    
+    // Fechar modal
+    document.getElementById('modalPersonal').style.display = 'none';
+    form.reset();
+    
+    // Atualizar tabela
+    renderPersonaisTable();
+    
+    // Atualizar contador do card
+    updatePersonalCardCount();
+    
+    showAlert(`Personal ${isEditing ? 'atualizado' : 'cadastrado'} com sucesso!`, 'success');
+}
+
+// Função para excluir personal
+function deletePersonal(personalId) {
+    const personais = getPersonaisFromStorage();
+    const personal = personais.find(p => p.id == personalId);
+    
+    if (!personal) return;
+    
+    if (confirm(`Tem certeza que deseja excluir o personal "${personal.nome}"?`)) {
+        const updatedPersonais = personais.filter(p => p.id != personalId);
+        savePersonaisToStorage(updatedPersonais);
+        
+        // Atualizar tabela
+        renderPersonaisTable();
+        
+        // Atualizar contador do card
+        updatePersonalCardCount();
+        
+        showAlert('Personal excluído com sucesso!', 'success');
+    }
+}
+
+// Função para atualizar contador no card
+function updatePersonalCardCount() {
+    const personais = getPersonaisFromStorage();
+    const personaisCard = document.querySelector('.card[data-tab="personais"] .card-value');
+    if (personaisCard) {
+        personaisCard.textContent = personais.length;
+    }
+}
+
+// Adicione este código dentro do DOMContentLoaded existente:
+document.addEventListener('DOMContentLoaded', function() {
+    // ... código existente ...
+    
+    // ============================================
+    // INICIALIZAÇÃO DOS PERSONAIS
+    // ============================================
+    
+    // Adicionar dados iniciais se não existirem
+    if (getPersonaisFromStorage().length === 0) {
+        const examplePersonais = [
+            {
+                id: 1,
+                nome: "Carlos Silva",
+                email: "carlos@email.com",
+                telefone: "(11) 99999-9999",
+                especialidade: "Musculação",
+                anos: "5",
+                academia: "Academia Fitness Plus",
+                descricao: "Especialista em treinamento funcional",
+                status: "ativo",
+                dataCadastro: "2024-01-15T10:00:00.000Z"
+            },
+            {
+                id: 2,
+                nome: "Ana Santos",
+                email: "ana@email.com",
+                telefone: "(11) 98888-8888",
+                especialidade: "Emagrecimento",
+                anos: "3",
+                academia: "",
+                descricao: "Foco em emagrecimento saudável",
+                status: "pendente",
+                dataCadastro: "2024-03-14T09:15:00.000Z"
+            },
+            {
+                id: 3,
+                nome: "Roberto Lima",
+                email: "roberto@email.com",
+                telefone: "(11) 97777-7777",
+                especialidade: "Crossfit",
+                anos: "8",
+                academia: "Power Gym",
+                descricao: "Especializado em crossfit",
+                status: "ativo",
+                dataCadastro: "2024-02-20T16:45:00.000Z"
+            }
+        ];
+        
+        savePersonaisToStorage(examplePersonais);
+    }
+    
+    // Renderizar tabela inicial
+    renderPersonaisTable();
+    updatePersonalCardCount();
+    
+    // Event Listeners para personais
+    const btnNovoPersonal = document.getElementById('btnNovoPersonal');
+    if (btnNovoPersonal) {
+        btnNovoPersonal.addEventListener('click', () => openEditPersonalModal());
+    }
+    
+    const btnSalvarPersonal = document.getElementById('btnSalvarPersonal');
+    if (btnSalvarPersonal) {
+        btnSalvarPersonal.addEventListener('click', savePersonal);
+    }
+    
+    const btnCancelarPersonal = document.getElementById('btnCancelarPersonal');
+    if (btnCancelarPersonal) {
+        btnCancelarPersonal.addEventListener('click', () => {
+            document.getElementById('modalPersonal').style.display = 'none';
+            document.getElementById('formPersonal').reset();
+        });
+    }
+    
+    // Fechar modal de personal
+    document.querySelectorAll('#modalPersonal .close-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('modalPersonal').style.display = 'none';
+            document.getElementById('formPersonal').reset();
+        });
+    });
+    
+    window.addEventListener('click', function(event) {
+        if (event.target.id === 'modalPersonal') {
+            document.getElementById('modalPersonal').style.display = 'none';
+            document.getElementById('formPersonal').reset();
+        }
+    });
+    
+    // Formatação de telefone
+    const personalTelefone = document.getElementById('personalTelefone');
+    if (personalTelefone) {
+        personalTelefone.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length <= 11) {
+                if (value.length <= 10) {
+                    value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                } else {
+                    value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                }
+                e.target.value = value;
+            }
+        });
+    }
+});
     </script>
 </body>
 </html>
