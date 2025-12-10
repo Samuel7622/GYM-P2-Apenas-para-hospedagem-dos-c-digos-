@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -656,11 +657,25 @@
       button.disabled = disabled;
     }
 
-    function redirectToMainPage(user) {
-      console.log('✅ Redirecionando usuário:', user.name);
-      // Altere para sua página principal
-      window.location.href = 'Menu-inicial-logado.html';
-    }
+  // MODIFIQUE A FUNÇÃO redirectToMainPage():
+function redirectToMainPage(user) {
+    console.log('🚀 SALVANDO USUÁRIO ANTES DE REDIRECIONAR:', user);
+    
+    // SALVAR EM TRÊS LUGARES PARA GARANTIR
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.setItem('gymp2_current_user', JSON.stringify(user));
+    
+    // Disparar evento global
+    window.dispatchEvent(new CustomEvent('userLoginSuccess', {
+        detail: { user: user }
+    }));
+    
+    // Pequeno delay para garantir salvamento
+    setTimeout(() => {
+        console.log('🔗 Redirecionando para página principal...');
+        window.location.href = 'Menu-inicial-sem-logar.html';
+    }, 300);  // 300ms de delay
+}
 
     // ============= EVENTOS DE LOGIN =============
     document.getElementById('login-form').addEventListener('submit', async (e) => {
