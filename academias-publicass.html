@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academias - Gym P2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* ========== ANIMAÇÕES ========== */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes highlight {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0.3); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+
+        /* ========== CONTEÚDO PRINCIPAL ========== */
+        .public-page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .public-header {
+            background: linear-gradient(135deg, #000 0%, #111 100%);
+            padding: 30px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 5px solid #00ff88;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .public-header h1 {
+            color: #00ff88;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .public-header p {
+            color: #99ffcc;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .academies-count {
+            display: inline-block;
+            background: #00ff88;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        /* ========== FILTROS ========== */
+        .content-wrapper {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+        }
+
+        .filters {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 280px;
+            height: fit-content;
+            border: 1px solid #333;
+        }
+
+        @media (max-width: 1024px) {
+            .filters {
+                width: 100%;
+            }
+        }
+
+        .filter-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group h4 {
+            margin-bottom: 0.8rem;
+            color: #00ff88;
+            font-size: 1rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="radio"],
+        .filter-option input[type="checkbox"] {
+            margin-right: 0.8rem;
+            cursor: pointer;
+            accent-color: #00ff88;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .price-range-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .price-input {
+            width: 80px;
+            padding: 0.4rem;
+            border: 2px solid #00ff88;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background: #111;
+            color: #fff;
+        }
+
+        .price-input:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+
+        .price-separator {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .clear-filters-btn {
+            background: transparent;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .clear-filters-btn:hover {
+            background: #00ff88;
+            color: #000;
+        }
+
+        /* ========== GRID DE CARDS ========== */
+        .academies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .academies-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Card de Academia */
+        .academy-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(40, 167, 69, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+      
+
+        /* Estilo específico para artes marciais */
+        .academy-card[data-type="artes-marciais"] {
+            border-color: #dc3545;
+            box-shadow: 0 2px 20px rgba(220, 53, 69, 0.3);
+        }
+
+        .academy-card[data-type="artes-marciais"]:hover {
+            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+        }
+
+        .academy-card[data-type="artes-marciais"] .academy-type {
+            background: #dc3545;
+        }
+
+        .academy-card[data-type="artes-marciais"] .price-badge {
+            background: #000;
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .academy-card[data-type="artes-marciais"] .view-details-btn {
+            background: #dc3545;
+        }
+
+        .academy-card[data-type="artes-marciais"] .view-details-btn:hover {
+            background: #a71e2a;
+        }
+
+        /* Imagem do card */
+        .card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .card-image {
+                height: 180px;
+            }
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
+        }
+
+        .card-image-title {
+            position: relative;
+            z-index: 2;
+            padding: 1rem;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            width: 100%;
+        }
+
+        /* Badge de preço */
+        .price-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #000;
+            color: #28a745;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            border: 1px solid #28a745;
+        }
+
+        /* Conteúdo do card */
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .card-content {
+                padding: 1.2rem;
+            }
+        }
+
+        .academy-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: #fff;
+        }
+
+        .academy-type {
+            background: #28a745;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+
+        .academy-location {
+            color: #ccc;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .academy-location::before {
+            content: '📍';
+        }
+
+        /* Seção de horário */
+        .schedule-section {
+            border-top: 1px solid #333;
+            padding-top: 1rem;
+            margin-top: auto;
+        }
+
+        .schedule {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.4;
+        }
+
+        .schedule-line {
+            margin-bottom: 0.3rem;
+        }
+
+        /* Botão de detalhes */
+        .view-details-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 1rem;
+            transition: background 0.3s;
+            font-size: 1rem;
+        }
+
+        .view-details-btn:hover {
+            background: #1a5d1a;
+        }
+
+        /* Status badge */
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #28a745;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+            border: 1px solid #28a745;
+        }
+
+        .status-badge.pending {
+            color: #ffa502;
+            border-color: #ffa502;
+        }
+
+        .status-badge.inactive {
+            color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        /* Mensagem quando não há academias */
+        .no-academies {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+            grid-column: 1 / -1;
+        }
+
+        .no-academies i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #3a3f48;
+        }
+
+        /* Campo de busca */
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+        }
+
+        /* ========== MODAL ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 50px auto;
+            padding: 0;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            border: 2px solid #00ff88;
+        }
+
+        .modal-header {
+            padding: 20px;
+            background-color: #111;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            color: #00ff88;
+        }
+
+        .close-btn {
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #00ff88;
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            background-color: #111;
+            border-top: 1px solid #333;
+            text-align: right;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b67;
+        }
+        /* Footer */
+        .academia-footer {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            margin-top: 60px;
+            color: white;
+        }
+
+        .academia-background svg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: 0;
+        }
+
+        .academia-footer-inner {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 2rem 8rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        .academia-footer-inner .academia-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .academia-footer-inner .academia-top h2 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .academia-footer-inner .academia-top h3 {
+            font-size: 1.25rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .academia-footer-inner .academia-bottom {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .academia-logo-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .academia-socials {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .academia-socials a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            font-size: 1.25rem;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .academia-nav {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .academia-nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .academia-nav h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        .academia-nav a {
+            font-size: 0.9rem;
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+    .academia-nav a:hover {
+    opacity: 1;
+    color: #00ff88;
+    transform: translateX(5px);
+}
+/* Header Principal */
+.header-container {
+    background: linear-gradient(135deg, #000 0%, #111 50%, #0a0a0a 100%);
+    padding: 1.2rem 2.5rem;
+    box-shadow: 0 4px 20px rgba(21, 255, 0, 0.4);
+    position: relative;
+    top: 0;
+    z-index: 2000;
+    backdrop-filter: blur(20px);
+    width: 100%;
+}
+
+.nav-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.brand-container {
+    flex-shrink: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo-img {
+    height: 80px;
+    width: auto;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.right-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: nowrap;
+}
+
+/* BARRA DE PESQUISA */
+.search-widget {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.search-toggle-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00ff40 0%, #1aed4f 100%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    z-index: 100;
+    flex-shrink: 0;
+}
+
+.search-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.search-icon {
+    width: 22px;
+    height: 22px;
+    fill: #000;
+    transition: all 0.3s ease;
+}
+
+.expandable-search-field {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid transparent;
+    border-radius: 30px;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    backdrop-filter: blur(15px);
+    z-index: 50;
+}
+
+.expandable-search-field.expanded {
+    width: 320px;
+    border-color: #00ff40;
+}
+
+.search-input-field {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0 60px 0 20px;
+    font-size: 1rem;
+    color: #000000;
+    font-family: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.2s;
+    cursor: text;
+}
+
+.expandable-search-field.expanded .search-input-field {
+    opacity: 1;
+}
+
+.expandable-search-field * {
+    pointer-events: auto;
+}
+
+/* Resultados da Pesquisa */
+.search-results {
+    position: fixed;
+    top: calc(1.2rem * 2 + 55px + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1999;
+    width: calc(100vw - 40px);
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-result-item:hover {
+    background: #f0f0f0;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.result-category {
+    font-size: 0.8rem;
+    color: #00ff40;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.result-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.result-description {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.gym-access-btn {
+    background: linear-gradient(135deg, #00ff40 0%, #1aed4f 50%);
+    color: #000;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.gym-access-btn a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+.gym-access-btn:hover {
+    background: #02911fea;
+}
+
+.gym-access-btn:active {
+    transform: translateY(0);
+}
+
+.menu-trigger {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    z-index: 2001;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.hamburger-line {
+    width: 28px;
+    height: 4px;
+    background: linear-gradient(45deg, #00ff40, #04ff00);
+    margin: 3px 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-radius: 3px;
+}
+
+.menu-trigger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(9px, 9px);
+}
+
+.menu-trigger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-trigger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(9px, -9px);
+}
+
+.slide-menu {
+    position: fixed;
+    top: -50px;
+    margin-top: 60px;
+    right: -450px;
+    width: 450px;
+    height: 100vh;
+    background: #000000;
+    transition: right 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 3000;
+    padding: 2rem 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #222;
+}
+
+.menu-close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.menu-close-btn:hover {
+    transform: rotate(90deg);
+}
+
+.menu-close-icon {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+}
+
+.menu-search-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #00ff40 0%, #00cc3a 100%);
+    color: #000;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    margin-bottom: 1.5rem;
+}
+
+.menu-search-btn:hover {
+    background: linear-gradient(135deg, #00ff40 0%, #00ff40 100%);
+}
+
+.slide-menu.open {
+    right: 0;
+}
+
+.navigation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.nav-item {
+    margin: 0;
+    width: 100%;
+}
+
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: block;
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 0.5px solid #333;
+}
+
+.nav-link:hover {
+    color: #00ff40;
+    padding-left: 15px;
+}
+
+.nav-item:last-child .nav-link {
+    border-bottom: none;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    z-index: 2500;
+    backdrop-filter: blur(8px);
+}
+
+.menu-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Estilos para o menu hamburguer quando logado */
+.nav-link i {
+    width: 20px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.nav-link[style*="color: #00ff88"] {
+    background: rgba(0, 255, 136, 0.1);
+    border-radius: 8px;
+    margin: 5px 0;
+    padding: 12px 15px !important;
+}
+
+.nav-link[style*="color: #ff4444"] {
+    background: rgba(255, 68, 68, 0.1);
+    border-radius: 8px;
+    margin: 5px 0;
+    padding: 12px 15px !important;
+}
+
+.nav-link[style*="color: #00ff88"]:hover {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff40 !important;
+}
+
+.nav-link[style*="color: #ff4444"]:hover {
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff4444 !important;
+}
+
+/* ========== RESPONSIVIDADE DO HEADER ========== */
+
+/* Tablets Grandes (1024px e abaixo) */
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 1rem 1.5rem;
+    }
+
+    .logo-img {
+        height: 65px;
+    }
+
+    .right-controls {
+        gap: 1rem;
+    }
+
+    .gym-access-btn {
+        padding: 10px 16px;
+        font-size: 0.95rem;
+    }
+
+    .search-toggle-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .search-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .expandable-search-field {
+        width: 44px;
+        height: 44px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 280px;
+    }
+
+    .search-input-field {
+        padding: 0 50px 0 18px;
+        font-size: 0.95rem;
+    }
+
+    .slide-menu {
+        width: 350px;
+        right: -350px;
+        padding: 2rem 1.5rem;
+    }
+
+    .menu-search-btn {
+        padding: 12px 18px;
+        font-size: 0.95rem;
+    }
+
+    .search-results {
+        top: calc(1rem * 2 + 65px + 10px);
+        max-width: 500px;
+    }
+}
+
+/* Tablets Pequenos e Mobile Grande (768px e abaixo) */
+@media (max-width: 768px) {
+    /* Ocultar botão Home em mobile */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.8rem 1rem;
+    }
+
+    .nav-wrapper {
+        flex-wrap: nowrap;
+        gap: 10px;
+    }
+
+    .logo-img {
+        height: 50px;
+        min-height: 50px;
+    }
+
+    .right-controls {
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .search-toggle-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .search-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .expandable-search-field {
+        width: 42px;
+        height: 42px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 250px;
+        z-index: 2002;
+    }
+
+    .search-input-field {
+        padding: 0 45px 0 16px;
+        font-size: 0.9rem;
+    }
+
+    .gym-access-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        margin: 3px;
+    }
+
+    .slide-menu {
+        width: 300px;
+        right: -300px;
+        padding: 1.5rem 1.2rem;
+    }
+
+    .menu-search-btn {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+
+    .nav-link {
+        font-size: 1rem;
+        padding: 0.9rem 0;
+        white-space: normal;
+        line-height: 1.4;
+    }
+
+    .search-results {
+        top: calc(0.8rem * 2 + 50px + 10px);
+        max-width: 400px;
+    }
+}
+
+/* Mobile (640px e abaixo) */
+@media (max-width: 640px) {
+    /* Manter Home oculto em mobile */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.7rem 0.8rem;
+    }
+
+    .nav-wrapper {
+        gap: 8px;
+    }
+
+    .right-controls {
+        gap: 0.4rem;
+    }
+
+    .logo-img {
+        height: 45px;
+        min-height: 45px;
+    }
+
+    .search-toggle-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .search-icon {
+        width: 17px;
+        height: 17px;
+    }
+
+    .expandable-search-field {
+        width: 38px;
+        height: 38px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 220px;
+        position: fixed;
+        right: 15px;
+        top: 70px;
+        transform: none;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .search-input-field {
+        padding: 0 40px 0 15px;
+        font-size: 0.85rem;
+    }
+
+    .gym-access-btn {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+
+    .slide-menu {
+        width: 280px;
+        right: -280px;
+        padding: 1.5rem 1rem;
+    }
+
+    .menu-search-btn {
+        padding: 11px 14px;
+        font-size: 0.85rem;
+    }
+
+    .nav-link {
+        font-size: 0.95rem;
+        padding: 0.85rem 0;
+        white-space: normal;
+    }
+
+    .search-results {
+        top: calc(0.7rem * 2 + 45px + 10px);
+        max-width: 350px;
+    }
+}
+
+/* Pequenos Smartphones (480px e abaixo) */
+@media (max-width: 480px) {
+    /* Manter Home oculto */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.6rem 0.6rem;
+    }
+
+    .nav-wrapper {
+        gap: 6px;
+    }
+
+    .logo-img {
+        height: 40px;
+        min-height: 40px;
+    }
+
+    .right-controls {
+        gap: 0.3rem;
+    }
+
+    .search-toggle-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .search-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .expandable-search-field {
+        width: 36px;
+        height: 36px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 200px;
+        right: 10px;
+        top: 65px;
+    }
+
+    .search-input-field {
+        padding: 0 38px 0 12px;
+        font-size: 0.8rem;
+    }
+
+    .gym-access-btn {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+    }
+
+    .slide-menu {
+        width: 260px;
+        right: -260px;
+        padding: 1.2rem 0.8rem;
+    }
+
+    .menu-search-btn {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+
+    .nav-link {
+        font-size: 0.9rem;
+        padding: 0.8rem 0;
+    }
+
+    .search-results {
+        top: calc(0.6rem * 2 + 40px + 10px);
+        max-width: 300px;
+    }
+}
+
+/* Telas muito pequenas (360px e abaixo) */
+@media (max-width: 360px) {
+    /* Manter Home oculto */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.5rem 0.5rem;
+    }
+
+    .logo-img {
+        height: 35px;
+        min-height: 35px;
+    }
+
+    .right-controls {
+        gap: 0.25rem;
+    }
+
+    .search-toggle-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .search-icon {
+        width: 15px;
+        height: 15px;
+    }
+
+    .expandable-search-field {
+        width: 34px;
+        height: 34px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 180px;
+        right: 8px;
+        top: 60px;
+    }
+
+    .search-input-field {
+        padding: 0 35px 0 10px;
+        font-size: 0.75rem;
+    }
+
+    .gym-access-btn {
+        padding: 4px 6px;
+        font-size: 0.65rem;
+    }
+
+    .slide-menu {
+        width: 240px;
+        right: -240px;
+        padding: 1.2rem 0.8rem;
+    }
+
+    .menu-search-btn {
+        padding: 9px 10px;
+        font-size: 0.75rem;
+    }
+
+    .nav-link {
+        font-size: 0.85rem;
+        padding: 0.75rem 0;
+    }
+
+    .search-results {
+        top: calc(0.5rem * 2 + 35px + 10px);
+        max-width: 280px;
+    }
+}
+
+/* Telas muito muito pequenas (320px e abaixo) */
+@media (max-width: 320px) {
+    /* Manter Home oculto */
+    .gym-access-btn:first-of-type {
+        display: none;
+    }
+
+    .header-container {
+        padding: 0.4rem 0.4rem;
+    }
+
+    .logo-img {
+        height: 32px;
+        min-height: 32px;
+    }
+
+    .right-controls {
+        gap: 0.2rem;
+    }
+
+    .search-toggle-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .search-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .expandable-search-field {
+        width: 32px;
+        height: 32px;
+    }
+
+    .expandable-search-field.expanded {
+        width: 170px;
+        right: 6px;
+        top: 55px;
+    }
+
+    .search-input-field {
+        padding: 0 32px 0 8px;
+        font-size: 0.7rem;
+    }
+
+    .gym-access-btn {
+        padding: 3px 5px;
+        font-size: 0.6rem;
+    }
+
+    .slide-menu {
+        width: 240px;
+        right: -240px;
+        padding: 60px 0.8rem 1.5rem;
+    }
+
+    .menu-search-btn {
+        padding: 8px 10px;
+        font-size: 0.7rem;
+    }
+
+    .nav-link {
+        font-size: 0.8rem;
+        padding: 0.7rem 0;
+    }
+
+    .search-results {
+        top: calc(0.4rem * 2 + 32px + 10px);
+        max-width: 260px;
+    }
+}
+    </style>
+</head>
+<body>
+<header class="header-container" id="menu">
+    <div class="nav-wrapper">
+        <div class="brand-container">
+            <a href="#"><img src="logo.png" alt="Logo" class="logo-img"></a>
+        </div>
+        
+        <div class="right-controls">
+            <div class="search-widget" id="searchWidget">
+                <div class="expandable-search-field" id="searchField">
+                    <input type="text" class="search-input-field" placeholder="Digite sua pesquisa..." id="searchInput">
+                </div>
+                <button class="search-toggle-btn" id="searchToggle" aria-label="Abrir pesquisa">
+                    <svg class="search-icon" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                </button>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            
+            <button class="gym-access-btn"><a href="Menu-inicial-sem-logar.html">Home</a></button>
+            <button class="gym-access-btn"><a href="academias-filtro-sem-logar.html">Academias</a></button>
+            <button class="gym-access-btn"><a href="login-gym.html">Login</a></button>
+            
+            <button class="menu-trigger" id="menuTrigger" aria-label="Abrir menu">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </button>
+        </div>
+    </div>
+</header>
+
+<nav class="slide-menu" id="slideMenu">
+    <div class="menu-header">
+        <button class="menu-close-btn" id="menuCloseBtn" aria-label="Fechar menu">
+            <svg class="menu-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+    
+    <button class="menu-search-btn" id="menuSearchBtn">Academias</button>
+    
+    <ul class="navigation-list">
+        <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="#espaço-cliente" class="nav-link">Login</a></li>
+        <li class="nav-item"><a href="#franqueado" class="nav-link">Personais</a></li>
+        <li class="nav-item"><a href="#news" class="nav-link">Sorteios</a></li>
+        <li class="nav-item"><a href="config.html" class="nav-link">Configurações</a></li>
+        <li class="nav-item"><a href="#sustentabilidade" class="nav-link">Blogs e dicas</a></li>
+        <li class="nav-item"><a href="#historia" class="nav-link">Sobre nós</a></li>
+    </ul>
+</nav>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+    <!-- ========== CONTEÚDO PRINCIPAL ========== -->
+    <div class="public-page-container">
+        <!-- Header da página pública -->
+        <div class="public-header">
+            <h1>Academias Cadastradas <span id="academiesCount" class="academies-count">0</span></h1>
+            <p>Encontre a academia perfeita para você! Filtre por tipo, localização e preço.</p>
+        </div>
+        
+        <!-- Campo de busca -->
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Pesquisar academias...">
+        
+        <!-- WRAPPER COM FILTROS E CARDS -->
+        <div class="content-wrapper">
+            <!-- ========== FILTROS ========== -->
+            <div class="filters">
+                <div class="filter-title">Filtrar Academias</div>
+                
+                <!-- Filtro por Tipo -->
+                <div class="filter-group">
+                    <h4>Tipo de Academia</h4>
+                    <div class="filter-option">
+                        <input type="radio" id="type-all" name="type" value="all" checked>
+                        <label for="type-all">Todos os tipos</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="type-musculacao" name="type" value="musculacao">
+                        <label for="type-musculacao">Musculação</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="type-artes-marciais" name="type" value="artes-marciais">
+                        <label for="type-artes-marciais">Artes Marciais</label>
+                    </div>
+                </div>
+                
+                <!-- Filtro por Localização -->
+                <div class="filter-group">
+                    <h4>Localização</h4>
+                    <div class="filter-option">
+                        <input type="checkbox" id="location-centro" value="centro">
+                        <label for="location-centro">Centro</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="location-praca-matriz" value="praca-matriz">
+                        <label for="location-praca-matriz">Praça da Matriz</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="location-vila-kolping" value="vila-kolping">
+                        <label for="location-vila-kolping">Vila Kolping</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="location-chapada-serra" value="chapada-serra">
+                        <label for="location-chapada-serra">Chapada/Serra</label>
+                    </div>
+                </div>
+                
+                <!-- Filtro por Facilidades -->
+                <div class="filter-group">
+                    <h4>Facilidades</h4>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-estacionamento" value="estacionamento">
+                        <label for="facility-estacionamento">Estacionamento</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-ar-condicionado" value="ar-condicionado">
+                        <label for="facility-ar-condicionado">Ar Condicionado</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-vestiario" value="vestiario">
+                        <label for="facility-vestiario">Vestiário</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-wifi" value="wifi">
+                        <label for="facility-wifi">Wi-Fi</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="facility-personais" value="personais">
+                        <label for="facility-personais">Personais</label>
+                    </div>
+                </div>
+                
+                <!-- Filtro por Preço -->
+                <div class="filter-group">
+                    <h4>Faixa de Preço (R$/mês)</h4>
+                    <div class="price-range-container">
+                        <input type="number" id="minPrice" class="price-input" placeholder="Min" min="0">
+                        <span class="price-separator">-</span>
+                        <input type="number" id="maxPrice" class="price-input" placeholder="Max" min="0">
+                    </div>
+                </div>
+                
+                <button class="clear-filters-btn" id="clearFilters">
+                    <i class="fas fa-times"></i> Limpar Filtros
+                </button>
+            </div>
+            
+            <!-- ========== GRID DE CARDS ========== -->
+            <div class="academies-grid" id="academiesGrid">
+                <!-- Os cards das academias do localStorage serão carregados aqui -->
+            </div>
+        </div>
+        
+        <!-- Mensagem quando não há academias -->
+        <div id="noAcademiesMessage" class="no-academies" style="display: none;">
+            <i class="fas fa-dumbbell"></i>
+            <h3>Nenhuma academia cadastrada</h3>
+            <p>Volte ao painel administrativo para adicionar academias.</p>
+        </div>
+    </div>
+
+    <!-- ========== MODAL PARA DETALHES ========== -->
+    <div id="academyModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Detalhes da Academia</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+<footer class="academia-footer">
+        <div class="academia-background">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="100%" height="100%" viewBox="0 0 1600 900">
+                <defs>
+                    <path id="wave" fill="rgba(0, 200, 100, 0.5)" d="M-363.852,502.589c0,0,236.988-41.997,505.475,0
+                    s371.981,38.998,575.971,0s293.985-39.278,505.474,5.859s493.475,48.368,716.963-4.995v560.106H-363.852V502.589z" />
+                </defs>
+                <g>
+                    <use xlink:href="#wave" opacity=".4">
+                        <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="8s" calcMode="spline"
+                            values="270 230; -334 180; 270 230" keyTimes="0; .5; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                            repeatCount="indefinite" />
+                    </use>
+                    <use xlink:href="#wave" opacity=".6">
+                        <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="6s" calcMode="spline"
+                            values="-270 230;243 220;-270 230" keyTimes="0; .6; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                            repeatCount="indefinite" />
+                    </use>
+                    <use xlink:href="#wave" opacty=".9">
+                        <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="4s" calcMode="spline"
+                            values="0 230;-140 200;0 230" keyTimes="0; .4; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                            repeatCount="indefinite" />
+                    </use>
+                </g>
+            </svg>
+        </div>
+        <div class="academia-footer-inner">
+            <div class="academia-top">
+                <div>
+                    <h2>VOCÊ ESTÁ PRONTO PARA TRANSFORMAR SEU CORPO E SUA VIDA?</h2>
+                    <h3>Encontre as melhores academias, dicas e uma comunidade que te impulsiona!</h3>
+                </div>
+            </div>
+            <div class="academia-bottom">
+                <div class="academia-logo-content">
+                    <div class="academia-socials">
+                        <a href="#" class="instagram" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <nav class="academia-nav">
+                    <ul>
+                        <li><h4>SOBRE O GYM P2</h4></li>
+                        <li><a href="#">Quem Somos</a></li>
+                        <li><a href="#">Nossa Missão</a></li>
+                        <li><a href="#">Contatos</a></li>
+                    </ul>
+                    <ul>
+                        <li><h4>EXPLORE</h4></li>
+                        <li><a href="#">Academias</a></li>
+                        <li><a href="#">Artes Marciais</a></li>
+                        <li><a href="#">Blog e Dicas</a></li>
+                    </ul>
+                    <ul>
+                        <li><h4>CONECTE-SE</h4></li>
+                        <li><a href="#">Siga-nos nas Redes Sociais</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </footer>
+    <script src="menu.js">
+  </script>
+  <!-- 1. Sistema de Notificações Globais -->
+<script src="global-notifications.js"></script>
+
+<!-- 2. Gerenciador de Usuários -->
+<script src="user-manager.js"></script>
+
+<!-- 3. Header com Informações do Usuário -->
+<script src="user-header.js"></script>
+    <script>
+        // ===========================================
+        // SISTEMA DE ACADEMIAS (Página Pública)
+        // ===========================================
+
+        // Dados de exemplo para academias (caso localStorage esteja vazio)
+        const exampleAcademies = [
+            {
+                id: '1',
+                name: 'Smart Strong',
+                type: 'musculacao',
+                address: 'R. Ângelo Gonçalves, n°137 - Centro',
+                location: 'centro',
+                price: '80',
+                schedule: {
+                    weekdays: '5h - 23h',
+                    weekend: '8h - 17h'
+                },
+                facilities: ['estacionamento', 'ar-condicionado', 'vestiario', 'wifi', 'personais'],
+                image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: '2',
+                name: 'Fight Club Pedro II',
+                type: 'artes-marciais',
+                address: 'Praça da Matriz, s/n',
+                location: 'praca-matriz',
+                price: '120',
+                schedule: {
+                    weekdays: '8h - 22h',
+                    weekend: '9h - 18h'
+                },
+                facilities: ['vestiario', 'personais'],
+                image: 'https://images.unsplash.com/photo-1544593066-4f3c3a2d7a58?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: '3',
+                name: 'Gym Evolution',
+                type: 'musculacao',
+                address: 'Vila Kolping, R. das Flores, 123',
+                location: 'vila-kolping',
+                price: '45',
+                schedule: {
+                    weekdays: '6h - 22h',
+                    weekend: '8h - 16h'
+                },
+                facilities: ['estacionamento', 'vestiario'],
+                image: 'https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: '4',
+                name: 'Força Total',
+                type: 'musculacao',
+                address: 'R. Principal, 456 - Centro',
+                location: 'centro',
+                price: '60',
+                schedule: {
+                    weekdays: '5h - 23h',
+                    weekend: '8h - 17h'
+                },
+                facilities: ['ar-condicionado', 'vestiario', 'wifi'],
+                image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            }
+        ];
+
+        // Inicializar localStorage com dados de exemplo se estiver vazio
+        function initializeLocalStorage() {
+            const storedAcademies = localStorage.getItem('gymAcademies');
+            if (!storedAcademies || JSON.parse(storedAcademies).length === 0) {
+                localStorage.setItem('gymAcademies', JSON.stringify(exampleAcademies));
+                console.log('✅ Dados de exemplo carregados no localStorage');
+            }
+        }
+
+        // Função para criar card no estilo especificado
+        function createAcademyCard(academy) {
+            const card = document.createElement('div');
+            card.className = 'academy-card';
+            card.setAttribute('data-type', academy.type || 'musculacao');
+            card.setAttribute('data-location', academy.location || 'centro');
+            card.setAttribute('data-price', academy.price || '60');
+            card.setAttribute('data-facilities', academy.facilities?.join(',') || '');
+            card.setAttribute('data-id', academy.id);
+            
+            // Determinar status (só mostrar se não for ativo)
+            let statusBadge = '';
+            if (academy.status && academy.status !== 'active') {
+                const statusText = academy.status === 'pending' ? 'Pendente' : 'Inativa';
+                const statusClass = academy.status === 'pending' ? 'pending' : 'inactive';
+                statusBadge = `<div class="status-badge ${statusClass}">${statusText}</div>`;
+            }
+            
+            // Formatar horário
+            let scheduleHTML = '';
+            if (academy.schedule) {
+                scheduleHTML = `
+                    <div class="schedule-line"><strong>Seg a Sex:</strong> ${academy.schedule.weekdays || '5h - 23h'}</div>
+                    <div class="schedule-line"><strong>Sáb/Feriados:</strong> ${academy.schedule.weekend || '8h - 17h'}</div>
+                `;
+            } else {
+                scheduleHTML = `
+                    <div class="schedule-line"><strong>Seg a Sex:</strong> 5h - 23h</div>
+                    <div class="schedule-line"><strong>Sáb/Feriados:</strong> 8h - 17h</div>
+                `;
+            }
+            
+            // URL da imagem (usar placeholder se não houver)
+            const imageUrl = academy.image || 'https://via.placeholder.com/320x200/1a1a1a/28a745?text=Academia+Gym+P2';
+            
+            // Criar HTML do card
+            card.innerHTML = `
+                ${statusBadge}
+                <div class="price-badge">R$ ${academy.price}/mês</div>
+                <div class="card-image" style="background-image: url('${imageUrl}')">
+                    <div class="card-image-title">${academy.name}</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="academy-name">${academy.name}</h3>
+                    <span class="academy-type">${academy.type === 'artes-marciais' ? 'Artes Marciais' : 'Musculação'}</span>
+                    <div class="academy-location">${academy.address}</div>
+                    <div class="schedule-section">
+                        <div class="schedule">${scheduleHTML}</div>
+                    </div>
+                    <button class="view-details-btn" onclick="showAcademyDetails('${academy.id}')">
+                        Ver Detalhes Completos
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Função para carregar academias do localStorage
+        function loadAcademies() {
+            const academiesGrid = document.getElementById('academiesGrid');
+            const noAcademiesMessage = document.getElementById('noAcademiesMessage');
+            const academiesCount = document.getElementById('academiesCount');
+            
+            // Limpar grid
+            academiesGrid.innerHTML = '';
+            
+            // Buscar academias do localStorage
+            const academies = JSON.parse(localStorage.getItem('gymAcademies')) || [];
+            
+            // Atualizar contador
+            academiesCount.textContent = academies.length;
+            
+            // Verificar se há academias
+            if (academies.length === 0) {
+                academiesGrid.style.display = 'none';
+                noAcademiesMessage.style.display = 'block';
+                return;
+            }
+            
+            academiesGrid.style.display = 'grid';
+            noAcademiesMessage.style.display = 'none';
+            
+            // Ordenar por data de criação (mais recentes primeiro)
+            academies.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            // Criar cards para cada academia
+            academies.forEach(academy => {
+                const card = createAcademyCard(academy);
+                academiesGrid.appendChild(card);
+            });
+            
+            // Aplicar filtros após carregar
+            filterAcademies();
+        }
+        
+        // ========== SISTEMA DE FILTROS (MESMO DA PRIMEIRA PÁGINA) ==========
+        function filterAcademies() {
+            const typeFilter = document.querySelector('input[name="type"]:checked').value;
+            const locationFilters = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(input => input.value);
+           
+            const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseInt(document.getElementById('maxPrice').value) || Infinity;
+           
+            const cards = document.querySelectorAll('.academy-card');
+            let visibleCount = 0;
+           
+            cards.forEach(card => {
+                const cardType = card.getAttribute('data-type');
+                const cardLocation = card.getAttribute('data-location');
+                const cardPrice = parseInt(card.getAttribute('data-price'));
+                const cardFacilities = card.getAttribute('data-facilities').split(',');
+               
+                let showCard = true;
+               
+                // Filtro por tipo
+                if (typeFilter !== 'all' && cardType !== typeFilter) {
+                    showCard = false;
+                }
+               
+                // Filtro por localização
+                const locationChecks = locationFilters.filter(filter =>
+                    ['praca-matriz', 'centro', 'vila-kolping', 'chapada-serra'].includes(filter)
+                );
+                if (locationChecks.length > 0 && !locationChecks.includes(cardLocation)) {
+                    showCard = false;
+                }
+               
+                // Filtro por preço
+                if (cardPrice < minPrice || cardPrice > maxPrice) {
+                    showCard = false;
+                }
+               
+                // Filtro por facilidades
+                const facilityChecks = locationFilters.filter(filter =>
+                    ['estacionamento', 'ar-condicionado', 'vestiario', 'wifi', 'personais'].includes(filter)
+                );
+                if (facilityChecks.length > 0) {
+                    const hasAllFacilities = facilityChecks.every(facility =>
+                        cardFacilities.includes(facility)
+                    );
+                    if (!hasAllFacilities) {
+                        showCard = false;
+                    }
+                }
+                
+                // Filtro por busca (opcional)
+                const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+                if (searchTerm) {
+                    const academyName = card.querySelector('.academy-name').textContent.toLowerCase();
+                    const academyAddress = card.querySelector('.academy-location').textContent.toLowerCase();
+                    
+                    if (!academyName.includes(searchTerm) && !academyAddress.includes(searchTerm)) {
+                        showCard = false;
+                    }
+                }
+               
+                card.style.display = showCard ? 'block' : 'none';
+                if (showCard) visibleCount++;
+            });
+            
+            // Atualizar contador
+            document.getElementById('academiesCount').textContent = visibleCount;
+            
+            // Mostrar mensagem se não houver resultados
+            const noAcademiesMessage = document.getElementById('noAcademiesMessage');
+            const academiesGrid = document.getElementById('academiesGrid');
+            
+            if (visibleCount === 0 && cards.length > 0) {
+                noAcademiesMessage.innerHTML = `
+                    <i class="fas fa-filter"></i>
+                    <h3>Nenhuma academia encontrada</h3>
+                    <p>Tente ajustar os filtros ou a busca.</p>
+                `;
+                noAcademiesMessage.style.display = 'block';
+                academiesGrid.style.display = 'none';
+            } else if (visibleCount > 0) {
+                noAcademiesMessage.style.display = 'none';
+                academiesGrid.style.display = 'grid';
+            }
+        }
+
+        // Função para mostrar detalhes da academia
+        function showAcademyDetails(academyId) {
+            const academies = JSON.parse(localStorage.getItem('gymAcademies')) || [];
+            const academy = academies.find(a => a.id == academyId);
+            
+            if (!academy) return;
+            
+            const modal = document.getElementById('academyModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            // Preencher modal com informações
+            modalTitle.textContent = academy.name;
+            
+            modalBody.innerHTML = `
+                <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                    <img src="${academy.image || 'https://via.placeholder.com/150/1a1a1a/28a745?text=Academia'}" style="width: 150px; height: 150px; border-radius: 8px; object-fit: cover;">
+                    <div>
+                        <h4 style="color: #00ff88; margin-bottom: 10px;">Informações Gerais</h4>
+                        <p><strong>Tipo:</strong> ${academy.type === 'artes-marciais' ? 'Artes Marciais' : 'Musculação'}</p>
+                        <p><strong>Preço:</strong> R$ ${academy.price}/mês</p>
+                        <p><strong>Status:</strong> ${academy.status === 'active' ? 'Ativa' : academy.status === 'pending' ? 'Pendente' : 'Inativa'}</p>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Localização</h4>
+                    <p>${academy.address}</p>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Horário de Funcionamento</h4>
+                    <p><strong>Segunda a Sexta:</strong> ${academy.schedule?.weekdays || '5h - 23h'}</p>
+                    <p><strong>Sábado e Feriados:</strong> ${academy.schedule?.weekend || '8h - 17h'}</p>
+                </div>
+                
+                ${academy.description ? `
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Descrição</h4>
+                    <p>${academy.description}</p>
+                </div>
+                ` : ''}
+                
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Contato</h4>
+                    ${academy.email ? `<p><strong>E-mail:</strong> ${academy.email}</p>` : ''}
+                    ${academy.phone ? `<p><strong>Telefone:</strong> ${academy.phone}</p>` : ''}
+                </div>
+                
+                <div>
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Facilidades</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        ${(academy.facilities || []).map(facility => `
+                            <span style="background: rgba(0, 255, 136, 0.1); color: #00ff88; padding: 5px 10px; border-radius: 15px; font-size: 0.9rem;">
+                                ${facility}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Mostrar modal
+            modal.style.display = 'block';
+            
+            // Configurar botões para fechar
+            const closeBtn = modal.querySelector('.close-btn');
+            const closeModalBtn = modal.querySelector('.close-modal');
+            
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            closeModalBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        // ========== INICIALIZAÇÃO DA PÁGINA ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Inicializar localStorage
+            initializeLocalStorage();
+            
+            // 2. Carregar academias
+            loadAcademies();
+            
+            // 3. Adicionar eventos aos filtros
+            const filterInputs = document.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+            filterInputs.forEach(input => {
+                input.addEventListener('change', filterAcademies);
+            });
+            
+            // 4. Adicionar eventos aos inputs de preço
+            document.getElementById('minPrice').addEventListener('input', filterAcademies);
+            document.getElementById('maxPrice').addEventListener('input', filterAcademies);
+            
+            // 5. Busca em tempo real
+            document.getElementById('searchBox').addEventListener('input', filterAcademies);
+            
+            // 6. Botão para limpar filtros
+            document.getElementById('clearFilters').addEventListener('click', function() {
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    if (radio.value === 'all') radio.checked = true;
+                });
+                
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                document.getElementById('minPrice').value = '';
+                document.getElementById('maxPrice').value = '';
+                document.getElementById('searchBox').value = '';
+                
+                filterAcademies();
+            });
+            
+            // 7. Configurar atualização automática
+            window.addEventListener('focus', loadAcademies);
+            
+            // 8. Atualizar contador inicial
+            filterAcademies();
+            
+            console.log('✅ Sistema de academias carregado!');
+        });
+    </script>
+</body>
+</html>
