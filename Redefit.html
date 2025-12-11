@@ -3107,95 +3107,7 @@ function obterMinhaLocalizacao() {
                 
                 const firstName = user.name.split(' ')[0];
                 
-                // Substituir pelo componente do usuário
-                btn.outerHTML = `
-                    <div class="user-header-container" id="userHeaderContainer" style="
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        background: rgba(0, 255, 136, 0.15);
-                        border: 2px solid rgba(0, 255, 136, 0.4);
-                        border-radius: 25px;
-                        padding: 6px 14px;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        position: relative;
-                    ">
-                        <div style="
-                            width: 35px;
-                            height: 35px;
-                            border-radius: 50%;
-                            background: linear-gradient(135deg, #00ff88, #00cc6a);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-weight: 700;
-                            font-size: 14px;
-                            color: #000;
-                            border: 2px solid #fff;
-                        ">${initials}</div>
-                        
-                        <span style="
-                            font-weight: 600;
-                            color: #00ff88;
-                            font-size: 14px;
-                        ">${firstName}</span>
-                        
-                        <div class="user-dropdown" id="userDropdown" style="
-                            position: absolute;
-                            top: calc(100% + 8px);
-                            right: 0;
-                            background: #1a1a1a;
-                            border: 2px solid rgba(0, 255, 136, 0.3);
-                            border-radius: 12px;
-                            padding: 10px;
-                            min-width: 200px;
-                            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-                            opacity: 0;
-                            visibility: hidden;
-                            transform: translateY(-10px);
-                            transition: all 0.3s ease;
-                            z-index: 3000;
-                        ">
-                            <div style="padding: 10px; border-bottom: 1px solid rgba(0, 255, 136, 0.2); margin-bottom: 8px;">
-                                <div style="font-size: 14px; font-weight: 700; color: #fff;">${user.name}</div>
-                                <div style="font-size: 11px; color: rgba(255, 255, 255, 0.6);">${user.email || 'usuario@gymp2.com'}</div>
-                            </div>
-                            
-                            <a href="#perfil" style="
-                                display: flex;
-                                align-items: center;
-                                gap: 10px;
-                                padding: 10px;
-                                border-radius: 8px;
-                                cursor: pointer;
-                                transition: all 0.2s ease;
-                                color: #fff;
-                                text-decoration: none;
-                                font-size: 13px;
-                            " onmouseover="this.style.background='rgba(0, 255, 136, 0.1)'" onmouseout="this.style.background='transparent'">
-                                👤 Meu Perfil
-                            </a>
-                            
-                            <div id="logoutBtnPage" style="
-                                display: flex;
-                                align-items: center;
-                                gap: 10px;
-                                padding: 10px;
-                                border-radius: 8px;
-                                cursor: pointer;
-                                transition: all 0.2s ease;
-                                color: #ff4444;
-                                border-top: 1px solid rgba(255, 68, 68, 0.2);
-                                margin-top: 6px;
-                                font-size: 13px;
-                            " onmouseover="this.style.background='rgba(255, 68, 68, 0.1)'" onmouseout="this.style.background='transparent'">
-                                🚪 Sair
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
+             
                 console.log('✅ Botão Login substituído');
                 
                 // Configurar eventos após inserir
@@ -3329,44 +3241,13 @@ function obterMinhaLocalizacao() {
         console.log('✅ Eventos do dropdown configurados');
     }
     
-    // ========== FUNÇÃO DE LOGOUT ==========
-    function handleLogout(e) {
-        e.preventDefault();
-        
-        if (confirm('Deseja realmente sair da sua conta?')) {
-            console.log('🚪 Fazendo logout...');
-            
-            // Limpar dados
-            localStorage.removeItem('gymp2_current_user');
-            localStorage.removeItem('currentUser');
-            
-            // Redirecionar para página inicial
-            alert('Logout realizado com sucesso!');
-            window.location.href = 'Menu-inicial-sem-logar.html';
-        }
-    }
+    
     
     // ========== EXPORTAR FUNÇÃO DE LOGOUT GLOBAL ==========
     window.logout = handleLogout;
     
 })();
 
-// ========== OBSERVAR MUDANÇAS NO LOCALSTORAGE ==========
-window.addEventListener('storage', function(e) {
-    if ((e.key === 'currentUser' || e.key === 'gymp2_current_user') && e.newValue) {
-        console.log('🔄 Login detectado em outra aba, recarregando...');
-        setTimeout(() => {
-            window.location.reload();
-        }, 500);
-    }
-    
-    if ((e.key === 'currentUser' || e.key === 'gymp2_current_user') && !e.newValue) {
-        console.log('🚪 Logout detectado em outra aba, recarregando...');
-        setTimeout(() => {
-            window.location.reload();
-        }, 500);
-    }
-});
 
 console.log('✅ Sistema de login carregado na página!');
 </script>
