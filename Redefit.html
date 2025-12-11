@@ -2420,19 +2420,19 @@
             <img class="thumbnail" src="Redefit_logo.jpg" alt="Academia 1" />
         </button>
         <button class="nav-button" aria-selected="false">
-            <img class="thumbnail" src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop" alt="Academia 2" />
+            <img class="thumbnail" src="RedeFit.png" alt="Academia 2" />
         </button>
         <button class="nav-button" aria-selected="false">
-            <img class="thumbnail" src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop" alt="Academia 3" />
+            <img class="thumbnail" src="Redefit1.jpeg" alt="Academia 3" />
         </button>
         <button class="nav-button" aria-selected="false">
-            <img class="thumbnail" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop" alt="Academia 4" />
+            <img class="thumbnail" src="Redefit2.jpeg" alt="Academia 4" />
         </button>
         <button class="nav-button" aria-selected="false">
-            <img class="thumbnail" src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop" alt="Academia 5" />
+            <img class="thumbnail" src="Redefit3.jpeg" alt="Academia 5" />
         </button>
         <button class="nav-button" aria-selected="false">
-            <img class="thumbnail" src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop" alt="Academia 6" />
+            <img class="thumbnail" src="Redefit4.jpeg" alt="Academia 6" />
         </button>
     </nav>
 </div>
@@ -2462,6 +2462,7 @@
                     <div class="title">Endereço</div>
                     <div class="address">
                        R. Cel. Cordeiro, 739, Pedro II - PI, 64255-000
+                
                     </div>
                 </div>
             </div>
@@ -3042,14 +3043,6 @@ function obterMinhaLocalizacao() {
         updateDisplay();
         setInterval(simulateVariation, 900000);
     </script>
-      <script src="menu.js"></script>
-  <!-- 1. Sistema de Notificações Globais -->
-<script src="global-notifications.js"></script>
-<!-- 2. Gerenciador de Usuários -->
-<script src="user-manager.js"></script>
-<!-- 3. Header com Informações do Usuário -->
-<script src="user-header.js"></script>
-
     <!-- ========== SISTEMA DE MANUTENÇÃO DE LOGIN ========== -->
 <script>
 // ========== VERIFICAÇÃO E MANUTENÇÃO DO LOGIN ==========
@@ -3091,7 +3084,125 @@ function obterMinhaLocalizacao() {
         console.log('✅ Interface atualizada com sucesso!');
     }
     
-   
+    // ========== ATUALIZAR BOTÃO LOGIN NO HEADER ==========
+    function updateLoginButton(user) {
+        // Encontrar todos os botões de Login
+        const loginButtons = document.querySelectorAll('.gym-access-btn');
+        
+        loginButtons.forEach(btn => {
+            const link = btn.querySelector('a');
+            
+            // Se for o botão de Login
+            if (btn.textContent.includes('Login') || 
+                (link && link.getAttribute('href') === 'login-gym.html')) {
+                
+                console.log('🔄 Substituindo botão Login...');
+                
+                const initials = user.name
+                    .split(' ')
+                    .map(n => n[0])
+                    .slice(0, 2)
+                    .join('')
+                    .toUpperCase();
+                
+                const firstName = user.name.split(' ')[0];
+                
+                // Substituir pelo componente do usuário
+                btn.outerHTML = `
+                    <div class="user-header-container" id="userHeaderContainer" style="
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        background: rgba(0, 255, 136, 0.15);
+                        border: 2px solid rgba(0, 255, 136, 0.4);
+                        border-radius: 25px;
+                        padding: 6px 14px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        position: relative;
+                    ">
+                        <div style="
+                            width: 35px;
+                            height: 35px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, #00ff88, #00cc6a);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 700;
+                            font-size: 14px;
+                            color: #000;
+                            border: 2px solid #fff;
+                        ">${initials}</div>
+                        
+                        <span style="
+                            font-weight: 600;
+                            color: #00ff88;
+                            font-size: 14px;
+                        ">${firstName}</span>
+                        
+                        <div class="user-dropdown" id="userDropdown" style="
+                            position: absolute;
+                            top: calc(100% + 8px);
+                            right: 0;
+                            background: #1a1a1a;
+                            border: 2px solid rgba(0, 255, 136, 0.3);
+                            border-radius: 12px;
+                            padding: 10px;
+                            min-width: 200px;
+                            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+                            opacity: 0;
+                            visibility: hidden;
+                            transform: translateY(-10px);
+                            transition: all 0.3s ease;
+                            z-index: 3000;
+                        ">
+                            <div style="padding: 10px; border-bottom: 1px solid rgba(0, 255, 136, 0.2); margin-bottom: 8px;">
+                                <div style="font-size: 14px; font-weight: 700; color: #fff;">${user.name}</div>
+                                <div style="font-size: 11px; color: rgba(255, 255, 255, 0.6);">${user.email || 'usuario@gymp2.com'}</div>
+                            </div>
+                            
+                            <a href="#perfil" style="
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                padding: 10px;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: all 0.2s ease;
+                                color: #fff;
+                                text-decoration: none;
+                                font-size: 13px;
+                            " onmouseover="this.style.background='rgba(0, 255, 136, 0.1)'" onmouseout="this.style.background='transparent'">
+                                👤 Meu Perfil
+                            </a>
+                            
+                            <div id="logoutBtnPage" style="
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                padding: 10px;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: all 0.2s ease;
+                                color: #ff4444;
+                                border-top: 1px solid rgba(255, 68, 68, 0.2);
+                                margin-top: 6px;
+                                font-size: 13px;
+                            " onmouseover="this.style.background='rgba(255, 68, 68, 0.1)'" onmouseout="this.style.background='transparent'">
+                                🚪 Sair
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                console.log('✅ Botão Login substituído');
+                
+                // Configurar eventos após inserir
+                setTimeout(setupDropdownEvents, 50);
+            }
+        });
+    }
     
     // ========== ATUALIZAR MENU HAMBURGUER ==========
     function updateHamburgerMenu(user) {
