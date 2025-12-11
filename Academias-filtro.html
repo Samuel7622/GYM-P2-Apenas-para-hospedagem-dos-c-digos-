@@ -3,61 +3,537 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academias - Gym P2</title>
+    <title>GYM P2 - Quem Somos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #00ff40;
+            --primary-dark: #00cc33;
+            --bg-dark: #000000;
+            --card-dark: #1a1a1a;
+            --text: #ffffff;
+            --text-muted: #cccccc;
+            --border: #333333;
+            --gradient: linear-gradient(135deg, #00ff40, #00cc33);
+        }
+
+        [data-theme="light"] {
+            --bg-dark: #f8f9fa;
+            --card-dark: #ffffff;
+            --text: #1a1a1a;
+            --text-muted: #555555;
+            --border: #dddddd;
+            --primary: #00cc33;
+            --primary-dark: #00a329;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #000;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
             min-height: 100vh;
-            padding: 0;
+            overflow-x: hidden;
+            line-height: 1.7;
+            transition: background 0.5s ease;
         }
 
-        /* ========== ANIMAÇÕES ========== */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: #25d366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.5);
+            z-index: 998;
+            animation: float 3s infinite ease-in-out;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.7);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Seção Quem Somos */
+        .quem-somos {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), 
+                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .quem-somos-content {
+            max-width: 1100px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .quem-somos-texto {
+            padding: 40px;
+            background: rgba(26, 26, 26, 0.85);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .quem-somos h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .quem-somos p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            opacity: 0.9;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .quem-somos strong {
+            color: var(--primary);
+        }
+
+        /* Área da foto da equipe */
+        .equipe-section {
+            padding: 30px;
+            background: rgba(26, 26, 26, 0.85);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .equipe-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+        }
+
+        .equipe-foto {
+            width: 100%;
+            height: 300px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .equipe-foto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .equipe-foto-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .equipe-foto-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .equipe-descricao {
+            font-size: 1rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* Seções adicionais */
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Missão, Visão e Valores */
+        .mission-vision-values {
+            padding: 20px 0;
+            background: #0a0a0a;
+        }
+
+        .mv-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .mv-card {
+            background: var(--card-dark);
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mv-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+     
+        .mv-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .mv-icon i {
+            font-size: 2rem;
+            color: #000;
+        }
+
+        .mv-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .mv-card p {
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .principal-highlight {
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        /* Estatísticas */
+        .stats-section {
+            padding: 80px 0;
+            background: #0a0a0a;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--card-dark);
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        /* Por que Confiar em Nós */
+        .trust-section {
+            padding: 80px 0;
+            background: #0a0a0a;
+        }
+
+        .trust-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .trust-card {
+            background: var(--card-dark);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .trust-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+        }
+
+      
+
+        .trust-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .trust-card h3 i {
+            font-size: 1.5rem;
+        }
+
+        .trust-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 50px;
+            background: linear-gradient(135deg, #001a00, #003311);
+            border-radius: 15px;
+            border: 1px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .cta-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .cta-content p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--primary);
+            color: #000;
+            padding: 16px 42px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+          
+            transform: translateY(-2px);
+           
+        }
+
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Cards Animados */
+        .animate-card {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsivo */
+        @media (max-width: 1024px) {
+            .section-title h2 { font-size: 2.5rem; }
+        }
+
+        @media (max-width: 900px) {
+            .quem-somos-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
             }
-            to {
-                opacity: 1;
-                transform: translateX(0);
+            
+            .quem-somos-texto, .equipe-section {
+                padding: 30px;
+            }
+            
+            .quem-somos h2 {
+                font-size: 2.5rem;
             }
         }
 
-        @keyframes slideOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
+        @media (max-width: 768px) {
+            .mv-cards, .trust-cards { 
+                grid-template-columns: 1fr; 
             }
-            to {
-                opacity: 0;
-                transform: translateX(20px);
+            
+            .stats-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
+            
+            .quem-somos h2 {
+                font-size: 2.2rem;
+            }
+
+            .quem-somos p {
+                font-size: 1.1rem;
+            }
+            
+            .equipe-foto {
+                height: 250px;
+            }
+            
+            .cta-content {
+                padding: 40px 30px;
             }
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
+        @media (max-width: 640px) {
+            .stats-grid { 
+                grid-template-columns: 1fr; 
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            
+            .quem-somos {
+                padding: 20px 10px;
+            }
+            
+            .quem-somos-texto, .equipe-section {
+                padding: 20px;
+            }
+            
+            .quem-somos h2 {
+                font-size: 2rem;
+            }
+            
+            .equipe-foto {
+                height: 200px;
+            }
+            
+            .cta-button {
+                padding: 14px 35px;
+                font-size: 1rem;
             }
         }
 
-        @keyframes highlight {
-            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
-            50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0.3); }
-            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
-        }
-/* Header Principal */
+        /* Header Principal */
 .header-container {
     background: linear-gradient(135deg, #000 0%, #111 50%, #0a0a0a 100%);
     padding: 1.2rem 2.5rem;
@@ -875,448 +1351,127 @@
     }
 }
 
-
-/* ========== OVERLAY DO MENU ========== */
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s ease;
-    z-index: 1998;
-    backdrop-filter: blur(8px);
-}
-
-.menu-overlay.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* ========== CONTEÚDO PRINCIPAL ========== */
-.section-title {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
-    color: #28a745;
-    text-align: center;
-}
-
-.content-wrapper {
-    display: flex;
-    gap: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* ========== FILTROS ========== */
-.filters {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    width: 280px;
-    height: fit-content;
-}
-
-.filter-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    color: #1a5d1a;
-}
-
-.filter-group {
-    margin-bottom: 1.5rem;
-}
-
-.filter-group h4 {
-    margin-bottom: 0.8rem;
-    color: #1a5d1a;
-    font-size: 1rem;
-}
-
-.filter-option {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-}
-
-.filter-option input[type="radio"],
-.filter-option input[type="checkbox"] {
-    margin-right: 0.8rem;
-    cursor: pointer;
-    accent-color: #28a745;
-}
-
-.filter-option label {
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: #333;
-}
-
-.price-range-container {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-.price-input {
-    width: 80px;
-    padding: 0.4rem;
-    border: 2px solid #28a745;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    background: #000;
-    color: #fff;
-}
-
-.price-separator {
-    color: #28a745;
-    font-weight: bold;
-}
-
-/* ========== GRID DE ACADEMIAS ========== */
-.academies-grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-}
-
-.academy-card {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 20px rgba(40, 167, 69, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    position: relative;
-}
-
-.academy-card[data-type="artes-marciais"] {
-    border-color: #dc3545;
-    box-shadow: 0 2px 20px rgba(220, 53, 69, 0.3);
-}
-
-.academy-card[data-type="artes-marciais"] .academy-type {
-    background: #dc3545;
-}
-
-.academy-card[data-type="artes-marciais"] .price-badge {
-    background: #000;
-    color: #dc3545;
-    border: 1px solid #dc3545;
-}
-
-.academy-card[data-type="artes-marciais"] .view-details-btn {
-    background: #dc3545;
-}
-
-.academy-card[data-type="artes-marciais"] .view-details-btn:hover {
-    background: #a71e2a;
-}
-
-.card-image {
-    height: 200px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
-    position: relative;
-}
-
-.card-image::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
-}
-
-.card-image-title {
-    position: relative;
-    z-index: 2;
-    padding: 1rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-}
-
-.price-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #000;
-    color: #28a745;
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    border: 1px solid #28a745;
-}
-
-.card-content {
-    padding: 1.5rem;
-}
-
-.academy-name {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 0.8rem;
-    color: #fff;
-}
-
-.academy-type {
-    background: #28a745;
-    color: white;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    display: inline-block;
-    margin-bottom: 0.8rem;
-}
-
-.academy-location {
-    color: #ccc;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.schedule-section {
-    border-top: 1px solid #333;
-    padding-top: 1rem;
-    margin-top: 1rem;
-}
-
-.schedule {
-    font-size: 0.9rem;
-    color: #ccc;
-    line-height: 1.4;
-}
-
-.schedule-line {
-    margin-bottom: 0.3rem;
-}
-
-.view-details-btn {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    width: 100%;
-    margin-top: 1rem;
-    transition: background 0.3s;
-}
-
-.view-details-btn:hover {
-    background: #1a5d1a;
-}
-
-
 /* Footer */
-.academia-footer {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    margin-top: 60px;
-}
+        .academia-footer {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            margin-top: 60px;
+        }
 
-.academia-background svg {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-    z-index: 0;
-}
+        .academia-background svg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: 0;
+        }
 
-.academia-footer-inner {
-    position: relative;
-    z-index: 1;
-    padding: 4rem 2rem 8rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-}
+        .academia-footer-inner {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 2rem 8rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
 
-.academia-footer-inner .academia-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 2rem;
-}
+        .academia-footer-inner .academia-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
 
-.academia-footer-inner .academia-top h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: white;
-}
+        .academia-footer-inner .academia-top h2 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
 
-.academia-footer-inner .academia-top h3 {
-    font-size: 1.25rem;
-    font-weight: 400;
-    opacity: 0.8;
-    color: white;
-}
+        .academia-footer-inner .academia-top h3 {
+            font-size: 1.25rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
 
-.academia-footer-inner .academia-bottom {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 2rem;
-}
+        .academia-footer-inner .academia-bottom {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
 
-.academia-logo-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-}
+        .academia-logo-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
 
-.academia-socials {
-    display: flex;
-    gap: 1rem;
-}
+        .academia-socials {
+            display: flex;
+            gap: 1rem;
+        }
 
-.academia-socials a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 45px;
-    height: 45px;
-    font-size: 1.25rem;
-    color: white;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
+        .academia-socials a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            font-size: 1.25rem;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
 
-.academia-socials a:hover {
-    background: #00ff88;
-    color: #000;
-    transform: translateY(-3px);
-}
+        .academia-nav {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
 
-.academia-nav {
-    display: flex;
-    gap: 3rem;
-    flex-wrap: wrap;
-}
+        .academia-nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
 
-.academia-nav ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
+        .academia-nav h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
 
-.academia-nav h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #ccc;
-}
+        .academia-nav a {
+            font-size: 0.9rem;
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
 
-.academia-nav a {
-    font-size: 0.9rem;
-    color: white;
-    opacity: 0.8;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.academia-nav a:hover {
+    .academia-nav a:hover {
     opacity: 1;
     color: #00ff88;
     transform: translateX(5px);
 }
 
-/* Responsividade do Footer */
-@media (max-width: 768px) {
-    .academia-footer-inner {
-        padding: 3rem 1.5rem 6rem;
-    }
-
-    .academia-footer-inner .academia-top h2 {
-        font-size: 1.6rem;
-    }
-
-    .academia-footer-inner .academia-top h3 {
-        font-size: 1.1rem;
-    }
-
-    .academia-nav {
-        gap: 2rem;
-        justify-content: space-between;
-        width: 100%;
-    }
-}
-
-@media (max-width: 640px) {
-    .academia-footer-inner .academia-bottom {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .academia-logo-content {
-        align-items: center;
-    }
-
-    .academia-nav {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-    }
-
-    .academia-nav ul {
-        align-items: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .academia-footer-inner {
-        padding: 2rem 1rem 4rem;
-    }
-
-    .academia-footer-inner .academia-top h2 {
-        font-size: 1.3rem;
-    }
-
-    .academia-footer-inner .academia-top h3 {
-        font-size: 0.9rem;
-    }
-}
-
-
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
-  <header class="header-container" id="menu">
+    <header class="header-container" id="menu">
         <div class="nav-wrapper">
             <div class="brand-container">
                 <a href="#"><img src="logo.png" alt="Logo" class="logo-img"></a>
@@ -1361,7 +1516,7 @@
         <button class="menu-search-btn" id="menuSearchBtn">Academias</button>
         
         <ul class="navigation-list">
-            <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="Menu-inicial-sem-logar.html" class="nav-link">Home</a></li>
             <li class="nav-item"><a href="#espaço-cliente" class="nav-link">Login</a></li>
             <li class="nav-item"><a href="#franqueado" class="nav-link">Personais</a></li>
             <li class="nav-item"><a href="#news" class="nav-link">Sorteios</a></li>
@@ -1372,268 +1527,122 @@
     </nav>
 
     <div class="menu-overlay" id="menuOverlay"></div>
-
-    <div class="main-content">
-        <h2 class="section-title">Academias e Artes Marciais em Pedro II</h2>
-       
-        <div class="content-wrapper">
-            <aside class="filters">
-                <h3 class="filter-title">Filtros</h3>
-               
-                <div class="filter-group">
-                    <h4>Apenas</h4>
-                    <div class="filter-option">
-                        <input type="radio" id="all" name="type" value="all" checked onchange="filterAcademies()">
-                        <label for="all">Todas as Academias</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="radio" id="musculacao" name="type" value="musculacao" onchange="filterAcademies()">
-                        <label for="musculacao">Academias de Musculação</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="radio" id="artes-marciais" name="type" value="artes-marciais" onchange="filterAcademies()">
-                        <label for="artes-marciais">Academias de Artes Marciais</label>
-                    </div>
+ 
+    <!-- Seção Quem Somos (Primeira seção) -->
+    <section class="quem-somos">
+        <div class="quem-somos-content">
+            <div class="quem-somos-texto animate-card">
+                <h2>Quem Somos</h2>
+                <p>A <strong>GymP2</strong> nasceu da paixão pelo esporte e pelo poder de transformação que o treino proporciona. Combinamos tecnologia, atendimento de excelência e estrutura de ponta para criar a melhor experiência fitness.</p>
+                <p>Estamos prontos para revolucionar sua rotina com treinos personalizados, suporte completo e uma equipe que vibra com cada conquista sua.</p>
+                <!-- Botão removido conforme solicitado -->
+            </div>
+            
+            <div class="equipe-section animate-card">
+                <h3 class="equipe-title">Nossa Equipe</h3>
+                <div class="equipe-foto">
+                    <img src="EquipeGYM.png" alt="Equipe GYM P2">
                 </div>
+                <p class="equipe-descricao">Nossa equipe multidisciplinar trabalha para oferecer a melhor experiência fitness em Pedro II, unindo tecnologia, conhecimento técnico e paixão pelo esporte.</p>
+            </div>
+        </div>
+    </section>
 
-                <div class="filter-group">
-                    <h4>Localização</h4>
-                    <div class="filter-option">
-                        <input type="checkbox" id="praca-matriz" value="praca-matriz" onchange="filterAcademies()">
-                        <label for="praca-matriz">Próximo à Praça da Matriz</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="centro" value="centro" onchange="filterAcademies()">
-                        <label for="centro">Centro</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="vila-kolping" value="vila-kolping" onchange="filterAcademies()">
-                        <label for="vila-kolping">Vila Kolping</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="chapada-serra" value="chapada-serra" onchange="filterAcademies()">
-                        <label for="chapada-serra">Chapada / Serra</label>
-                    </div>
+    <div class="container">
+        <!-- Missão, Visão, Valores -->
+        <section class="mission-vision-values">
+            <div class="section-title">
+                <h2>Nossa Filosofia</h2>
+                <p>Os princípios que guiam cada ação do GYM P2</p>
+            </div>
+            <div class="mv-cards">
+                <div class="mv-card animate-card">
+                    <div class="mv-icon"><i class="fas fa-bullseye"></i></div>
+                    <h3>Nossa Missão</h3>
+                    <p>Facilitar o acesso da comunidade de Pedro II a informações sobre saúde e atividades físicas.</p>
                 </div>
-
-                <div class="filter-group">
-                    <h4>Faixa de Preço</h4>
-                    <div class="price-range-container">
-                        <input type="number" id="minPrice" class="price-input" placeholder="Min" min="0" onchange="filterAcademies()">
-                        <span class="price-separator">-</span>
-                        <input type="number" id="maxPrice" class="price-input" placeholder="Max" min="0" onchange="filterAcademies()">
-                    </div>
+                <div class="mv-card animate-card">
+                    <div class="mv-icon"><i class="fas fa-eye"></i></div>
+                    <h3>Nossa Visão</h3>
+                    <p>Ser a <strong class="principal-highlight">PRINCIPAL</strong> plataforma digital de bem-estar em Pedro II.</p>
                 </div>
-
-                <div class="filter-group">
-                    <h4>Facilidades</h4>
-                    <div class="filter-option">
-                        <input type="checkbox" id="estacionamento" value="estacionamento" onchange="filterAcademies()">
-                        <label for="estacionamento">Estacionamento</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="ar-condicionado" value="ar-condicionado" onchange="filterAcademies()">
-                        <label for="ar-condicionado">Ar Condicionado</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="vestiario" value="vestiario" onchange="filterAcademies()">
-                        <label for="vestiario">Vestiário</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="wifi" value="wifi" onchange="filterAcademies()">
-                        <label for="wifi">WiFi</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="personais" value="personais" onchange="filterAcademies()">
-                        <label for="personais">Personais</label>
-                    </div>
+                <div class="mv-card animate-card">
+                    <div class="mv-icon"><i class="fas fa-heart"></i></div>
+                    <h3>Nossos Valores</h3>
+                    <p>Acessibilidade, transparência, comunidade, saúde e inovação.</p>
                 </div>
-            </aside>
+            </div>
+        </section>
 
-            <div class="academies-grid" id="academiesGrid">
-                <!-- Card 1 -->
-                <div class="academy-card" data-type="musculacao" data-location="centro" data-price="60" data-facilities="estacionamento,ar-condicionado,vestiario,wifi">
-                    <div class="price-badge">R$ 80/mês</div>
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=250&fit=crop&q=80')">
-                        <div class="card-image-title">PERFORMANCE FITNESS 01</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="academy-name">PERFORMANCE FITNESS 01</h3>
-                        <span class="academy-type">Musculação</span>
-                        <div class="academy-location">rua Antônio Alexandrino, n° 90 - Vila kolp, Pedro II - PI, 64255-000</div>
-                        <div class="schedule-section">
-                            <div class="schedule">
-                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6h - 21:30h</div>
-                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 9h - 13h</div>
-                            </div>
-                        </div>
-                        <button class="view-details-btn" onclick="alert('Detalhes da Academia PERFORMANCE FITNESS 01')">Ver Detalhes</button>
-                    </div>
+        <!-- Estatísticas -->
+        <section class="stats-section">
+            <div class="section-title">
+                <h2>Nosso Impacto em Números</h2>
+                <p>O resultado do nosso trabalho na comunidade</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item animate-card">
+                    <span class="stat-number" data-target="15">0+</span>
+                    <span class="stat-label">Academias Parceiras</span>
                 </div>
-
-                <!-- Card 2 -->
-                <div class="academy-card" data-type="artes-marciais" data-location="praca-matriz" data-price="80" data-facilities="vestiario,ar-condicionado,personais">
-                    <div class="price-badge">R$ 80/mês</div>
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=400&h=250&fit=crop&q=80')">
-                        <div class="card-image-title">centro de treinamento de Jiu-jitsu DGT</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="academy-name">centro de treinamento de Jiu-jitsu DGT</h3>
-                        <span class="academy-type">Artes Marciais</span>
-                        <div class="academy-location">Av. Cel. Cordeiro, 01 - Vila das flores, Pedro II - PI, 64255-000</div>
-                        <div class="schedule-section">
-                            <div class="schedule">
-                                <div class="schedule-line"><strong>Seg a Sex:</strong> 20h - 22:30h</div>
-                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 16h - 18h</div>
-                            </div>
-                        </div>
-                        <button class="view-details-btn" onclick="alert('Detalhes do Fight Club Pedro II')">Ver Detalhes</button>
-                    </div>
+                <div class="stat-item animate-card">
+                    <span class="stat-number" data-target="2500">0+</span>
+                    <span class="stat-label">Moradores Atendidos</span>
                 </div>
-
-                <!-- Card 3 -->
-                <div class="academy-card" data-type="musculacao" data-location="vila-kolping" data-price="45" data-facilities="estacionamento,vestiario,wifi">
-                    <div class="price-badge">R$ 45/mês</div>
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop&q=80')">
-                        <div class="card-image-title">Iron Body Fitness Pedro ii</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="academy-name">Iron Body Fitness Pedro ii</h3>
-                        <span class="academy-type">Musculação</span>
-                        <div class="academy-location">BR-407, Pedro II - PI, 64255-000</div>
-                        <div class="schedule-section">
-                            <div class="schedule">
-                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6:30h - 21h</div>
-                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 13h - 16h</div>
-                            </div>
-                        </div>
-                        <button class="view-details-btn" onclick="alert('Detalhes do Gym Evolution')">Ver Detalhes</button>
-                    </div>
+                <div class="stat-item animate-card">
+                    <span class="stat-number" data-target="89">0%</span>
+                    <span class="stat-label">Satisfação</span>
                 </div>
-
-                <!-- Card 4 -->
-                <div class="academy-card" data-type="artes-marciais" data-location="chapada-serra" data-price="70" data-facilities="ar-condicionado,vestiario,personais">
-                    <div class="price-badge">R$ 70/mês</div>
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1555597673-b21d5c935865?w=400&h=250&fit=crop&q=80')">
-                        <div class="card-image-title">C.T gladiadores de P2</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="academy-name">C.T gladiadores de P2</h3>
-                        <span class="academy-type">Artes Marciais</span>
-                        <div class="academy-location">R. Vasco da Gama, 554, Pedro II - PI, 64255-000</div>
-                        <div class="schedule-section">
-                            <div class="schedule">
-                                <div class="schedule-line"><strong>Seg a Sex:</strong> 14h - 20h</div>
-                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> Fechado</div>
-                            </div>
-                        </div>
-                        <button class="view-details-btn" onclick="alert('Detalhes do Dojo Samurai')">Ver Detalhes</button>
-                    </div>
+                <div class="stat-item animate-card">
+                    <span class="stat-number" data-target="100">0%</span>
+                    <span class="stat-label">Foco em Pedro II</span>
                 </div>
+            </div>
+        </section>
+    </div>
 
-                <!-- Card 5 -->
-                <div class="academy-card" data-type="musculacao" data-location="centro" data-price="85" data-facilities="estacionamento,ar-condicionado,vestiario,wifi,personais">
-                    <div class="price-badge">R$ 85/mês</div>
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1583500178690-80e3baf9d2b0?w=400&h=250&fit=crop&q=80')">
-                        <div class="card-image-title">SMART STRONG</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="academy-name">SMART STRONG</h3>
-                        <span class="academy-type">Musculação</span>
-                        <div class="academy-location">R. Ângelo Gonçalves, n°137, Pedro II - PI, 64255-000</div>
-                        <div class="schedule-section">
-                            <div class="schedule">
-                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6h - 22h</div>
-                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 9h - 14h</div>
-                            </div>
-                        </div>
-                        <button class="view-details-btn" onclick="alert('Detalhes do Power Gym')">Ver Detalhes</button>
-                    </div>
+    <!-- Por que Confiar em Nós -->
+    <section class="trust-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Por que o GYM P2 é Diferente</h2>
+                <p>O que nos torna a escolha certa para você</p>
+            </div>
+            
+            <div class="trust-cards">
+                <div class="trust-card animate-card">
+                    <h3><i class="fas fa-check-circle"></i> Informações Locais</h3>
+                    <p>Todas as informações são coletadas pessoalmente por nossa equipe aqui em Pedro II. Conhecemos cada academia que indicamos.</p>
                 </div>
-
-                <!-- Card 6 -->
-                <div class="academy-card" data-type="artes-marciais" data-location="vila-kolping" data-price="55" data-facilities="vestiario,wifi">
-                    <div class="price-badge">R$ 55/mês</div>
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=400&h=250&fit=crop&q=80')">
-                        <div class="card-image-title">Studio de Treino Fucional</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="academy-name">Studio de Treino Fucional</h3>
-                        <span class="academy-type">Artes Marciais</span>
-                        <div class="academy-location">R. Raimundo José Leite, 541 - Boa Esperança, Pedro II - PI, 64255-000</div>
-                        <div class="schedule-section">
-                            <div class="schedule">
-                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6h - 20h</div>
-                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> Fechado</div>
-                            </div>
-                        </div>
-                        <button class="view-details-btn" onclick="alert('Detalhes da Academia Muay Thai')">Ver Detalhes</button>
-                    </div>
+                
+                <div class="trust-card animate-card">
+                    <h3><i class="fas fa-users"></i> Feito para Nossa Gente</h3>
+                    <p>Desenvolvemos soluções específicas para as necessidades reais da população de Pedro II, com foco total no bem-estar local.</p>
                 </div>
-
-                <!-- Card 7 -->
-                <div class="academy-card" data-type="musculacao" data-location="praca-matriz" data-price="50" data-facilities="estacionamento,vestiario">
-                    <div class="price-badge">R$ 50/mês</div>
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=400&h=250&fit=crop&q=80')">
-                        <div class="card-image-title">Academia do Gás</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="academy-name">Academia do Gás</h3>
-                        <span class="academy-type">Musculação</span>
-                        <div class="academy-location">34, R. João Benício da Silva, 2, Pedro II - PI, 64255-000</div>
-                        <div class="schedule-section">
-                            <div class="schedule">
-                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6:30h - 21h</div>
-                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 9h - 12h</div>
-                            </div>
-                        </div>
-                        <button class="view-details-btn" onclick="alert('Detalhes da Academia Strong')">Ver Detalhes</button>
-                    </div>
+                
+                <div class="trust-card animate-card">
+                    <h3><i class="fas fa-shield-alt"></i> Transparência Garantida</h3>
+                    <p>Mantemos comunicação aberta e transparente com usuários e academias parceiras, construindo relacionamentos baseados na confiança.</p>
                 </div>
-
-                <!-- Card 8 -->
-                <div class="academy-card" data-type="musculacao" data-location="chapada-serra" data-price="65" data-facilities="ar-condicionado,wifi,personais">
-                    <div class="price-badge">R$ 65/mês</div>
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=250&fit=crop&q=80')">
-                        <div class="card-image-title">Academia P2</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="academy-name">Academia P2</h3>
-                        <span class="academy-type">Musculação</span>
-                        <div class="academy-location">R. Sotero Nogueira Lima, 94, Pedro II - PI, 64255-000</div>
-                        <div class="schedule-section">
-                            <div class="schedule">
-                                <div class="schedule-line"><strong>Seg a Sex:</strong> 9h - 17h</div>
-                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 9h - 17h</div>
-                            </div>
-                        </div>
-                        <button class="view-details-btn" onclick="alert('Detalhes do Karate-Do Pedro II')">Ver Detalhes</button>
-                    </div>
-                </div>
-
-                <!-- Card 9 -->
-                <div class="academy-card" data-type="musculacao" data-location="centro" data-price="75" data-facilities="estacionamento,ar-condicionado,vestiario,wifi,personais">
-                    <div class="price-badge">R$ 75/mês</div>
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?w=400&h=250&fit=crop&q=80')">
-                        <div class="card-image-title">olympic fit</div>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="academy-name">olympic fit</h3>
-                        <span class="academy-type">Musculação</span>
-                        <div class="academy-location">Av. Dr. José Lourenço Mourão, 865A, Pedro II - PI, 64255-000</div>
-                        <div class="schedule-section">
-                            <div class="schedule">
-                                <div class="schedule-line"><strong>Seg a Sex:</strong> 6h - 22h</div>
-                                <div class="schedule-line"><strong>Sáb/Feriados:</strong> 7h - 15h</div>
-                            </div>
-                        </div>
-                        <button class="view-details-btn" onclick="alert('Detalhes do Iron Gym')">Ver Detalhes</button>
-                    </div>
+                
+                <div class="trust-card animate-card">
+                    <h3><i class="fas fa-star"></i> Avaliações de Verdade</h3>
+                    <p>Nossas avaliações e depoimentos são de usuários reais da plataforma, garantindo feedbacks autênticos e confiáveis.</p>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content animate-card">
+                <h2>Faça Parte Dessa Comunidade</h2>
+                <p>Descubra as melhores academias de Pedro II e comece sua jornada rumo a uma vida mais saudável hoje mesmo. Juntos, podemos fazer de Pedro II uma cidade mais ativa e saudável!</p>
+                <a href="Academias-filtro.html" class="cta-button">Encontrar Academias em Pedro II</a>
+            </div>
+        </div>
+    </section>
 
 <footer class="academia-footer">
         <div class="academia-background">
@@ -1672,13 +1681,10 @@
             <div class="academia-bottom">
                 <div class="academia-logo-content">
                     <div class="academia-socials">
-    <a href="#" class="instagram" title="Instagram" aria-label="Instagram">
-        <!-- Ícone SVG como fallback caso Font Awesome não carregue -->
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-        </svg>
-    </a>
-</div>
+                        <a href="#" class="instagram" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
                 </div>
                 <nav class="academia-nav">
                     <ul>
@@ -1705,7 +1711,730 @@
     </footer>
 
     <script>
-          // Funcionalidade do Menu Hamburguer
+        // Animação ao rolar
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animate-card').forEach(el => observer.observe(el));
+
+        // Contadores
+        const counters = document.querySelectorAll('.stat-number');
+        const speed = 200;
+
+        const startCounter = (counter) => {
+            const target = +counter.getAttribute('data-target');
+            const isPercent = counter.textContent.includes('%');
+            const count = +counter.innerText.replace(/[^\d]/g, '');
+            const inc = target / speed;
+
+            if (count < target) {
+                counter.innerText = Math.ceil(count + inc) + (isPercent ? '%' : '+');
+                setTimeout(() => startCounter(counter), 15);
+            } else {
+                counter.innerText = target + (isPercent ? '%' : '+');
+            }
+        };
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startCounter(entry.target);
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(counter => counterObserver.observe(counter));
+    </script>
+
+    <script>// ========== SISTEMA DE LOGIN COM REDIRECIONAMENTO ==========
+// Adicionar ao final do script da página de login (login-gym.html)
+
+// Modificar a função de login
+document.getElementById('login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    const result = db.login(email, password);
+
+    if (result.success) {
+        showMessage('login-message', result.message, 'success');
+        
+        // Salvar usuário no localStorage
+        localStorage.setItem('currentUser', JSON.stringify(result.user));
+        localStorage.setItem('gymp2_current_user', JSON.stringify(result.user));
+        
+        // Redirecionar após 1 segundo para a página LOGADA
+        setTimeout(() => {
+            window.location.href = window.location.origin + '/Menu-inicial-sem-logar.html';
+        }, 1000);
+    } else {
+        showMessage('login-message', result.message, 'error');
+    }
+});
+
+// Modificar a função de signup
+document.getElementById('signup-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('signup-name').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+
+    const result = db.createUser({ name, email, password });
+
+    if (result.success) {
+        showMessage('signup-message', result.message, 'success');
+        
+        // Fazer login automático após criar conta
+        setTimeout(() => {
+            const loginResult = db.login(email, password);
+            if (loginResult.success) {
+                localStorage.setItem('currentUser', JSON.stringify(loginResult.user));
+                localStorage.setItem('gymp2_current_user', JSON.stringify(loginResult.user));
+                window.location.replace('Menu-inicial-sem-logar.html');
+            }
+        }, 1500);
+    } else {
+        showMessage('signup-message', result.message, 'error');
+    }
+});
+
+// ========== ADICIONAR NO SCRIPT DA PÁGINA INICIAL ==========
+
+// Adicionar estilos CSS se não existirem
+function addUserHeaderStyles() {
+    if (document.getElementById('user-header-styles')) {
+        return;
+    }
+
+    const styles = `
+        <style id="user-header-styles">
+            .user-header-container {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                background: rgba(0, 255, 136, 0.1);
+                border: 2px solid rgba(0, 255, 136, 0.3);
+                border-radius: 30px;
+                padding: 6px 16px 6px 6px;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                position: relative;
+            }
+
+        
+            .user-avatar {
+              
+                border-radius: 10%;
+                background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 200;
+                font-size: 10px;
+                color: #000;
+                border: 1px solid #fff;
+                flex-shrink: 0;
+            }
+
+       
+
+            .user-name-text {
+                font-size: 10px;
+                font-weight: 600;
+                color: #fff;
+                max-width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .user-dropdown-menu {
+                position: absolute;
+                top: calc(100% + 10px);
+                right: 0;
+                background: #1a1a1a;
+                border: 2px solid rgba(0, 255, 136, 0.3);
+                border-radius: 12px;
+                padding: 12px;
+                min-width: 220px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: all 0.3s ease;
+                z-index: 3000;
+            }
+
+         
+
+            .user-dropdown-info {
+                padding: 12px;
+                border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+                margin-bottom: 8px;
+            }
+
+            .user-dropdown-name {
+                font-size: 16px;
+                font-weight: 700;
+                color: #fff;
+                margin-bottom: 4px;
+            }
+
+            .user-dropdown-email {
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.6);
+            }
+
+            .user-dropdown-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                color: #fff;
+                text-decoration: none;
+                margin-bottom: 4px;
+            }
+
+            
+
+            .user-dropdown-item.logout {
+                color: #ff4444;
+                border-top: 1px solid rgba(255, 68, 68, 0.2);
+                margin-top: 8px;
+            }
+
+       
+            .user-dropdown-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* Estilos para o menu hamburguer quando logado */
+            .nav-link i {
+                width: 20px;
+                text-align: center;
+                margin-right: 10px;
+            }
+
+            .nav-link[style*="color: #00ff88"] {
+                background: rgba(0, 255, 136, 0.1);
+                border-radius: 8px;
+                margin: 5px 0;
+                padding: 12px 15px !important;
+            }
+
+            .nav-link[style*="color: #ff4444"] {
+                background: rgba(255, 68, 68, 0.1);
+                border-radius: 8px;
+                margin: 5px 0;
+                padding: 12px 15px !important;
+            }
+
+            .nav-link[style*="color: #00ff88"]:hover {
+                background: rgba(0, 255, 136, 0.2);
+                color: #00ff88 !important;
+            }
+
+            .nav-link[style*="color: #ff4444"]:hover {
+                background: rgba(255, 68, 68, 0.2);
+                color: #ff4444 !important;
+            }
+
+            @media (max-width: 768px) {
+                .user-name-text {
+                    display: none;
+                }
+
+                .user-header-container {
+                    padding: 6px;
+                }
+
+                .user-dropdown-menu {
+                    min-width: 200px;
+                }
+            }
+        </style>
+    `;
+
+    document.head.insertAdjacentHTML('beforeend', styles);
+}
+
+// ========== ATUALIZAR MENU HAMBURGUER QUANDO LOGADO ==========
+function updateHamburgerMenuForLoggedUser(user) {
+    const navigationList = document.querySelector('.navigation-list');
+    
+    if (!navigationList) {
+        console.log('❌ Menu hamburguer não encontrado');
+        return;
+    }
+
+    // Encontrar o item de login no menu
+    const loginItems = navigationList.querySelectorAll('.nav-link');
+    let loginItem = null;
+    
+    loginItems.forEach(item => {
+        if (item.textContent.trim() === 'Login' || item.getAttribute('href') === '#espaço-cliente') {
+            loginItem = item.closest('.nav-item');
+        }
+    });
+    
+    // Se encontrou o item de login, substituir por Perfil
+    if (loginItem) {
+        const firstName = user.name.split(' ')[0];
+        
+        loginItem.innerHTML = `
+            <a href="#perfil" class="nav-link" style="color: #00ff88; font-weight: 700;">
+                <i class="fas fa-user" style="margin-right: 10px;"></i>
+                Meu Perfil (${firstName})
+            </a>
+        `;
+        
+        // Remover item de logout existente se houver
+        const existingLogout = document.getElementById('menuLogoutBtn');
+        if (existingLogout) {
+            existingLogout.closest('.nav-item').remove();
+        }
+        
+        // Adicionar item de logout
+        const logoutItem = document.createElement('li');
+        logoutItem.className = 'nav-item';
+        logoutItem.innerHTML = `
+            <a href="#logout" class="nav-link" style="color: #ff4444;" id="menuLogoutBtn">
+                <i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i>
+                Sair
+            </a>
+        `;
+        
+        navigationList.appendChild(logoutItem);
+        
+        // Configurar evento de logout no menu
+        const menuLogoutBtn = document.getElementById('menuLogoutBtn');
+        if (menuLogoutBtn) {
+            menuLogoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('Deseja realmente sair da sua conta?')) {
+                    localStorage.removeItem('gymp2_current_user');
+                    localStorage.removeItem('currentUser');
+                    window.location.reload();
+                }
+            });
+        }
+        
+        console.log('✅ Menu hamburguer atualizado para usuário logado');
+    } else {
+        console.log('ℹ️ Item de login não encontrado no menu hamburguer');
+    }
+}
+
+// ========== RESTAURAR MENU HAMBURGUER PADRÃO ==========
+function resetHamburgerMenu() {
+    const navigationList = document.querySelector('.navigation-list');
+    if (!navigationList) return;
+    
+    // Restaurar item de login se não existir
+    const loginItems = navigationList.querySelectorAll('.nav-link');
+    let loginExists = false;
+    
+    loginItems.forEach(item => {
+        if (item.textContent.includes('Login') || item.getAttribute('href') === '#espaço-cliente') {
+            loginExists = true;
+        }
+    });
+    
+    if (!loginExists) {
+        // Encontrar onde inserir o login (normalmente após Home)
+        const homeItem = Array.from(navigationList.querySelectorAll('.nav-link')).find(item => 
+            item.textContent === 'Home' || item.getAttribute('href') === '#home'
+        );
+        
+        if (homeItem) {
+            const loginItem = document.createElement('li');
+            loginItem.className = 'nav-item';
+            loginItem.innerHTML = `
+                <a href="#espaço-cliente" class="nav-link">Login</a>
+            `;
+            homeItem.closest('.nav-item').after(loginItem);
+        }
+    }
+    
+    // Remover item de logout se existir
+    const logoutItems = navigationList.querySelectorAll('#menuLogoutBtn');
+    logoutItems.forEach(item => {
+        item.closest('.nav-item').remove();
+    });
+}
+
+// ========== CRIAR HEADER DE USUÁRIO MANUALMENTE ==========
+function createUserHeaderManually(user) {
+    const rightControls = document.querySelector('.right-controls');
+    
+    if (!rightControls) {
+        console.error('❌ Container .right-controls não encontrado');
+        return;
+    }
+
+    // Verificar se já existe um componente de usuário
+    if (document.getElementById('userHeaderContainer')) {
+        console.log('ℹ️ Header de usuário já existe');
+        return;
+    }
+
+    // Remover o botão "Login" se existir
+    const gymButtons = rightControls.querySelectorAll('.gym-access-btn');
+    gymButtons.forEach(btn => {
+        if (btn.textContent.includes('Login')) {
+            btn.remove();
+        }
+    });
+   
+    // Criar as iniciais do usuário
+    const initials = user.name
+        .split(' ')
+        .map(n => n[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase();
+
+    const firstName = user.name.split(' ')[0];
+
+    // HTML do componente de usuário
+    const userHTML = `
+        <div class="user-header-container" id="userHeaderContainer">
+            <div class="user-avatar">
+                ${initials}
+            </div>
+            <span class="user-name-text">${firstName}</span>
+            
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+                <div class="user-dropdown-info">
+                    <div class="user-dropdown-name">${user.name}</div>
+                    <div class="user-dropdown-email">${user.email || 'usuario@gymp2.com'}</div>
+                </div>
+                
+                <a href="#perfil" class="user-dropdown-item">
+                    <svg class="user-dropdown-icon" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                    Meu Perfil
+                </a>
+                
+                <div class="user-dropdown-item logout" id="logoutBtn">
+                    <svg class="user-dropdown-icon" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                    </svg>
+                    Sair
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Inserir antes do menu hambúrguer
+    const menuTrigger = document.getElementById('menuTrigger');
+    const userContainer = document.createElement('div');
+    userContainer.innerHTML = userHTML;
+    
+    if (menuTrigger) {
+        menuTrigger.parentNode.insertBefore(userContainer.firstElementChild, menuTrigger);
+    } else {
+        rightControls.appendChild(userContainer.firstElementChild);
+    }
+
+    // Configurar eventos
+    setupUserEvents();
+    
+    console.log('✅ Header de usuário criado:', user.name);
+}
+
+// ========== CONFIGURAR EVENTOS DO COMPONENTE DE USUÁRIO ==========
+function setupUserEvents() {
+    const userContainer = document.getElementById('userHeaderContainer');
+    const dropdownMenu = document.getElementById('userDropdownMenu');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (!userContainer || !dropdownMenu || !logoutBtn) {
+        return;
+    }
+
+    // Toggle do dropdown
+    userContainer.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userContainer.classList.toggle('active');
+    });
+
+    // Fechar dropdown ao clicar fora
+    document.addEventListener('click', (e) => {
+        if (!userContainer.contains(e.target)) {
+            userContainer.classList.remove('active');
+        }
+    });
+
+    // Prevenir fechamento ao clicar no dropdown
+    dropdownMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Evento de logout
+    logoutBtn.addEventListener('click', () => {
+        if (confirm('Deseja realmente sair da sua conta?')) {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('gymp2_current_user');
+            alert('Logout realizado com sucesso!');
+            window.location.reload();
+        }
+    });
+
+    // Fechar dropdown ao clicar nos links
+    const dropdownLinks = dropdownMenu.querySelectorAll('a.user-dropdown-item');
+    dropdownLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            userContainer.classList.remove('active');
+        });
+    });
+}
+
+// ========== FUNÇÃO PRINCIPAL DE VERIFICAÇÃO DE LOGIN ==========
+function checkAndUpdateHeader() {
+    const userData = localStorage.getItem('currentUser') || localStorage.getItem('gymp2_current_user');
+    
+    console.log('🔍 Verificando dados de login...');
+    
+    if (userData) {
+        try {
+            const user = JSON.parse(userData);
+            console.log('✅ Usuário detectado:', user.name);
+            
+            // Atualizar header principal
+            createUserHeaderManually(user);
+            
+            // Atualizar menu hamburguer
+            updateHamburgerMenuForLoggedUser(user);
+            
+        } catch (error) {
+            console.error('❌ Erro ao processar dados do usuário:', error);
+        }
+    } else {
+        console.log('ℹ️ Nenhum usuário logado');
+        // Garantir que o menu hamburguer esteja no estado padrão
+        resetHamburgerMenu();
+    }
+}
+
+// ========== EXECUTAR QUANDO A PÁGINA CARREGAR ==========
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔍 Iniciando verificação de login...');
+    addUserHeaderStyles();
+    checkAndUpdateHeader();
+});
+
+// Executar também se o documento já estiver carregado
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    console.log('🔍 Documento já carregado, verificando login...');
+    setTimeout(() => {
+        addUserHeaderStyles();
+        checkAndUpdateHeader();
+    }, 100);
+}
+
+// ========== OBSERVADOR DE MUDANÇAS NO LOCALSTORAGE ==========
+window.addEventListener('storage', (e) => {
+    if ((e.key === 'currentUser' || e.key === 'gymp2_current_user') && e.newValue) {
+        console.log('🔄 Mudança de login detectada! Atualizando página...');
+        setTimeout(() => {
+            checkAndUpdateHeader();
+        }, 500);
+    }
+});
+
+// ========== VERIFICAÇÃO PERIÓDICA (PARA DEBUG) ==========
+let checkCount = 0;
+const checkInterval = setInterval(() => {
+    checkCount++;
+    
+    const userData = localStorage.getItem('currentUser');
+    const userContainer = document.getElementById('userHeaderContainer');
+    
+    if (userData && !userContainer) {
+        console.log('⚠️ Usuário logado mas header não existe! Criando...');
+        clearInterval(checkInterval);
+        checkAndUpdateHeader();
+    }
+    
+    // Parar após 10 verificações
+    if (checkCount >= 10) {
+        console.log('⏹ Verificação automática finalizada');
+        clearInterval(checkInterval);
+    }
+}, 1000);</script>
+
+
+<script>// user-manager.js - Sistema completo de gerenciamento de usuários
+class UserManager {
+    constructor() {
+        this.usersKey = 'gymp2_users';
+        this.currentUserKey = 'gymp2_current_user';
+        this.init();
+    }
+
+    init() {
+        if (!localStorage.getItem(this.usersKey)) {
+            const initialUsers = {
+                'admin@gymp2.com': {
+                    name: 'Administrador',
+                    email: 'admin@gymp2.com',
+                    password: '123456',
+                    joined: new Date().toISOString(),
+                    role: 'admin'
+                },
+                'usuario@gymp2.com': {
+                    name: 'João Silva',
+                    email: 'usuario@gymp2.com',
+                    password: '123456',
+                    joined: new Date().toISOString(),
+                    role: 'user'
+                }
+            };
+            localStorage.setItem(this.usersKey, JSON.stringify(initialUsers));
+        }
+    }
+
+    getUsers() {
+        return JSON.parse(localStorage.getItem(this.usersKey)) || {};
+    }
+
+    saveUsers(users) {
+        localStorage.setItem(this.usersKey, JSON.stringify(users));
+    }
+
+    getUser(email) {
+        const users = this.getUsers();
+        return users[email] || null;
+    }
+
+    createUser(userData) {
+        const users = this.getUsers();
+
+        if (users[userData.email]) {
+            return { success: false, message: 'Email já cadastrado' };
+        }
+
+        users[userData.email] = {
+            ...userData,
+            joined: new Date().toISOString(),
+            role: 'user'
+        };
+
+        this.saveUsers(users);
+        return { success: true, message: 'Conta criada com sucesso!' };
+    }
+
+    login(email, password) {
+        const user = this.getUser(email);
+
+        if (!user) {
+            return { success: false, message: 'Email não encontrado' };
+        }
+
+        if (user.password !== password) {
+            return { success: false, message: 'Senha incorreta' };
+        }
+
+        localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+        return { success: true, message: 'Login realizado com sucesso!', user };
+    }
+
+    logout() {
+        localStorage.removeItem(this.currentUserKey);
+    }
+
+    getCurrentUser() {
+        const userData = localStorage.getItem(this.currentUserKey);
+        return userData ? JSON.parse(userData) : null;
+    }
+
+    updateUserProfile(updatedData) {
+        const currentUser = this.getCurrentUser();
+        if (!currentUser) return { success: false, message: 'Nenhum usuário logado' };
+
+        const users = this.getUsers();
+        if (users[currentUser.email]) {
+            users[currentUser.email] = { ...users[currentUser.email], ...updatedData };
+            this.saveUsers(users);
+            
+            // Atualizar usuário atual também
+            const updatedUser = { ...currentUser, ...updatedData };
+            localStorage.setItem(this.currentUserKey, JSON.stringify(updatedUser));
+            
+            return { success: true, message: 'Perfil atualizado!', user: updatedUser };
+        }
+        
+        return { success: false, message: 'Erro ao atualizar perfil' };
+    }
+
+    isLoggedIn() {
+        return this.getCurrentUser() !== null;
+    }
+
+    requireAuth(redirectUrl = 'login-gym.html') {
+        if (!this.isLoggedIn()) {
+            window.location.href = redirectUrl;
+            return false;
+        }
+        return true;
+    }
+}
+
+// Tornar global para acesso em todas as páginas
+window.userManager = new UserManager();</script>
+
+<script>   // ========== SISTEMA DE PÁGINAS ==========
+    const pages = [
+        'home-page',
+        'academias-page', 
+        'personal-trainer-page',
+        'blog-page',
+        'sobre-page'
+    ];
+
+    function goToPage(pageId) {
+        // Esconder todas as páginas
+        pages.forEach(page => {
+            const pageElement = document.getElementById(page);
+            if (pageElement) {
+                pageElement.classList.remove('active');
+            }
+        });
+
+        // Mostrar a página desejada
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+            targetPage.classList.add('active');
+        }
+
+        // Fechar a pesquisa
+        closeSearch();
+
+        console.log(`📍 Navegado para: ${pageId}`);
+    }
+
+      
+
+       function cadastrar() {
+            alert('Vamos te levar para o cadastro da academia...');
+            // Aqui iria o código para o cadastro
+        }
+         // Funcionalidade do Menu Hamburguer
         const menuTrigger = document.getElementById('menuTrigger');
         const slideMenu = document.getElementById('slideMenu');
         const menuOverlay = document.getElementById('menuOverlay');
@@ -1863,488 +2592,926 @@
                 e.preventDefault();
             }
         });
-       // ========== CONFIGURAÇÃO INICIAL ==========
-let searchExpanded = false;
-
-// Mapa de busca com páginas reais e academias
-const searchMap = {
-    'smart strong': {
-        url: 'smart-strong.html',
-        category: 'Academia',
-        description: 'Musculação - R. Ângelo Gonçalves, n°137'
-    },
-    'rede fit': {
-        url: 'Redefit.html',
-        category: 'Academia',
-        description: 'Musculação - R. Cel. Cordeiro, 739'
-    },
-    'força total': {
-        url: '#',
-        category: 'Academia',
-        description: 'Musculação - Centro - R$ 60/mês',
-        scrollTo: 'Academia Força Total'
-    },
-    'fight club': {
-        url: '#',
-        category: 'Academia',
-        description: 'Artes Marciais - Praça da Matriz - R$ 80/mês',
-        scrollTo: 'Fight Club Pedro II'
-    },
-    'gym evolution': {
-        url: '#',
-        category: 'Academia',
-        description: 'Musculação - Vila Kolping - R$ 45/mês',
-        scrollTo: 'Gym Evolution'
-    },
-    'personal trainer': {
-        url: 'personal-trainer.html',
-        category: 'Serviço',
-        description: 'Encontre profissionais qualificados'
-    },
-    'blog': {
-        url: 'blog.html',
-        category: 'Conteúdo',
-        description: 'Dicas e artigos sobre fitness'
-    },
-    'personais': {
-        url: '#treinadores',
-        category: 'Serviço',
-        description: 'Personal trainers disponíveis'
-    },
-    'sorteios': {
-        url: '#promocoes',
-        category: 'Promoção',
-        description: 'Participe dos sorteios'
-    },
-    'campeonatos': {
-        url: '#competicoes',
-        category: 'Eventos',
-        description: 'Competições e eventos fitness'
-    }
-};
-
-// ========== ELEMENTOS DO DOM ==========
-const elements = {
-    searchToggle: null,
-    searchField: null,
-    searchInput: null,
-    searchResults: null,
-    searchWidget: null,
-    menuTrigger: null,
-    slideMenu: null
-    // REMOVIDO: menuOverlay - não existe no HTML
-};
-
-// ========== FUNÇÕES DE BUSCA ==========
-function toggleSearch() {
-    searchExpanded = !searchExpanded;
-   
-    if (searchExpanded) {
-        elements.searchField?.classList.add('expanded');
-        elements.searchToggle?.classList.add('expanded');
-        elements.searchWidget?.classList.add('expanded-mode');
-       
+    // ========== FUNÇÕES AUXILIARES ==========
+    function showNotification(message) {
+        // Criar notificação temporária
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #00ff88;
+            color: #000;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
         setTimeout(() => {
-            if (elements.searchInput) {
-                elements.searchInput.focus();
-                elements.searchInput.style.pointerEvents = 'auto';
+            if (notification.parentNode) {
+                notification.remove();
             }
-        }, 300);
+        }, 3000);
+    }
+
+    function buscarPersonal() {
+        showNotification('🔍 Buscando personal trainers...');
+        navigateToFilter('personal trainer');
+    }
+
+    function cadastrarPersonal() {
+        showNotification('👤 Redirecionando para cadastro de personal trainer...');
+    }
+
+    // ========== INICIALIZAÇÃO ==========
+    function initializeSearch() {
+        // Event Listeners da barra de pesquisa
+        if (searchToggle) {
+            searchToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleSearch();
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                performSearch(e.target.value);
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const query = searchInput.value.trim();
+                    if (query) {
+                        const firstMatch = Object.entries(searchMap)
+                            .find(([key, data]) => key.includes(query.toLowerCase()));
+                        
+                        if (firstMatch) {
+                            navigateToFilter(firstMatch[0]);
+                        } else {
+                            showNotification(`Nenhum resultado encontrado para: "${query}"`);
+                        }
+                    }
+                } else if (e.key === 'Escape') {
+                    closeSearch();
+                }
+            });
+        }
+
+        // Filtros rápidos
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                navigateToFilter(filter);
+            });
+        });
+
+        // Fechar ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (searchExpanded && 
+                !searchField?.contains(e.target) && 
+                !searchToggle?.contains(e.target) &&
+                !searchInput?.contains(e.target) &&
+                !searchResults?.contains(e.target) &&
+                !searchFilters?.contains(e.target)) {
+                closeSearch();
+            }
+        });
+
+        // Prevenir fechamento ao clicar nos resultados
+        if (searchResults) {
+            searchResults.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        // Tecla ESC para fechar
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && searchExpanded) {
+                closeSearch();
+            }
+        });
+
+        // Funções adicionais
+        document.querySelectorAll('[onclick*="buscarPersonal"]').forEach(btn => {
+            btn.addEventListener('click', buscarPersonal);
+        });
+
+        document.querySelectorAll('[onclick*="cadastrarPersonal"]').forEach(btn => {
+            btn.addEventListener('click', cadastrarPersonal);
+        });
+
+        console.log('🔍 Sistema de pesquisa com filtros carregado!');
+        console.log('Filtros disponíveis:', Object.keys(searchMap));
+        
+        // Verificar se todos os filtros estão funcionando
+        const filterTags = document.querySelectorAll('.filter-tag');
+        console.log(`🎯 ${filterTags.length} filtros rápidos carregados:`);
+        filterTags.forEach(tag => {
+            console.log(`   - ${tag.textContent} (${tag.getAttribute('data-filter')})`);
+        });
+    }
+
+    // Inicializar quando o DOM estiver carregado
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeSearch);
     } else {
-        closeSearch();
+        initializeSearch();
+    }
+
+
+// ========== FUNÇÕES ADICIONAIS ==========
+function buscarPersonal() {
+    showNotification('🔍 Buscando personal trainers...');
+    navigateToFilter('personal trainer');
+}
+
+function cadastrarPersonal() {
+    showNotification('👤 Redirecionando para cadastro de personal trainer...');
+}
+
+// Adicionando eventos para filtros específicos que podem estar no menu
+document.querySelectorAll('[onclick*="buscarPersonal"]').forEach(btn => {
+    btn.addEventListener('click', buscarPersonal);
+});
+
+document.querySelectorAll('[onclick*="cadastrarPersonal"]').forEach(btn => {
+    btn.addEventListener('click', cadastrarPersonal);
+});</script>
+
+ <script src="menu.js">
+  </script>
+  <!-- 1. Sistema de Notificações Globais -->
+<script src="global-notifications.js"></script>
+
+<!-- 2. Gerenciador de Usuários -->
+<script src="user-manager.js"></script>
+
+<!-- 3. Header com Informações do Usuário -->
+<script src="user-header.js"></script>
+   <script>
+    // ========== DEBUG EM TEMPO REAL ==========
+console.log('🔍 VERIFICANDO LOGIN AO CARREGAR PÁGINA...');
+
+// 1. Verificar localStorage
+const userLocalStorage = localStorage.getItem('currentUser');
+const userGymP2 = localStorage.getItem('gymp2_current_user');
+
+console.log('📦 Dados no localStorage:');
+console.log('- currentUser:', userLocalStorage);
+console.log('- gymp2_current_user:', userGymP2);
+
+// 2. Verificar sessionStorage (usado pelo segundo código)
+const token = sessionStorage.getItem('gymp2_token');
+const userSession = sessionStorage.getItem('gymp2_user');
+
+console.log('🗝️ Dados no sessionStorage:');
+console.log('- Token:', token);
+console.log('- Usuário:', userSession);
+
+// 3. Tentar parsear
+try {
+    if (userLocalStorage) {
+        const user = JSON.parse(userLocalStorage);
+        console.log('✅ USUÁRIO ENCONTRADO (currentUser):', user.name);
+    }
+    if (userGymP2) {
+        const user = JSON.parse(userGymP2);
+        console.log('✅ USUÁRIO ENCONTRADO (gymp2_current_user):', user.name);
+    }
+    if (userSession) {
+        const user = JSON.parse(userSession);
+        console.log('✅ USUÁRIO ENCONTRADO (session):', user.name);
+    }
+} catch (e) {
+    console.error('❌ ERRO AO ANALISAR DADOS:', e);
+}
+// ========== DETECÇÃO AUTOMÁTICA DE LOGIN ==========
+(function() {
+    console.log('🔍 Verificando status de login...');
+    
+    // Verificar se há usuário logado
+    const userData = localStorage.getItem('gymp2_current_user') || 
+                     localStorage.getItem('currentUser');
+    
+    if (userData) {
+        try {
+            const user = JSON.parse(userData);
+            console.log(' Usuário logado detectado:', user.name);
+            
+            // Trocar o botão "Login" pelo nome do usuário
+            const loginButtons = document.querySelectorAll('.gym-access-btn');
+            loginButtons.forEach(btn => {
+                if (btn.textContent.includes('Login')) {
+                    // Substituir pelo dropdown do usuário
+                    btn.outerHTML = `
+                        <div class="user-header-container" id="userHeaderContainer" style="
+                            display: flex;
+                            align-items: center;
+                            gap: 12px;
+                            background: rgba(0, 255, 136, 0.1);
+                            border: 2px solid rgba(0, 255, 136, 0.3);
+                            border-radius: 30px;
+                            padding: 6px 16px 6px 6px;
+                            cursor: pointer;
+                            position: relative;
+                            transition: all 0.3s ease;
+                        ">
+                            <div class="user-avatar" style="
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 50%;
+                                background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-weight: 700;
+                                font-size: 16px;
+                                color: #000;
+                                border: 2px solid #fff;
+                            ">${getInitials(user.name)}</div>
+                            
+                            <span class="user-name-text" style="
+                                font-size: 14px;
+                                font-weight: 600;
+                                color: #fff;
+                            ">${user.name.split(' ')[0]}</span>
+                            
+                            <div class="user-dropdown-menu" id="userDropdownMenu" style="
+                                position: absolute;
+                                top: calc(100% + 10px);
+                                right: 0;
+                                background: #1a1a1a;
+                                border: 2px solid rgba(0, 255, 136, 0.3);
+                                border-radius: 16px;
+                                padding: 12px;
+                                min-width: 220px;
+                                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+                                opacity: 0;
+                                visibility: hidden;
+                                transform: translateY(-10px);
+                                transition: all 0.3s ease;
+                                z-index: 3000;
+                            ">
+                                <div style="padding: 12px; border-bottom: 1px solid rgba(0, 255, 136, 0.2); margin-bottom: 8px;">
+                                    <div style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px;">${user.name}</div>
+                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">${user.email}</div>
+                                </div>
+                                
+                                <a href="perfil.html" style="
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 12px;
+                                    padding: 12px;
+                                    border-radius: 10px;
+                                    cursor: pointer;
+                                    transition: all 0.2s ease;
+                                    color: #fff;
+                                    text-decoration: none;
+                                    margin-bottom: 4px;
+                                ">
+                                    <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                                    </svg>
+                                    Meu Perfil
+                                </a>
+                                
+                                <div id="logoutBtn" style="
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 12px;
+                                    padding: 12px;
+                                    border-radius: 10px;
+                                    cursor: pointer;
+                                    transition: all 0.2s ease;
+                                    color: #ff4444;
+                                    border-top: 1px solid rgba(255, 68, 68, 0.2);
+                                    margin-top: 8px;
+                                ">
+                                    <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                                    </svg>
+                                    Sair
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Configurar eventos após inserir o HTML
+                    setTimeout(setupUserDropdown, 100);
+                }
+            });
+            
+        } catch (error) {
+            console.error('❌ Erro ao processar dados do usuário:', error);
+        }
+    } else {
+        console.log(' Nenhum usuário logado');
+    }
+    
+    // Função para obter iniciais do nome
+    function getInitials(name) {
+        return name
+            .split(' ')
+            .map(n => n[0])
+            .slice(0, 2)
+            .join('')
+            .toUpperCase();
+    }
+    
+    // Configurar dropdown do usuário
+    function setupUserDropdown() {
+        const userContainer = document.getElementById('userHeaderContainer');
+        const dropdownMenu = document.getElementById('userDropdownMenu');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        if (!userContainer || !dropdownMenu || !logoutBtn) {
+            console.log(' Elementos do dropdown não encontrados');
+            return;
+        }
+        
+        // Toggle do dropdown
+        userContainer.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = dropdownMenu.style.opacity === '1';
+            
+            if (isActive) {
+                dropdownMenu.style.opacity = '0';
+                dropdownMenu.style.visibility = 'hidden';
+                dropdownMenu.style.transform = 'translateY(-10px)';
+            } else {
+                dropdownMenu.style.opacity = '1';
+                dropdownMenu.style.visibility = 'visible';
+                dropdownMenu.style.transform = 'translateY(0)';
+            }
+        });
+        
+        // Fechar dropdown ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!userContainer.contains(e.target)) {
+                dropdownMenu.style.opacity = '0';
+                dropdownMenu.style.visibility = 'hidden';
+                dropdownMenu.style.transform = 'translateY(-10px)';
+            }
+        });
+        
+        // Prevenir fechamento ao clicar no dropdown
+        dropdownMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+        
+        // Hover effect no container
+        userContainer.addEventListener('mouseenter', () => {
+            userContainer.style.background = 'rgba(0, 255, 136, 0.2)';
+            userContainer.style.borderColor = 'rgba(0, 255, 136, 0.5)';
+            userContainer.style.transform = 'translateY(-2px)';
+            userContainer.style.boxShadow = '0 4px 15px rgba(0, 255, 136, 0.3)';
+        });
+        
+        userContainer.addEventListener('mouseleave', () => {
+            userContainer.style.background = 'rgba(0, 255, 136, 0.1)';
+            userContainer.style.borderColor = 'rgba(0, 255, 136, 0.3)';
+            userContainer.style.transform = 'translateY(0)';
+            userContainer.style.boxShadow = 'none';
+        });
+        
+        // Hover nos itens do menu
+        const menuItems = dropdownMenu.querySelectorAll('a, #logoutBtn');
+        menuItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.background = 'rgba(0, 255, 136, 0.1)';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.background = 'transparent';
+            });
+        });
+        
+        // Evento de logout
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('Deseja realmente sair da sua conta?')) {
+                localStorage.removeItem('gymp2_current_user');
+                localStorage.removeItem('currentUser');
+                
+                // Mostrar notificação se disponível
+                if (window.notifications) {
+                    window.notifications.success('Logout realizado com sucesso!');
+                }
+                
+                // Recarregar a página após 1 segundo
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+        });
+        
+        console.log('✅ Dropdown do usuário configurado');
+    }
+    
+})();
+function logout() {
+    if (confirm('Deseja realmente sair?')) {
+        localStorage.removeItem('gymp2_current_user');
+        localStorage.removeItem('currentUser');
+        window.location.reload();
+    }
+}
+</script>
+<script>
+// ========== DEBUG E VERIFICAÇÃO ==========
+console.log('🚀 Script de login carregado!');
+
+// Verificar se há usuário logado imediatamente
+const userData = localStorage.getItem('currentUser') || localStorage.getItem('gymp2_current_user');
+console.log('📦 Dados do usuário no localStorage:', userData);
+
+if (userData) {
+    try {
+        const user = JSON.parse(userData);
+        console.log('👤 Usuário parseado:', user);
+    } catch (error) {
+        console.error('❌ Erro ao fazer parse:', error);
     }
 }
 
-function closeSearch() {
-    searchExpanded = false;
-    elements.searchField?.classList.remove('expanded');
-    elements.searchToggle?.classList.remove('expanded');
-    elements.searchWidget?.classList.remove('expanded-mode');
-   
-    if (elements.searchInput) {
-        elements.searchInput.blur();
-        elements.searchInput.value = '';
+// ========== SISTEMA PRINCIPAL ATUALIZADO ==========
+function initLoginSystem() {
+    console.log('🔧 Iniciando sistema de login...');
+    
+    const userData = localStorage.getItem('currentUser') || localStorage.getItem('gymp2_current_user');
+    
+    if (userData) {
+        try {
+            const user = JSON.parse(userData);
+            console.log(' Usuário logado detectado:', user.name);
+            updateUIForLoggedUser(user);
+        } catch (error) {
+            console.error(' Erro ao processar usuário:', error);
+        }
+    } else {
+        console.log('ℹ️ Nenhum usuário logado');
+        resetUIForLoggedOut();
     }
-   
-    hideResults();
 }
 
-function performSearch(query) {
-    const searchTerm = query.toLowerCase().trim();
-   
-    if (!searchTerm) {
-        hideResults();
+// ========== ATUALIZAR INTERFACE PARA USUÁRIO LOGADO ==========
+function updateUIForLoggedUser(user) {
+    console.log('🎨 Atualizando UI para usuário logado:', user.name);
+    
+    // 1. Atualizar header principal
+    updateMainHeader(user);
+    
+    // 2. Atualizar menu hamburguer
+    updateHamburgerMenu(user);
+    
+    console.log('✅ UI atualizada com sucesso!');
+}
+
+// ========== ATUALIZAR HEADER PRINCIPAL ==========
+function updateMainHeader(user) {
+    const rightControls = document.querySelector('.right-controls');
+    if (!rightControls) {
+        console.error('❌ .right-controls não encontrado');
         return;
     }
-   
-    // Buscar nas academias da página
-    const cards = document.querySelectorAll('.academy-card');
-    let academyMatches = [];
-   
-    cards.forEach(card => {
-        const academyName = card.querySelector('.academy-name').textContent.toLowerCase();
-        const academyLocation = card.querySelector('.academy-location').textContent.toLowerCase();
-        const academyType = card.getAttribute('data-type');
-        const academyPrice = card.getAttribute('data-price');
-       
-        if (academyName.includes(searchTerm) || academyLocation.includes(searchTerm)) {
-            academyMatches.push({
-                name: card.querySelector('.academy-name').textContent,
-                category: academyType === 'musculacao' ? 'Musculação' : 'Artes Marciais',
-                description: `${card.querySelector('.academy-location').textContent} - R$ ${academyPrice}/mês`,
-                scrollTo: card.querySelector('.academy-name').textContent
-            });
+
+    // Remover botão Login existente
+    const loginButtons = rightControls.querySelectorAll('.gym-access-btn');
+    loginButtons.forEach(btn => {
+        if (btn.textContent.includes('Login') || btn.querySelector('a')?.textContent.includes('Login')) {
+            console.log('🗑 Removendo botão Login do header');
+            btn.remove();
         }
     });
-   
-    // Buscar no mapa de navegação
-    const navMatches = Object.entries(searchMap)
-        .filter(([key, data]) =>
-            key.includes(searchTerm) ||
-            data.description.toLowerCase().includes(searchTerm) ||
-            data.category.toLowerCase().includes(searchTerm)
-        )
-        .map(([key, data]) => ({
-            name: formatTitle(key),
-            category: data.category,
-            description: data.description,
-            url: data.url,
-            scrollTo: data.scrollTo
-        }));
-   
-    const allMatches = [...academyMatches, ...navMatches].slice(0, 8);
-    displayResults(allMatches);
-}
 
-function displayResults(matches) {
-    if (!elements.searchResults) return;
-   
-    if (matches.length === 0) {
-        elements.searchResults.innerHTML = `
-            <div class="search-result-item">
-                <div class="result-title">Nenhum resultado encontrado</div>
-                <div class="result-description">Tente pesquisar por outro termo</div>
-            </div>
-        `;
-    } else {
-        elements.searchResults.innerHTML = matches.map((match, index) => `
-            <div class="search-result-item" onclick="navigateToSearchResult(${index})" data-match='${JSON.stringify(match).replace(/'/g, "&apos;")}'>
-                <div class="result-category">${match.category}</div>
-                <div class="result-title">${match.name}</div>
-                <div class="result-description">${match.description}</div>
-            </div>
-        `).join('');
+    // Verificar se já existe o componente de usuário
+    if (document.getElementById('userHeaderContainer')) {
+        console.log('ℹ️ Header de usuário já existe');
+        return;
     }
-   
-    elements.searchResults.classList.add('active');
+
+    // Criar componente do usuário
+    const initials = user.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+    const firstName = user.name.split(' ')[0];
+
+    const userHTML = `
+        <div class="user-header-container" id="userHeaderContainer" style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 30px;
+            padding: 6px 16px 6px 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        ">
+            <div class="user-avatar" style="
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                font-size: 16px;
+                color: #000;
+                border: 2px solid #fff;
+            ">${initials}</div>
+            
+            <span class="user-name-text" style="
+                font-size: 14px;
+                font-weight: 600;
+                color: #fff;
+            ">${firstName}</span>
+            
+            <div class="user-dropdown-menu" id="userDropdownMenu" style="
+                position: absolute;
+                top: calc(100% + 10px);
+                right: 0;
+                background: #1a1a1a;
+                border: 2px solid rgba(0, 255, 136, 0.3);
+                border-radius: 16px;
+                padding: 12px;
+                min-width: 220px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: all 0.3s ease;
+                z-index: 3000;
+            ">
+                <div style="padding: 12px; border-bottom: 1px solid rgba(0, 255, 136, 0.2); margin-bottom: 8px;">
+                    <div style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px;">${user.name}</div>
+                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">${user.email || 'usuario@gymp2.com'}</div>
+                </div>
+                
+                <a href="#perfil" style="
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    color: #fff;
+                    text-decoration: none;
+                    margin-bottom: 4px;
+                ">
+                    <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                    Meu Perfil
+                </a>
+                
+                <div id="logoutBtn" style="
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    color: #ff4444;
+                    border-top: 1px solid rgba(255, 68, 68, 0.2);
+                    margin-top: 8px;
+                ">
+                    <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                    </svg>
+                    Sair
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Inserir antes do menu hamburguer
+    const menuTrigger = document.getElementById('menuTrigger');
+    if (menuTrigger) {
+        menuTrigger.insertAdjacentHTML('beforebegin', userHTML);
+        console.log('✅ Header de usuário inserido no header principal');
+    } else {
+        rightControls.insertAdjacentHTML('beforeend', userHTML);
+        console.log('✅ Header de usuário inserido no final do header');
+    }
+
+    // Configurar eventos do dropdown
+    setupUserDropdownEvents();
 }
 
-// FUNÇÃO CORRIGIDA - sem conflito de nomes
-function navigateToSearchResult(index) {
-    const resultItem = document.querySelectorAll('.search-result-item')[index];
-    const matchData = JSON.parse(resultItem.getAttribute('data-match').replace(/&apos;/g, "'"));
-   
-    closeSearch();
-   
-    if (matchData.scrollTo) {
-        scrollToCard(matchData.scrollTo);
-        showNotification(`📍 Encontrado: ${matchData.name}`);
-    } else if (matchData.url) {
-        showNotification(`Redirecionando para: ${matchData.name}`);
-       
-        setTimeout(() => {
-            if (matchData.url.startsWith('#')) {
-                const target = document.querySelector(matchData.url);
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+// ========== ATUALIZAR MENU HAMBURGUER ==========
+function updateHamburgerMenu(user) {
+    console.log('🍔 Atualizando menu hamburguer...');
+    
+    const navigationList = document.querySelector('.navigation-list');
+    if (!navigationList) {
+        console.error('❌ .navigation-list não encontrado');
+        return;
+    }
+
+    // Encontrar item de Login
+    const navItems = navigationList.querySelectorAll('.nav-item');
+    let loginItem = null;
+    
+    navItems.forEach(item => {
+        const link = item.querySelector('.nav-link');
+        if (link && (link.textContent.trim() === 'Login' || link.getAttribute('href') === '#espaço-cliente')) {
+            loginItem = item;
+            console.log('🔍 Item de login encontrado no menu');
+        }
+    });
+
+    if (loginItem) {
+        const firstName = user.name.split(' ')[0];
+        
+        // Substituir Login por Perfil
+        loginItem.innerHTML = `
+            <a href="#perfil" class="nav-link" style="color: #00ff88; font-weight: 700; background: rgba(0, 255, 136, 0.1); border-radius: 8px; margin: 5px 0; padding: 12px 15px !important;">
+                <i class="fas fa-user" style="margin-right: 10px;"></i>
+                Meu Perfil (${firstName})
+            </a>
+        `;
+        console.log('✅ Login substituído por Perfil no menu');
+
+        // Remover logout existente
+        const existingLogout = document.getElementById('menuLogoutBtn');
+        if (existingLogout) {
+            existingLogout.closest('.nav-item').remove();
+            console.log('🗑 Logout anterior removido');
+        }
+
+        // Adicionar item Sair
+        const logoutItem = document.createElement('li');
+        logoutItem.className = 'nav-item';
+        logoutItem.innerHTML = `
+            <a href="#logout" class="nav-link" style="color: #ff4444; background: rgba(255, 68, 68, 0.1); border-radius: 8px; margin: 5px 0; padding: 12px 15px !important;" id="menuLogoutBtn">
+                <i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i>
+                Sair
+            </a>
+        `;
+        
+        navigationList.appendChild(logoutItem);
+        console.log('✅ Item Sair adicionado ao menu');
+
+        // Configurar evento de logout
+        const menuLogoutBtn = document.getElementById('menuLogoutBtn');
+        if (menuLogoutBtn) {
+            menuLogoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('Deseja realmente sair da sua conta?')) {
+                    console.log('🚪 Fazendo logout...');
+                    localStorage.removeItem('gymp2_current_user');
+                    localStorage.removeItem('currentUser');
+                    alert('Logout realizado com sucesso!');
+                    window.location.reload();
                 }
-            } else {
-                window.location.href = matchData.url;
-            }
+            });
+        }
+    } else {
+        console.log('⚠️ Item de login não encontrado no menu hamburguer');
+    }
+}
+
+// ========== CONFIGURAR EVENTOS DO DROPDOWN ==========
+function setupUserDropdownEvents() {
+    const userContainer = document.getElementById('userHeaderContainer');
+    const dropdownMenu = document.getElementById('userDropdownMenu');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (!userContainer || !dropdownMenu || !logoutBtn) {
+        console.error('❌ Elementos do dropdown não encontrados');
+        return;
+    }
+
+    // Toggle dropdown
+    userContainer.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isVisible = dropdownMenu.style.opacity === '1';
+        
+        if (isVisible) {
+            dropdownMenu.style.opacity = '0';
+            dropdownMenu.style.visibility = 'hidden';
+            dropdownMenu.style.transform = 'translateY(-10px)';
+        } else {
+            dropdownMenu.style.opacity = '1';
+            dropdownMenu.style.visibility = 'visible';
+            dropdownMenu.style.transform = 'translateY(0)';
+        }
+    });
+
+    // Fechar ao clicar fora
+    document.addEventListener('click', () => {
+        dropdownMenu.style.opacity = '0';
+        dropdownMenu.style.visibility = 'hidden';
+        dropdownMenu.style.transform = 'translateY(-10px)';
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+        if (confirm('Deseja realmente sair da sua conta?')) {
+            console.log('🚪 Fazendo logout...');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('gymp2_current_user');
+            alert('Logout realizado com sucesso!');
+            window.location.reload();
+        }
+    });
+
+    console.log('✅ Eventos do dropdown configurados');
+}
+
+// ========== RESTAURAR INTERFACE PADRÃO ==========
+function resetUIForLoggedOut() {
+    console.log('🔄 Restaurando interface para usuário deslogado...');
+    
+    // Remover header de usuário se existir
+    const userHeader = document.getElementById('userHeaderContainer');
+    if (userHeader) {
+        userHeader.remove();
+        console.log('🗑 Header de usuário removido');
+    }
+    
+    // Restaurar menu hamburguer será feito automaticamente ao recarregar
+}
+
+// ========== INICIAR SISTEMA ==========
+
+// Executar quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 DOM carregado, iniciando sistema...');
+    setTimeout(initLoginSystem, 100);
+});
+
+// Executar também se a página já estiver carregada
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    console.log('⚡ Página já carregada, iniciando sistema...');
+    setTimeout(initLoginSystem, 100);
+}
+
+// Observar mudanças no localStorage
+window.addEventListener('storage', function(e) {
+    if ((e.key === 'currentUser' || e.key === 'gymp2_current_user')) {
+        console.log('🔄 Mudança no localStorage detectada, recarregando...');
+        setTimeout(() => {
+            window.location.reload();
         }, 500);
     }
-}
+});
 
-function hideResults() {
-    elements.searchResults?.classList.remove('active');
-}
+console.log('🎯 Sistema de login carregado e pronto!');
+</script>
 
-function formatTitle(text) {
-    return text.split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-}
+<!--JavaScript para aplicar configurações globais-->
+<script>
+    // Aplicar configurações globais - PARA TODAS AS PÁGINAS
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Aplicando configurações globais...');
+        applyGlobalSettings();
+        
+        // Verificar se as configurações foram aplicadas
+        setTimeout(() => {
+            console.log('Configurações aplicadas:', {
+                tema: localStorage.getItem('gym-theme'),
+                fonte: localStorage.getItem('gym-fontSize'),
+                bodyClass: document.body.className
+            });
+        }, 500);
+    });
 
-function scrollToCard(academyName) {
-    const cards = document.querySelectorAll('.academy-card');
-    cards.forEach(card => {
-        const name = card.querySelector('.academy-name').textContent;
-        if (name.toLowerCase() === academyName.toLowerCase()) {
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            card.style.animation = 'highlight 2s ease-in-out';
-            setTimeout(() => {
-                card.style.animation = '';
-            }, 2000);
+    function applyGlobalSettings() {
+        // Carregar configurações salvas
+        const savedTheme = localStorage.getItem('gym-theme') || 'dark';
+        const savedFontSize = localStorage.getItem('gym-fontSize') || 'medium';
+        
+        console.log('Configurações carregadas:', { savedTheme, savedFontSize });
+        
+        // Aplicar tema
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            console.log('Modo claro aplicado');
+        } else {
+            document.body.classList.remove('light-mode');
+            console.log('Modo escuro aplicado');
+        }
+        
+        // Aplicar tamanho da fonte
+        applyFontSize(savedFontSize);
+    }
+
+    function applyFontSize(size) {
+        const sizes = {
+            'small': { 
+                h1: '32px', h2: '24px', h3: '18px',
+                normal: '14px', small: '12px',
+                button: '14px'
+            },
+            'medium': { 
+                h1: '42px', h2: '28px', h3: '22px',
+                normal: '16px', small: '14px',
+                button: '16px'
+            },
+            'large': { 
+                h1: '52px', h2: '32px', h3: '26px',
+                normal: '18px', small: '16px',
+                button: '18px'
+            }
+        };
+
+        const currentSizes = sizes[size];
+        
+        console.log('Aplicando tamanho de fonte:', size, currentSizes);
+        
+        // Aplicar a todos os elementos
+        setTimeout(() => {
+            // Títulos principais
+            document.querySelectorAll('h1').forEach(el => {
+                el.style.fontSize = currentSizes.h1;
+            });
+            
+            // Títulos secundários
+            document.querySelectorAll('h2').forEach(el => {
+                el.style.fontSize = currentSizes.h2;
+            });
+            
+            // Títulos terciários
+            document.querySelectorAll('h3').forEach(el => {
+                el.style.fontSize = currentSizes.h3;
+            });
+            
+            // Textos normais
+            document.querySelectorAll('p, .setting-description, .feedback-text, .nav-link, .result-title, .profile-info p, .feedback-text').forEach(el => {
+                el.style.fontSize = currentSizes.normal;
+            });
+            
+            // Botões
+            document.querySelectorAll('.gym-access-btn, .edit-profile-btn, .menu-search-btn').forEach(el => {
+                el.style.fontSize = currentSizes.button;
+            });
+            
+            // Textos pequenos
+            document.querySelectorAll('.feedback-date, .setting-description, small, .result-description, .feedback-date').forEach(el => {
+                el.style.fontSize = currentSizes.small;
+            });
+            
+            // Estatísticas
+            document.querySelectorAll('.stat-box p').forEach(el => {
+                el.style.fontSize = currentSizes.h2;
+            });
+            
+            document.querySelectorAll('.stat-box h3').forEach(el => {
+                el.style.fontSize = currentSizes.normal;
+            });
+
+            console.log('Tamanhos de fonte aplicados com sucesso');
+        }, 100);
+    }
+
+    // Função para forçar atualização (útil para debugging)
+    function forceUpdateSettings() {
+        console.log('Forçando atualização das configurações...');
+        applyGlobalSettings();
+    }
+
+    // Adicionar listener para mudanças no localStorage (opcional)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'gym-theme' || e.key === 'gym-fontSize') {
+            console.log('Configurações alteradas em outra aba, aplicando...');
+            applyGlobalSettings();
         }
     });
-}
 
-// ========== FUNÇÕES DO MENU LATERAL ==========
-function toggleMenu() {
-    if (elements.menuTrigger && elements.slideMenu) {
-        elements.menuTrigger.classList.toggle('active');
-        elements.slideMenu.classList.toggle('open');
-       
-        // Criar overlay dinamicamente se não existir
-        let overlay = document.getElementById('menuOverlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'menuOverlay';
-            overlay.className = 'menu-overlay';
-            overlay.addEventListener('click', toggleMenu);
-            document.body.appendChild(overlay);
+
+
+
+    
+</script>
+
+<script>
+  // ========== FUNÇÃO PARA REDIRECIONAR PARA PERFIL ==========
+function redirectToProfile() {
+    const userData = localStorage.getItem('currentUser') || localStorage.getItem('gymp2_current_user');
+    
+    if (userData) {
+        try {
+            const user = JSON.parse(userData);
+            console.log(' Redirecionando para perfil do usuário:', user.name);
+            window.location.href = 'perfil.html';
+        } catch (error) {
+            console.error(' Erro ao redirecionar:', error);
+            window.location.href = 'login-gym.html';
         }
-        overlay.classList.toggle('visible');
-       
-        closeSearch();
+    } else {
+        alert('Você precisa fazer login primeiro!');
+        window.location.href = 'login-gym.html';
     }
 }
+</script>
 
-        // ========== FUNÇÕES DE FILTRO ==========
-        function filterAcademies() {
-            const typeFilter = document.querySelector('input[name="type"]:checked').value;
-            const locationFilters = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
-                .map(input => input.value);
-           
-            const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
-            const maxPrice = parseInt(document.getElementById('maxPrice').value) || Infinity;
-           
-            const cards = document.querySelectorAll('.academy-card');
-           
-            cards.forEach(card => {
-                const cardType = card.getAttribute('data-type');
-                const cardLocation = card.getAttribute('data-location');
-                const cardPrice = parseInt(card.getAttribute('data-price'));
-                const cardFacilities = card.getAttribute('data-facilities').split(',');
-               
-                let showCard = true;
-               
-                // Filtro por tipo
-                if (typeFilter !== 'all' && cardType !== typeFilter) {
-                    showCard = false;
-                }
-               
-                // Filtro por localização
-                const locationChecks = locationFilters.filter(filter =>
-                    ['praca-matriz', 'centro', 'vila-kolping', 'chapada-serra'].includes(filter)
-                );
-                if (locationChecks.length > 0 && !locationChecks.includes(cardLocation)) {
-                    showCard = false;
-                }
-               
-                // Filtro por preço
-                if (cardPrice < minPrice || cardPrice > maxPrice) {
-                    showCard = false;
-                }
-               
-                // Filtro por facilidades
-                const facilityChecks = locationFilters.filter(filter =>
-                    ['estacionamento', 'ar-condicionado', 'vestiario', 'wifi', 'personais'].includes(filter)
-                );
-                if (facilityChecks.length > 0) {
-                    const hasAllFacilities = facilityChecks.every(facility =>
-                        cardFacilities.includes(facility)
-                    );
-                    if (!hasAllFacilities) {
-                        showCard = false;
-                    }
-                }
-               
-                card.style.display = showCard ? 'block' : 'none';
-            });
-        }
-
-        // ========== FUNÇÕES AUXILIARES ==========
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #00ff88;
-                color: #000;
-                padding: 12px 20px;
-                border-radius: 8px;
-                font-weight: 600;
-                z-index: 10000;
-                box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
-                animation: slideIn 0.3s ease-out;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-           
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease-in';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 300);
-            }, 2700);
-        }
-
-        // ========== INICIALIZAÇÃO ==========
-        function initializeElements() {
-            elements.searchToggle = document.getElementById('searchToggle');
-            elements.searchField = document.getElementById('searchField');
-            elements.searchInput = document.getElementById('searchInput');
-            elements.searchResults = document.getElementById('searchResults');
-            elements.searchWidget = document.getElementById('searchWidget');
-            elements.menuTrigger = document.getElementById('menuTrigger');
-            elements.slideMenu = document.getElementById('slideMenu');
-            elements.menuOverlay = document.getElementById('menuOverlay');
-        }
-
-        function initializeSearchEvents() {
-            // Toggle da busca
-            if (elements.searchToggle) {
-                elements.searchToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleSearch();
-                });
-            }
-
-            // Input de busca
-            if (elements.searchInput) {
-                elements.searchInput.addEventListener('input', (e) => {
-                    performSearch(e.target.value);
-                });
-
-                elements.searchInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        const query = elements.searchInput.value.trim();
-                        if (query) {
-                            performSearch(query);
-                        }
-                    } else if (e.key === 'Escape') {
-                        closeSearch();
-                    }
-                });
-            }
-
-            // Fechar ao clicar fora
-            document.addEventListener('click', (e) => {
-                if (searchExpanded &&
-                    !elements.searchField?.contains(e.target) &&
-                    !elements.searchToggle?.contains(e.target) &&
-                    !elements.searchInput?.contains(e.target) &&
-                    !elements.searchResults?.contains(e.target)) {
-                    closeSearch();
-                }
-            });
-
-            // Prevenir fechamento ao clicar nos resultados
-            if (elements.searchResults) {
-                elements.searchResults.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                });
-            }
-
-            // Tecla ESC global
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && searchExpanded) {
-                    closeSearch();
-                }
-            });
-        }
-
-        function initializeMenuEvents() {
-            // Menu trigger
-            if (elements.menuTrigger) {
-                elements.menuTrigger.addEventListener('click', toggleMenu);
-            }
-
-            // Overlay do menu
-            if (elements.menuOverlay) {
-                elements.menuOverlay.addEventListener('click', toggleMenu);
-            }
-
-            // Links de navegação
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                   
-                    // Se for âncora interna, fazer scroll suave
-                    if (href.startsWith('#')) {
-                        e.preventDefault();
-                        const target = document.querySelector(href);
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                            toggleMenu();
-                        }
-                    }
-                   
-                    showNotification(`📍 Navegando para: ${link.textContent}`);
-                });
-            });
-        }
-
-        function initializeSmoothScroll() {
-            // Scroll suave para todos os links âncora
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    const href = this.getAttribute('href');
-                    if (href !== '#') {
-                        e.preventDefault();
-                        const target = document.querySelector(href);
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    }
-                });
-            });
-        }
-
-        // ========== INICIALIZAÇÃO PRINCIPAL ==========
-        function initializeHeader() {
-            console.log('🚀 Inicializando sistema...');
-           
-            initializeElements();
-            initializeSearchEvents();
-            initializeMenuEvents();
-            initializeSmoothScroll();
-           
-            console.log('✅ Sistema inicializado com sucesso!');
-            console.log('🔍 Busca integrada ativada');
-            console.log('📱 Menu responsivo ativado');
-            console.log('🏋️ Total de academias:', document.querySelectorAll('.academy-card').length);
-        }
-
-        // Executar quando o DOM estiver pronto
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeHeader);
-        } else {
-            initializeHeader();
-        }
-
-        // Expor funções globalmente para uso inline
-        window.navigateToResult = navigateToResult;
-        window.toggleSearch = toggleSearch;
-        window.toggleMenu = toggleMenu;
-        window.showNotification = showNotification;
-        window.filterAcademies = filterAcademies;
-        window.scrollToCard = scrollToCard;
-    </script>
-  <script src="menu.js"></script>
+<script src="menu.js"></script>
   <!-- 1. Sistema de Notificações Globais -->
 <script src="global-notifications.js"></script>
 <!-- 2. Gerenciador de Usuários -->
