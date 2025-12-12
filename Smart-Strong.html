@@ -2390,7 +2390,7 @@
             <li class="nav-item"><a href="#espaço-cliente" class="nav-link">Login</a></li>
             <li class="nav-item"><a href="#franqueado" class="nav-link">Personais</a></li>
             <li class="nav-item"><a href="#news" class="nav-link">Sorteios</a></li>
-            <li class="nav-item"><a href="#planos" class="nav-link">Configurações</a></li>
+            <li class="nav-item"><a href="config.html" class="nav-link">Configurações</a></li>
             <li class="nav-item"><a href="#sustentabilidade" class="nav-link">Blogs e dicaas</a></li>
             <li class="nav-item"><a href="#historia" class="nav-link">Sobre nós</a></li>
         </ul>
@@ -3284,6 +3284,127 @@ window.addEventListener('storage', function(e) {
 });
 
 console.log('✅ Sistema de login carregado na página!');
+</script>
+<!-- ADICIONE ISTO ANTES DO </body> NA PÁGINA DA REDE FIT -->
+
+<!--JavaScript para aplicar configurações globais-->
+<script>
+    // Aplicar configurações globais - PARA TODAS AS PÁGINAS
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🔧 Aplicando configurações globais na Rede Fit...');
+        applyGlobalSettings();
+        
+        // Verificar se as configurações foram aplicadas
+        setTimeout(() => {
+            console.log('✅ Configurações aplicadas:', {
+                tema: localStorage.getItem('gym-theme'),
+                fonte: localStorage.getItem('gym-fontSize'),
+                bodyClass: document.body.className
+            });
+        }, 500);
+    });
+
+    function applyGlobalSettings() {
+        // Carregar configurações salvas
+        const savedTheme = localStorage.getItem('gym-theme') || 'dark';
+        const savedFontSize = localStorage.getItem('gym-fontSize') || 'medium';
+        
+        console.log('📋 Configurações carregadas:', { savedTheme, savedFontSize });
+        
+        // Aplicar tema
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            console.log('🌙 Modo claro aplicado');
+        } else {
+            document.body.classList.remove('light-mode');
+            console.log('🌙 Modo escuro aplicado');
+        }
+        
+        // Aplicar tamanho da fonte
+        applyFontSize(savedFontSize);
+    }
+
+    function applyFontSize(size) {
+        const sizes = {
+            'small': { 
+                h1: '32px', h2: '24px', h3: '18px',
+                normal: '14px', small: '12px',
+                button: '14px'
+            },
+            'medium': { 
+                h1: '42px', h2: '28px', h3: '22px',
+                normal: '16px', small: '14px',
+                button: '16px'
+            },
+            'large': { 
+                h1: '52px', h2: '32px', h3: '26px',
+                normal: '18px', small: '16px',
+                button: '18px'
+            }
+        };
+
+        const currentSizes = sizes[size];
+        
+        console.log('📝 Aplicando tamanho de fonte:', size, currentSizes);
+        
+        // Aplicar a todos os elementos
+        setTimeout(() => {
+            // Títulos principais
+            document.querySelectorAll('h1').forEach(el => {
+                el.style.fontSize = currentSizes.h1;
+            });
+            
+            // Títulos secundários
+            document.querySelectorAll('h2').forEach(el => {
+                el.style.fontSize = currentSizes.h2;
+            });
+            
+            // Títulos terciários
+            document.querySelectorAll('h3').forEach(el => {
+                el.style.fontSize = currentSizes.h3;
+            });
+            
+            // Textos normais
+            document.querySelectorAll('p, .setting-description, .feedback-text, .nav-link, .result-title, .profile-info p, .feedback-text').forEach(el => {
+                el.style.fontSize = currentSizes.normal;
+            });
+            
+            // Botões
+            document.querySelectorAll('.gym-access-btn, .edit-profile-btn, .menu-search-btn').forEach(el => {
+                el.style.fontSize = currentSizes.button;
+            });
+            
+            // Textos pequenos
+            document.querySelectorAll('.feedback-date, .setting-description, small, .result-description, .feedback-date').forEach(el => {
+                el.style.fontSize = currentSizes.small;
+            });
+            
+            // Estatísticas
+            document.querySelectorAll('.stat-box p').forEach(el => {
+                el.style.fontSize = currentSizes.h2;
+            });
+            
+            document.querySelectorAll('.stat-box h3').forEach(el => {
+                el.style.fontSize = currentSizes.normal;
+            });
+
+            console.log('✅ Tamanhos de fonte aplicados com sucesso');
+        }, 100);
+    }
+
+    // Função para forçar atualização (útil para debugging)
+    function forceUpdateSettings() {
+        console.log('🔄 Forçando atualização das configurações...');
+        applyGlobalSettings();
+    }
+
+    // Adicionar listener para mudanças no localStorage (sincronizar entre abas)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'gym-theme' || e.key === 'gym-fontSize') {
+            console.log('🔄 Configurações alteradas em outra aba, aplicando...');
+            applyGlobalSettings();
+        }
+    });
 </script>
 </body>
 </html>
