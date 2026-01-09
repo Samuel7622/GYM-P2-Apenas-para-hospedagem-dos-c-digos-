@@ -426,6 +426,77 @@
         }
 
         /* ============================================ */
+        /* ESTILOS PARA O SISTEMA DE EXCLUSÃO */
+        /* ============================================ */
+        .deletion-status-item {
+            background: linear-gradient(135deg, rgba(255, 149, 0, 0.08), rgba(255, 149, 0, 0.03));
+            border: 1px solid rgba(255, 149, 0, 0.2);
+            border-radius: 12px;
+            margin: 10px;
+            animation: pulseWarning 2s infinite;
+            display: none;
+        }
+
+        @keyframes pulseWarning {
+            0%, 100% { border-color: rgba(255, 149, 0, 0.2); }
+            50% { border-color: rgba(255, 149, 0, 0.4); }
+        }
+
+        .deletion-countdown {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 59, 48, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .deletion-countdown span {
+            font-weight: bold;
+            color: #ff3b30;
+        }
+
+        .btn-warning {
+            padding: 8px 16px;
+            background: rgba(255, 149, 0, 0.1);
+            border: 1px solid rgba(255, 149, 0, 0.3);
+            border-radius: 8px;
+            color: #ff9500;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-warning:hover {
+            background: rgba(255, 149, 0, 0.2);
+            border-color: #ff9500;
+        }
+
+        /* Modo claro para exclusão */
+        body.light-mode .deletion-status-item {
+            background: linear-gradient(135deg, rgba(255, 149, 0, 0.05), rgba(255, 149, 0, 0.02));
+            border-color: rgba(255, 149, 0, 0.3);
+        }
+
+        body.light-mode .deletion-countdown {
+            background: rgba(255, 59, 48, 0.08);
+        }
+
+        body.light-mode .btn-warning {
+            background: rgba(255, 149, 0, 0.08);
+            border-color: rgba(255, 149, 0, 0.3);
+            color: #ff9500;
+        }
+
+        body.light-mode .btn-warning:hover {
+            background: rgba(255, 149, 0, 0.15);
+            border-color: #ff9500;
+        }
+
+        /* ============================================ */
         /* FIM DO CSS DO MODO CLARO */
         /* ============================================ */
 
@@ -470,12 +541,32 @@
                 </div>
                 <button class="btn-secondary" onclick="openModal('email')">Editar</button>
             </div>
-            <div class="setting-item">
+            
+            <!-- Status de Exclusão (aparece apenas se houver solicitação) -->
+            <div class="setting-item deletion-status-item" id="deletionStatusItem">
                 <div class="setting-label">
-                    <div class="setting-title">Deletar conta</div>
-                    <div class="setting-description">Esta ação é irreversível</div>
+                    <div class="setting-title">⚠️ Exclusão Pendente</div>
+                    <div class="setting-description">
+                        Sua conta será excluída em 
+                        <span class="deletion-countdown">
+                            <span id="daysRemainingCount">30</span> dias
+                        </span>
+                    </div>
                 </div>
-                <button class="btn-danger" onclick="openModal('delete')">Deletar</button>
+                <button class="btn-warning" onclick="cancelAccountDeletion()">Cancelar Exclusão</button>
+            </div>
+            
+            <!-- Opção para Deletar/Recuperar Conta -->
+            <div class="setting-item" id="deleteAccountItem">
+                <div class="setting-label">
+                    <div class="setting-title" id="deleteAccountTitle">Deletar conta</div>
+                    <div class="setting-description" id="deleteAccountDesc">
+                        Tem 30 dias para cancelar após solicitar
+                    </div>
+                </div>
+                <button class="btn-danger" onclick="openDeleteAccountModal()" id="deleteAccountBtn">
+                    Solicitar Exclusão
+                </button>
             </div>
         </div>
 
@@ -515,7 +606,7 @@
             </div>
         </div>
 
-        <!-- Modal de Confirmação -->
+        <!-- Modal de Confirmação Original (Mantido) -->
         <div class="modal" id="confirmModal">
             <div class="modal-content">
                 <div class="modal-title" id="modalTitle">Confirmar ação</div>
@@ -526,11 +617,62 @@
                 </div>
             </div>
         </div>
+        
+        <!-- NOVO: Modal de Exclusão de Conta -->
+        <div class="modal" id="deleteAccountModal">
+            <div class="modal-content">
+                <div class="modal-title">⚠️ Confirmar Exclusão da Conta</div>
+                <div class="modal-description" id="deleteAccountDescription">
+                    <p>Você está solicitando a exclusão permanente da sua conta.</p>
+                    <p><strong>Importante:</strong></p>
+                    <ul style="margin: 10px 0 10px 20px; color: #ff6b6b;">
+                        <li>Sua conta será desativada imediatamente</li>
+                        <li>Você terá <strong>30 dias</strong> para cancelar esta exclusão</li>
+                        <li>Após 30 dias, todos os seus dados serão permanentemente removidos</li>
+                        <li>Durante este período, você poderá cancelar a qualquer momento</li>
+                        <li>Depois de excluída, este email não poderá mais ser usado</li>
+                    </ul>
+                    <p>Deseja continuar?</p>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn-cancel" onclick="closeDeleteModal()">Cancelar</button>
+                    <button class="btn-confirm danger" onclick="requestAccountDeletion()">
+                        Sim, Solicitar Exclusão
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NOVO: Modal de Cancelamento de Exclusão -->
+        <div class="modal" id="cancelDeletionModal">
+            <div class="modal-content">
+                <div class="modal-title">✅ Cancelar Exclusão</div>
+                <div class="modal-description">
+                    <p>Você está prestes a cancelar a exclusão da sua conta.</p>
+                    <p>Sua conta será reativada imediatamente e você poderá continuar usando normalmente.</p>
+                    <label style="display: block; margin: 15px 0 5px;">
+                        <span>Motivo do cancelamento (opcional):</span>
+                        <textarea id="cancellationReason" 
+                                 placeholder="Por que está cancelando a exclusão?"
+                                 rows="3"
+                                 style="width: 100%; margin-top: 5px; padding: 8px; border-radius: 6px; 
+                                        background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+                                        color: inherit; font-family: inherit;"></textarea>
+                    </label>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn-cancel" onclick="closeCancelModal()">Voltar</button>
+                    <button class="btn-confirm" onclick="confirmCancelDeletion()">
+                        Confirmar Cancelamento
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         // ============================================
-        // SISTEMA GLOBAL DE CONFIGURAÇÕES
+        // SISTEMA GLOBAL DE CONFIGURAÇÕES (ORIGINAL)
         // ============================================
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -544,6 +686,9 @@
             loadSavedPreferences();
             setupConfigButtons();
             applyCurrentSettings();
+            
+            // Verificar status da conta
+            checkAccountDeletionStatus();
         });
 
         // ============================================
@@ -563,7 +708,7 @@
         }
 
         // ============================================
-        // FUNÇÕES DE CONFIGURAÇÃO
+        // FUNÇÕES DE CONFIGURAÇÃO (ORIGINAIS)
         // ============================================
         
         function loadSavedPreferences() {
@@ -706,7 +851,7 @@
         }
 
         // ============================================
-        // MODAL FUNCTIONS
+        // MODAL FUNCTIONS ORIGINAIS
         // ============================================
         
         let pendingAction = null;
@@ -737,12 +882,6 @@
                     title: 'Alterar Email?',
                     description: 'Você realmente quer alterar seu email? Um código de verificação será enviado.',
                     btnText: 'Alterar Email'
-                },
-                'delete': {
-                    title: 'Deletar Conta?',
-                    description: 'Tem certeza? Esta ação é IRREVERSÍVEL e todos seus dados serão perdidos permanentemente.',
-                    btnText: 'Deletar Conta',
-                    isDanger: true
                 }
             };
 
@@ -751,9 +890,6 @@
                 title.textContent = content.title;
                 description.textContent = content.description;
                 confirmBtn.textContent = content.btnText;
-                if (content.isDanger) {
-                    confirmBtn.classList.add('danger');
-                }
             }
 
             modal.classList.add('show');
@@ -771,8 +907,7 @@
             const messages = {
                 'username': 'Redirecionando para alterar nome de usuário...',
                 'password': 'Redirecionando para alterar senha...',
-                'email': 'Redirecionando para alterar email...',
-                'delete': 'Sua conta foi deletada permanentemente!'
+                'email': 'Redirecionando para alterar email...'
             };
 
             if (pendingAction && messages[pendingAction]) {
@@ -788,6 +923,335 @@
             if (e.target === modal) {
                 closeModal();
             }
+        });
+
+        // ============================================
+        // NOVO: SISTEMA DE EXCLUSÃO DE CONTA
+        // ============================================
+        
+        let deletionStatus = null;
+
+        // Verificar status da exclusão
+        async function checkAccountDeletionStatus() {
+            try {
+                // Obter token do usuário logado
+                const currentUser = localStorage.getItem('currentUser') || 
+                                   localStorage.getItem('gymp2_current_user');
+                
+                if (!currentUser) return;
+                
+                // Em um sistema real, você faria uma requisição para a API
+                // Para demonstração, vamos simular
+                
+                // Verificar se há status salvo localmente
+                const savedStatus = localStorage.getItem('gymp2_deletion_status');
+                
+                if (savedStatus) {
+                    deletionStatus = JSON.parse(savedStatus);
+                    updateDeletionUI(deletionStatus);
+                } else {
+                    // Simular requisição à API
+                    setTimeout(() => {
+                        // Para teste, vamos simular que não há exclusão pendente
+                        deletionStatus = {
+                            hasPendingDeletion: false
+                        };
+                        updateDeletionUI(deletionStatus);
+                    }, 500);
+                }
+                
+            } catch (error) {
+                console.error('Erro ao verificar status de exclusão:', error);
+            }
+        }
+
+        // Atualizar interface com status
+        function updateDeletionUI(status) {
+            const deletionItem = document.getElementById('deletionStatusItem');
+            const deleteBtn = document.getElementById('deleteAccountBtn');
+            const deleteTitle = document.getElementById('deleteAccountTitle');
+            const deleteDesc = document.getElementById('deleteAccountDesc');
+            
+            if (status.hasPendingDeletion && status.deletionRecord) {
+                // Mostrar status de exclusão pendente
+                if (deletionItem) {
+                    deletionItem.style.display = 'flex';
+                    
+                    // Atualizar contador de dias
+                    const daysSpan = document.getElementById('daysRemainingCount');
+                    if (daysSpan) {
+                        daysSpan.textContent = status.deletionRecord.daysRemaining;
+                    }
+                }
+                
+                // Atualizar botão de exclusão
+                if (deleteBtn) {
+                    deleteBtn.disabled = true;
+                    deleteBtn.textContent = 'Exclusão Solicitada';
+                    deleteBtn.style.opacity = '0.6';
+                }
+                
+                // Atualizar textos
+                if (deleteTitle) deleteTitle.textContent = 'Exclusão em Andamento';
+                if (deleteDesc) deleteDesc.textContent = 'Você pode cancelar a qualquer momento';
+                
+            } else {
+                // Ocultar status de exclusão pendente
+                if (deletionItem) {
+                    deletionItem.style.display = 'none';
+                }
+                
+                // Habilitar botão de exclusão
+                if (deleteBtn) {
+                    deleteBtn.disabled = false;
+                    deleteBtn.textContent = 'Solicitar Exclusão';
+                    deleteBtn.style.opacity = '1';
+                }
+                
+                // Restaurar textos originais
+                if (deleteTitle) deleteTitle.textContent = 'Deletar conta';
+                if (deleteDesc) deleteDesc.textContent = 'Tem 30 dias para cancelar após solicitar';
+            }
+        }
+
+        // ============================================
+        // MODAIS DE EXCLUSÃO
+        // ============================================
+
+        function openDeleteAccountModal() {
+            // Verificar se já tem exclusão pendente
+            if (deletionStatus && deletionStatus.hasPendingDeletion) {
+                alert('⚠️ Você já tem uma solicitação de exclusão pendente.');
+                return;
+            }
+            
+            const modal = document.getElementById('deleteAccountModal');
+            if (modal) modal.classList.add('show');
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteAccountModal');
+            if (modal) modal.classList.remove('show');
+        }
+
+        function cancelAccountDeletion() {
+            const modal = document.getElementById('cancelDeletionModal');
+            if (modal) modal.classList.add('show');
+        }
+
+        function closeCancelModal() {
+            const modal = document.getElementById('cancelDeletionModal');
+            if (modal) modal.classList.remove('show');
+        }
+
+        // Solicitar exclusão da conta
+        async function requestAccountDeletion() {
+            try {
+                // Obter dados do usuário
+                const currentUser = localStorage.getItem('currentUser') || 
+                                   localStorage.getItem('gymp2_current_user');
+                
+                if (!currentUser) {
+                    alert('❌ Sessão expirada. Faça login novamente.');
+                    window.location.href = 'login-gym.html';
+                    return;
+                }
+                
+                const user = JSON.parse(currentUser);
+                
+                // SIMULAÇÃO - Em produção, faça requisição para API
+                console.log('📝 Solicitando exclusão para:', user.email);
+                
+                // Simular delay da API
+                closeDeleteModal();
+                
+                setTimeout(() => {
+                    // Criar registro de exclusão simulado
+                    const deletionDate = new Date();
+                    deletionDate.setDate(deletionDate.getDate() + 30); // +30 dias
+                    
+                    deletionStatus = {
+                        hasPendingDeletion: true,
+                        deletionRecord: {
+                            requestedAt: new Date().toISOString(),
+                            scheduledDeletionDate: deletionDate.toISOString(),
+                            status: 'pending',
+                            daysRemaining: 30,
+                            canCancel: true
+                        }
+                    };
+                    
+                    // Salvar localmente (em produção, isso viria da API)
+                    localStorage.setItem('gymp2_deletion_status', JSON.stringify(deletionStatus));
+                    
+                    // Atualizar UI
+                    updateDeletionUI(deletionStatus);
+                    
+                    // Mostrar mensagem de sucesso
+                    alert(`✅ Solicitação de exclusão recebida!\n\n` +
+                          `Você tem 30 dias para cancelar (até ${deletionDate.toLocaleDateString()}).\n` +
+                          `Sua conta foi desativada temporariamente.`);
+                    
+                    // Deslogar o usuário (opcional)
+                    setTimeout(() => {
+                        if (confirm('Deseja fazer logout agora? Você poderá fazer login para cancelar a exclusão.')) {
+                            localStorage.removeItem('currentUser');
+                            localStorage.removeItem('gymp2_current_user');
+                            window.location.href = 'login-gym.html';
+                        }
+                    }, 1000);
+                    
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Erro ao solicitar exclusão:', error);
+                alert('❌ Erro ao processar sua solicitação. Tente novamente.');
+            }
+        }
+
+        // Cancelar exclusão da conta
+        async function confirmCancelDeletion() {
+            try {
+                const reason = document.getElementById('cancellationReason')?.value || '';
+                
+                // SIMULAÇÃO - Em produção, faça requisição para API
+                console.log('🔄 Cancelando exclusão. Motivo:', reason);
+                
+                // Simular delay da API
+                setTimeout(() => {
+                    // Atualizar status
+                    deletionStatus = {
+                        hasPendingDeletion: false
+                    };
+                    
+                    // Remover registro local
+                    localStorage.removeItem('gymp2_deletion_status');
+                    
+                    // Atualizar UI
+                    updateDeletionUI(deletionStatus);
+                    
+                    // Fechar modal
+                    closeCancelModal();
+                    
+                    // Mostrar mensagem de sucesso
+                    alert('✅ Exclusão cancelada com sucesso!\n\nSua conta foi reativada e está funcionando normalmente.');
+                    
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Erro ao cancelar exclusão:', error);
+                alert('❌ Erro ao cancelar exclusão. Tente novamente.');
+            }
+        }
+
+        // ============================================
+        // FUNÇÃO PARA BACKEND (API) - PARA REFERÊNCIA
+        // ============================================
+        /*
+        // URL da sua API (altere conforme necessário)
+        const API_URL = 'http://localhost:3000';
+        
+        async function requestAccountDeletionReal() {
+            try {
+                const token = localStorage.getItem('gymp2_token') || 
+                             sessionStorage.getItem('gymp2_token');
+                
+                const response = await fetch(`${API_URL}/api/account/delete-request`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    // Sucesso
+                    deletionStatus = {
+                        hasPendingDeletion: true,
+                        deletionRecord: data
+                    };
+                    
+                    localStorage.setItem('gymp2_deletion_status', JSON.stringify(deletionStatus));
+                    updateDeletionUI(deletionStatus);
+                    
+                    alert(`✅ ${data.message}\n\nVocê tem ${data.daysRemaining} dias para cancelar.`);
+                    
+                } else {
+                    throw new Error(data.message || 'Erro na solicitação');
+                }
+                
+            } catch (error) {
+                console.error('Erro na API:', error);
+                alert('❌ ' + error.message);
+            }
+        }
+        
+        async function checkDeletionStatusReal() {
+            try {
+                const token = localStorage.getItem('gymp2_token') || 
+                             sessionStorage.getItem('gymp2_token');
+                
+                const response = await fetch(`${API_URL}/api/account/deletion-status`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    deletionStatus = data;
+                    updateDeletionUI(data);
+                }
+            } catch (error) {
+                console.error('Erro ao verificar status:', error);
+            }
+        }
+        
+        async function cancelDeletionReal(reason) {
+            try {
+                const token = localStorage.getItem('gymp2_token') || 
+                             sessionStorage.getItem('gymp2_token');
+                
+                const response = await fetch(`${API_URL}/api/account/cancel-deletion`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    // Sucesso
+                    deletionStatus = { hasPendingDeletion: false };
+                    localStorage.removeItem('gymp2_deletion_status');
+                    updateDeletionUI(deletionStatus);
+                    
+                    alert('✅ ' + data.message);
+                    
+                } else {
+                    throw new Error(data.message || 'Erro ao cancelar');
+                }
+                
+            } catch (error) {
+                console.error('Erro na API:', error);
+                alert('❌ ' + error.message);
+            }
+        }
+        */
+
+        // Fechar modais ao clicar fora
+        document.addEventListener('click', function(e) {
+            const deleteModal = document.getElementById('deleteAccountModal');
+            const cancelModal = document.getElementById('cancelDeletionModal');
+            
+            if (e.target === deleteModal) closeDeleteModal();
+            if (e.target === cancelModal) closeCancelModal();
         });
     </script>
 </body>
